@@ -33,5 +33,7 @@ public class Ad extends BaseEntity {
     private Customer customer;
     @OneToMany(mappedBy = "ad", fetch = FetchType.EAGER)
     private List<Offer> offers;
+    @ManyToOne
+    private SubServ subServ;
 
 }
