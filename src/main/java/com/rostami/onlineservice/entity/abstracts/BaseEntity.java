@@ -1,8 +1,10 @@
 package com.rostami.onlineservice.entity.abstracts;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.Objects;
@@ -10,7 +12,8 @@ import java.util.Objects;
 @ToString
 @Getter
 @Setter
-@Entity
+@SuperBuilder
+@NoArgsConstructor
 @MappedSuperclass
 public abstract class BaseEntity {
     @Id

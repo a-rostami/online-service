@@ -19,21 +19,28 @@ import java.util.List;
 @Builder
 @Entity
 public class Ad extends BaseEntity {
+    @Column(nullable = false)
     private Date recordDate;
+    @Column(nullable = false)
     private Time recordTime;
+    @Column(nullable = false)
     private Date completionDate;
+    @Column(nullable = false)
     private Time completionTime;
-    @Column(precision = 17, scale = 2)
+    @Column(precision = 17, scale = 2, nullable = false)
     private BigDecimal price;
+    @Column(nullable = false)
     private String workDescription;
+    @Column(nullable = false)
     private String address;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private AdStatus status;
+
     @ManyToOne
     private Customer customer;
     @OneToMany(mappedBy = "ad", fetch = FetchType.EAGER)
     private List<Offer> offers;
     @ManyToOne
     private SubServ subServ;
-
 }

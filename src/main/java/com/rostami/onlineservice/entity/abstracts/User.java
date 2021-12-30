@@ -5,10 +5,9 @@ import com.rostami.onlineservice.entity.enums.UserStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.MappedSuperclass;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Pattern;
 
 @Setter
 @Getter
@@ -17,14 +16,23 @@ import javax.persistence.MappedSuperclass;
 @ToString(callSuper = true)
 @SuperBuilder
 @MappedSuperclass
-@Entity
 public abstract class User extends BaseEntity {
+    @Column(nullable = false)
     private String firstname;
+    @Column(nullable = false)
     private String lastname;
+    @Column(nullable = false)
     private String username;
+    @Email
+    @Column(nullable = false)
+    private String email;
+    @Column(nullable = false)
+    @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
     private String password;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private UserStatus userStatus;
 }

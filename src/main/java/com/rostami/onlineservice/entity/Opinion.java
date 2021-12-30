@@ -3,6 +3,7 @@ package com.rostami.onlineservice.entity;
 import com.rostami.onlineservice.entity.abstracts.BaseEntity;
 import lombok.*;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
 
@@ -14,7 +15,9 @@ import javax.persistence.ManyToOne;
 @Builder
 @Entity
 public class Opinion extends BaseEntity {
+    @Column(nullable = false)
     private int rate;
+    @Column(nullable = false)
     private String description;
 
     @ManyToOne

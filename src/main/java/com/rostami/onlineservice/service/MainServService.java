@@ -1,20 +1,17 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.entity.Ad;
-import com.rostami.onlineservice.entity.Credit;
-import com.rostami.onlineservice.repository.CreditRepository;
+import com.rostami.onlineservice.entity.MainServ;
+import com.rostami.onlineservice.repository.MainServRepository;
 import com.rostami.onlineservice.service.abstracts.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class CreditService extends BaseService<Credit, Long> {
-    private final CreditRepository repository;
+public class MainServService extends BaseService<MainServ, Long> {
+    private final MainServRepository repository;
 
     @PostConstruct
     public void init(){
