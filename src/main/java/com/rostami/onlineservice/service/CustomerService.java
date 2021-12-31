@@ -1,6 +1,8 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.Customer;
+import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.exception.DuplicateEmailException;
 import com.rostami.onlineservice.repository.CustomerRepository;
 import com.rostami.onlineservice.service.abstracts.BaseService;
@@ -10,6 +12,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor

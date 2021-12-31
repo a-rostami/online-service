@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.entity.Ad;
+import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.repository.AdRepository;
 import com.rostami.onlineservice.service.abstracts.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -21,5 +22,10 @@ public class AdService extends BaseService<Ad, Long> {
     @PostConstruct
     public void init(){
         setJpaRepository(repository);
+    }
+
+    public void createAd(Customer customer, Ad ad){
+        ad.setCustomer(customer);
+        repository.save(ad);
     }
 }

@@ -4,6 +4,7 @@ package com.rostami.onlineservice.entity;
 import com.rostami.onlineservice.entity.abstracts.BaseEntity;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -16,7 +17,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Builder
+@SuperBuilder
 @Entity
 public class Ad extends BaseEntity {
     @Column(nullable = false)
@@ -37,10 +38,12 @@ public class Ad extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AdStatus status;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Customer customer;
-    @OneToMany(mappedBy = "ad", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ad",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Offer> offers;
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private SubServ subServ;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "ad")
+    private List<Opinion> opinions;
 }

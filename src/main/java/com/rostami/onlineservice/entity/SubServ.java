@@ -2,6 +2,7 @@ package com.rostami.onlineservice.entity;
 
 import com.rostami.onlineservice.entity.abstracts.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -11,7 +12,7 @@ import java.util.List;
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 public class SubServ extends BaseEntity {
     @Column(nullable = false)
@@ -22,11 +23,11 @@ public class SubServ extends BaseEntity {
     @ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private MainServ mainServ;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(mappedBy = "subServ", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Ad> ads;
 
-    @ManyToOne
-    private Expert expert;
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private List<Expert> experts;
 
     @Override
     public String toString() {

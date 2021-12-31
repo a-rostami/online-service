@@ -16,4 +16,7 @@ public interface ExpertRepository extends JpaRepository<Expert, Long> {
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("UPDATE Expert e SET e.password=:password WHERE e.id=:id")
     void changePassword(Long id, String password);
+
+    @Query("SELECT e FROM Expert e WHERE e.email=:email")
+    Expert findBySubServ(String email);
 }

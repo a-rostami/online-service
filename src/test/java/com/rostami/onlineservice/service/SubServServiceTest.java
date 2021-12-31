@@ -1,10 +1,7 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
-import com.rostami.onlineservice.entity.Customer;
-import com.rostami.onlineservice.entity.Expert;
-import com.rostami.onlineservice.entity.enums.Role;
-import com.rostami.onlineservice.entity.enums.UserStatus;
+import com.rostami.onlineservice.entity.SubServ;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -12,28 +9,35 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.math.BigDecimal;
+
 @DataJpaTest
 @ActiveProfiles("test")
 @SpringJUnitConfig({AppConfig.class})
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
-class ExpertServiceTest {
+class SubServServiceTest {
     @Autowired
-    ExpertService expertService;
+    SubServService service;
 
-    /*@Test
+    @Autowired
+    MainServService mainService;
+
+    @Test
     void init_e_g(){
-        Expert expert = Expert.builder()
+        SubServ subServ = SubServ.builder()
                 .id(1L)
-                .firstname("arash")
-                .lastname("rostami")
-                .email("test@Gmail.com")
-                .password("12345678")
-                .username("mrrostami")
-                .role(Role.EXPERT)
-                .userStatus(UserStatus.NEW)
-                .avatar(new byte[10])
+                .name("Kitchen Stuff")
+                .basePrice(BigDecimal.valueOf(120000L))
+                .mainServ(mainService.findById(1L))
                 .build();
-        expertService.save(expert);
-    }*/
+        SubServ subServ2 = SubServ.builder()
+                .id(2L)
+                .name("bathroom")
+                .basePrice(BigDecimal.valueOf(180000L))
+                .mainServ(mainService.findById(2L))
+                .build();
+        service.save(subServ);
+        service.save(subServ2);
+    }
 
 }

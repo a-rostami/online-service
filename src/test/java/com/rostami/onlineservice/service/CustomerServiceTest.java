@@ -2,6 +2,7 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.entity.Customer;
+import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
 import com.rostami.onlineservice.exception.DuplicateEmailException;
 import org.junit.jupiter.api.Test;
@@ -10,6 +11,9 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
+
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -23,23 +27,17 @@ class CustomerServiceTest {
 
     @Test
     void duplicate_email_is_throws_exception(){
-        Customer customer = Customer.builder()
-                .firstname("arash")
-                .lastname("rostami")
-                .email("arash5@Gmail.com")
-                .password("12345678")
-                .username("mrrostami")
-                .userStatus(UserStatus.NEW)
-                .build();
         Customer customer2 = Customer.builder()
+                .id(2L)
                 .firstname("arash")
                 .lastname("rostami")
-                .email("arash5@Gmail.com")
+                // this email exists in DB
+                .email("test@Gmail.com")
                 .password("56556128")
                 .username("mrrostami")
+                .role(Role.CUSTOMER)
                 .userStatus(UserStatus.NEW)
                 .build();
-        customerService.save(customer);
         assertThrows(DuplicateEmailException.class, () -> customerService.save(customer2));
     }
 
@@ -50,12 +48,12 @@ class CustomerServiceTest {
                 .id(1L)
                 .firstname("arash")
                 .lastname("rostami")
-                .email("arash544@Gmail.com")
+                .email("test1@Gmail.com")
                 .password("12345678")
                 .username("mrrostami")
+                .role(Role.CUSTOMER)
                 .userStatus(UserStatus.NEW)
                 .build();
-        customerService.save(customer);
         customerService.changePassword(1L, newPassword);
         Customer entity = customerService.findByUserNameAndPassword("mrrostami", newPassword);
         assertEquals(entity, customer);

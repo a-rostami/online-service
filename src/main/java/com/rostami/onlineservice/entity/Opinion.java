@@ -2,24 +2,33 @@ package com.rostami.onlineservice.entity;
 
 import com.rostami.onlineservice.entity.abstracts.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Builder
+@SuperBuilder
 @Entity
 public class Opinion extends BaseEntity {
     @Column(nullable = false)
-    private int rate;
+    @Max(value = 5)
+    @Min(value = 1)
+    private Integer rate;
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Expert expert;
+
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Ad ad;
 }

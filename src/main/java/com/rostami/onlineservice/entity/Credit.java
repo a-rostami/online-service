@@ -2,7 +2,9 @@ package com.rostami.onlineservice.entity;
 
 import com.rostami.onlineservice.entity.abstracts.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.OneToOne;
@@ -13,15 +15,15 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Builder
+@SuperBuilder
 @Entity
 public class Credit extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal balance;
 
-    @OneToOne
+    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Expert expert;
 
-    @OneToOne
+    @OneToOne( cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Customer customer;
 }

@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.Expert;
+import com.rostami.onlineservice.entity.Opinion;
 import com.rostami.onlineservice.exception.DuplicateEmailException;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.abstracts.BaseService;
@@ -11,6 +11,9 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +35,17 @@ public class ExpertService extends BaseService<Expert, Long> {
         Expert byEmail = repository.findByEmail(email);
         if (byEmail != null)
             throw new DuplicateEmailException("Email Exist!");
+    }
+
+    public Double getAveragePoint(Long id){
+        Expert expert = new Expert();
+        Optional<Expert> byId = repository.findById(id);
+        if (byId.isPresent())
+            expert = byId.get();
+        List<Opinion> opinions = expert.getOpinions();
+        AtomicReference<Double> average = new AtomicReference<>(0.0);
+        opinions.forEach(opinion -> average.updateAndGet(v -> v + opinion.getRate()));
+        return average.get() / opinions.size();
     }
 
     public Expert findByUsername(String username){

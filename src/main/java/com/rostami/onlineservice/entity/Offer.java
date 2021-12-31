@@ -2,6 +2,7 @@ package com.rostami.onlineservice.entity;
 
 import com.rostami.onlineservice.entity.abstracts.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.math.BigDecimal;
@@ -13,7 +14,7 @@ import java.sql.Time;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString(callSuper = true)
-@Builder
+@SuperBuilder
 @Entity
 public class Offer extends BaseEntity {
     @Column(nullable = false)

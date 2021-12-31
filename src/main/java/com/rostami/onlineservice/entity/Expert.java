@@ -21,7 +21,7 @@ public class Expert extends User {
     @Column( columnDefinition = "BLOB", nullable = false)
     private byte[] avatar;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<SubServ> subServs;
 
     @OneToOne(mappedBy = "expert", cascade = {CascadeType.MERGE, CascadeType.PERSIST})

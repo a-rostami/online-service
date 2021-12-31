@@ -2,24 +2,22 @@ package com.rostami.onlineservice.entity;
 
 import com.rostami.onlineservice.entity.abstracts.BaseEntity;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
+import javax.persistence.*;
 import java.util.List;
 
 @Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@SuperBuilder
 @Entity
 public class MainServ extends BaseEntity {
     @Column(nullable = false)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "mainServ", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<SubServ> subServs;
 
     @Override
