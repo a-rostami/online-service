@@ -40,7 +40,7 @@ public class Ad extends BaseEntity {
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Customer customer;
-    @OneToMany(mappedBy = "ad",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ad",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Offer> offers;
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private SubServ subServ;

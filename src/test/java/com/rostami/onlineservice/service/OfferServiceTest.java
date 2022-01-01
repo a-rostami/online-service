@@ -1,7 +1,10 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
+import com.rostami.onlineservice.entity.Ad;
+import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Offer;
+import com.rostami.onlineservice.exception.BelowBasePriceException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -31,6 +34,8 @@ class OfferServiceTest {
 
     @Test
     void submit_offer_isOk(){
+        Expert expert = expertService.findById(1L);
+        Ad ad = adService.findById(1L);
         Offer offer = Offer.builder()
                 .id(1L)
                 .startDate(Date.valueOf("2021-10-31"))
@@ -40,10 +45,18 @@ class OfferServiceTest {
                 .recordTime(Time.valueOf("24:30:10"))
                 .recordDate(Date.valueOf("2020-10-31"))
                 .price(BigDecimal.valueOf(450000L))
-                .expert(expertService.findById(1L))
+                .expert(expert)
+                .ad(ad)
                 .build();
-        offerService.save(offer);
-        offerService.submitOffer(adService.findById(1L), offer);
-//        assertEquals(offer, adService.findById(1L).getOffers().get(0));
+        offerService.submitOffer(offer);
+        assertEquals(offer, adService.findById(1L).getOffers().get(0));
+    }
+
+    @Test
+    void submit_offer_throws_below_priceException_isOk(){
+        Offer offer = offerService.findById(1L);
+        // base price of subService of this ad is 120000
+        offer.setPrice(BigDecimal.valueOf(100000));
+        assertThrows(BelowBasePriceException.class, () -> offerService.submitOffer(offer));
     }
 }
