@@ -38,7 +38,7 @@ public class Ad extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AdStatus status;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Customer customer;
     @OneToMany(mappedBy = "ad",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Offer> offers;

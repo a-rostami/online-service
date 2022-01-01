@@ -2,6 +2,8 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.entity.Ad;
+import com.rostami.onlineservice.entity.Customer;
+import com.rostami.onlineservice.entity.SubServ;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,7 +16,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -34,6 +36,8 @@ class AdServiceTest {
 
     @Test
     void add_newAd_isOk() throws ParseException {
+        Customer customer = customerService.findById(1L);
+        SubServ subServ = subServService.findById(1L);
         Ad ad = Ad.builder()
                 .id(1L)
                 .address("Tabriz")
@@ -44,10 +48,12 @@ class AdServiceTest {
                 .recordDate(Date.valueOf("2022-01-31"))
                 .workDescription("I Want You To Do SomeThing Good")
                 .status(AdStatus.WAITING_FOR_OFFER)
-                .customer(customerService.findById(1L))
-                .subServ(subServService.findById(1L))
+                .customer(customer)
+                .subServ(subServ)
                 .build();
-        adService.createAd(customerService.findById(1L), ad);
+        customer.setAds(List.of(ad));
+        adService.save(ad);
+        customerService.save(customer);
         Ad entity = customerService.findById(1L).getAds().get(0);
         assertEquals(ad, entity);
     }
