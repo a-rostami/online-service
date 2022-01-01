@@ -2,17 +2,13 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.Customer;
+import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.repository.AdRepository;
-import com.rostami.onlineservice.service.abstracts.BaseService;
+import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,6 +22,7 @@ public class AdService extends BaseService<Ad, Long> {
 
     public void createAd(Customer customer, Ad ad){
         ad.setCustomer(customer);
+        ad.setStatus(AdStatus.WAITING_FOR_OFFER);
         repository.save(ad);
     }
 }

@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.entity;
 
-import com.rostami.onlineservice.entity.abstracts.User;
+import com.rostami.onlineservice.entity.base.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

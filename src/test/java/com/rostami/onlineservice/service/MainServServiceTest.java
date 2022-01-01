@@ -17,19 +17,4 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 class MainServServiceTest {
     @Autowired
     MainServService service;
-
-    @Test
-    void init_e_g(){
-        MainServ mainServ = MainServ.builder()
-                .id(1L)
-                .name("Home Appliance")
-                .build();
-        MainServ mainServ2 = MainServ.builder()
-                .id(2L)
-                .name("Health Products")
-                .build();
-        service.save(mainServ);
-        service.save(mainServ2);
-    }
-
 }

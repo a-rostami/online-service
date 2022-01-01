@@ -1,4 +1,4 @@
-package com.rostami.onlineservice.entity.abstracts;
+package com.rostami.onlineservice.entity.base;
 
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;

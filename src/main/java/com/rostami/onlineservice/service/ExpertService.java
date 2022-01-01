@@ -3,8 +3,9 @@ package com.rostami.onlineservice.service;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Opinion;
 import com.rostami.onlineservice.exception.DuplicateEmailException;
+import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.ExpertRepository;
-import com.rostami.onlineservice.service.abstracts.BaseService;
+import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -12,8 +13,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.atomic.AtomicReference;
 
 @Service
 @RequiredArgsConstructor
@@ -26,26 +25,22 @@ public class ExpertService extends BaseService<Expert, Long> {
     }
 
     @Override
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void save(Expert entity) {
-        checkEmailExist(entity.getEmail());
+        checkEmailExist(entity.getEmail(), entity.getId());
         repository.save(entity);
     }
 
-    private void checkEmailExist(String email){
+    private void checkEmailExist(String email, Long id){
         Expert byEmail = repository.findByEmail(email);
-        if (byEmail != null)
+        if (byEmail != null && !byEmail.getId().equals(id))
             throw new DuplicateEmailException("Email Exist!");
     }
 
     public Double getAveragePoint(Long id){
-        Expert expert = new Expert();
-        Optional<Expert> byId = repository.findById(id);
-        if (byId.isPresent())
-            expert = byId.get();
+        Expert expert = repository.findById(id).orElseThrow(() ->new EntityLoadException("Expert Was Not Found."));
         List<Opinion> opinions = expert.getOpinions();
-        AtomicReference<Double> average = new AtomicReference<>(0.0);
-        opinions.forEach(opinion -> average.updateAndGet(v -> v + opinion.getRate()));
-        return average.get() / opinions.size();
+        return opinions.stream().mapToInt(Opinion::getRate).average().orElse(0);
     }
 
     public Expert findByUsername(String username){

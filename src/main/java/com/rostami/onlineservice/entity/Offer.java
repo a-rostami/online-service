@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.entity;
 
-import com.rostami.onlineservice.entity.abstracts.BaseEntity;
+import com.rostami.onlineservice.entity.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -32,7 +32,7 @@ public class Offer extends BaseEntity {
     @Column(precision = 17, scale = 2)
     private BigDecimal price;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Ad ad;
 
     @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})

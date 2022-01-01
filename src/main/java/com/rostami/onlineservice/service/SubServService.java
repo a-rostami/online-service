@@ -2,7 +2,7 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.entity.SubServ;
 import com.rostami.onlineservice.repository.SubServRepository;
-import com.rostami.onlineservice.service.abstracts.BaseService;
+import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

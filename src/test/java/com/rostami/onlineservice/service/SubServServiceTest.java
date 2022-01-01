@@ -21,23 +21,4 @@ class SubServServiceTest {
 
     @Autowired
     MainServService mainService;
-
-    @Test
-    void init_e_g(){
-        SubServ subServ = SubServ.builder()
-                .id(1L)
-                .name("Kitchen Stuff")
-                .basePrice(BigDecimal.valueOf(120000L))
-                .mainServ(mainService.findById(1L))
-                .build();
-        SubServ subServ2 = SubServ.builder()
-                .id(2L)
-                .name("bathroom")
-                .basePrice(BigDecimal.valueOf(180000L))
-                .mainServ(mainService.findById(2L))
-                .build();
-        service.save(subServ);
-        service.save(subServ2);
-    }
-
 }

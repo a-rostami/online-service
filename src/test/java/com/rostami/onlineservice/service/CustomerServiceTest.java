@@ -13,8 +13,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 
-import java.util.List;
-
 import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
@@ -27,7 +25,7 @@ class CustomerServiceTest {
 
     @Test
     void duplicate_email_is_throws_exception(){
-        Customer customer2 = Customer.builder()
+        Customer customer = Customer.builder()
                 .id(2L)
                 .firstname("arash")
                 .lastname("rostami")
@@ -38,7 +36,7 @@ class CustomerServiceTest {
                 .role(Role.CUSTOMER)
                 .userStatus(UserStatus.NEW)
                 .build();
-        assertThrows(DuplicateEmailException.class, () -> customerService.save(customer2));
+        assertThrows(DuplicateEmailException.class, () -> customerService.save(customer));
     }
 
     @Test

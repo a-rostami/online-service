@@ -1,18 +1,15 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.Customer;
-import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.exception.DuplicateEmailException;
 import com.rostami.onlineservice.repository.CustomerRepository;
-import com.rostami.onlineservice.service.abstracts.BaseService;
+import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -26,13 +23,13 @@ public class CustomerService extends BaseService<Customer, Long> {
 
     @Override
     public void save(Customer entity) {
-        checkEmailExist(entity.getEmail());
+        checkEmailExist(entity.getEmail(), entity.getId());
         repository.save(entity);
     }
 
-    private void checkEmailExist(String email){
+    private void checkEmailExist(String email, Long id){
         Customer byEmail = repository.findByEmail(email);
-        if (byEmail != null)
+        if (byEmail != null  && !byEmail.getId().equals(id))
             throw new DuplicateEmailException("Email Exist!");
     }
 

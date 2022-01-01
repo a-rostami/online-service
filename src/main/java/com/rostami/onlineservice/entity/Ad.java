@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.entity;
 
 
-import com.rostami.onlineservice.entity.abstracts.BaseEntity;
+import com.rostami.onlineservice.entity.base.BaseEntity;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;

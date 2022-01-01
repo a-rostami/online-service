@@ -1,4 +1,4 @@
-package com.rostami.onlineservice.entity.abstracts;
+package com.rostami.onlineservice.entity.base;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

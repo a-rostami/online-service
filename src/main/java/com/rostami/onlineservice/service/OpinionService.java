@@ -6,7 +6,7 @@ import com.rostami.onlineservice.entity.Opinion;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.exception.NotAllowedToSubmitOpinionException;
 import com.rostami.onlineservice.repository.OpinionRepository;
-import com.rostami.onlineservice.service.abstracts.BaseService;
+import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
