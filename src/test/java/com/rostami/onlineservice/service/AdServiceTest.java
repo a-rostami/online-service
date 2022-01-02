@@ -3,6 +3,7 @@ package com.rostami.onlineservice.service;
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.Customer;
+import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.entity.SubServ;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import org.junit.jupiter.api.Test;
@@ -15,7 +16,7 @@ import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
-import java.text.ParseException;
+import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -35,7 +36,7 @@ class AdServiceTest {
     SubServService subServService;
 
     @Test
-    void add_newAd_isOk() throws ParseException {
+    void add_newAd_isOk() {
         Customer customer = customerService.findById(1L);
         SubServ subServ = subServService.findById(1L);
         Ad ad = Ad.builder()
@@ -56,6 +57,25 @@ class AdServiceTest {
         customerService.save(customer);
         Ad entity = customerService.findById(1L).getAds().get(0);
         assertEquals(ad, entity);
+    }
+
+    @Test
+    void order_byPrice_isOk(){
+        Ad ad = adService.findById(1L);
+        List<Offer> adOffers = ad.getOffers();
+        List<Offer> sortedOffers = adService.orderOffersByPrice(ad);
+        adOffers.sort(Comparator.comparing(Offer::getPrice));
+        assertEquals(adOffers, sortedOffers);
+    }
+
+    @Test
+    void order_byExpert_point_isOk(){
+        Ad ad = adService.findById(1L);
+        List<Offer> offers = adService.orderOffersByExpertPoint(ad);
+        List<Offer> adOffers = ad.getOffers();
+        // at this point we only have 1 expert
+        // FIXME: 1/2/2022 add more expert for test average point sort
+        assertEquals(offers, adOffers);
     }
 
 }
