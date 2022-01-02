@@ -1,10 +1,7 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
-import com.rostami.onlineservice.entity.Ad;
-import com.rostami.onlineservice.entity.Customer;
-import com.rostami.onlineservice.entity.Offer;
-import com.rostami.onlineservice.entity.SubServ;
+import com.rostami.onlineservice.entity.*;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +28,9 @@ class AdServiceTest {
 
     @Autowired
     CustomerService customerService;
+
+    @Autowired
+    ExpertService expertService;
 
     @Autowired
     SubServService subServService;
@@ -76,6 +76,14 @@ class AdServiceTest {
         // at this point we only have 1 expert
         // FIXME: 1/2/2022 add more expert for test average point sort
         assertEquals(offers, adOffers);
+    }
+
+    @Test
+    void choose_expert_isOk(){
+        Ad ad = adService.findById(1L);
+        Expert expert = expertService.findById(1L);
+        adService.chooseExpert(ad, expert);
+        assertEquals(ad.getStatus(), AdStatus.WAITING_FOR_EXPERT);
     }
 
 }

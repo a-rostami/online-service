@@ -46,4 +46,6 @@ public class Ad extends BaseEntity {
     private SubServ subServ;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "ad")
     private List<Opinion> opinions;
+    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Expert chosenExpert;
 }
