@@ -5,6 +5,8 @@ import com.rostami.onlineservice.exception.DuplicateEmailException;
 import com.rostami.onlineservice.repository.CustomerRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -15,6 +17,7 @@ import javax.annotation.PostConstruct;
 @RequiredArgsConstructor
 public class CustomerService extends BaseService<Customer, Long> {
     private final CustomerRepository repository;
+    Logger logger = LoggerFactory.getLogger(CustomerService.class);
 
     @PostConstruct
     public void init(){
