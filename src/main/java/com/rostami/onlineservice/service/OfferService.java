@@ -52,4 +52,9 @@ public class OfferService extends BaseService<Offer, Long> {
         return repository.findAll(specification, pageable).getContent();
     }
 
+    @Transactional(readOnly = true)
+    public List<Offer> findAll(Sort sort){
+        return repository.findAll(sort);
+    }
+
 }

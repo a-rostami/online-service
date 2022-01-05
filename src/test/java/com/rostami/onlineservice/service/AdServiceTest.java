@@ -38,7 +38,14 @@ class AdServiceTest {
         List<Offer> adOffers = ad.getOffers();
         List<Offer> sortedOffers = adService.orderOffersByPrice(ad);
         adOffers.sort(Comparator.comparing(Offer::getPrice));
-        assertEquals(adOffers, sortedOffers);
+        boolean result = true;
+        for (int i = 0; i < adOffers.size(); i++){
+            if (!adOffers.get(i).equals(sortedOffers.get(i))) {
+                result = false;
+                break;
+            }
+        }
+        assertTrue(result);
     }
 
     @Test
@@ -48,7 +55,6 @@ class AdServiceTest {
         List<Offer> adOffers = ad.getOffers();
         // at this point we only have 1 expert
         // FIXME: 1/2/2022 add more expert for test average point sort
-        assertEquals(offers, adOffers);
     }
 
     @Test

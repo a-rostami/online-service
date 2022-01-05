@@ -13,4 +13,6 @@ public interface AdRepository extends JpaRepository<Ad, Long>, JpaSpecificationE
     List<Ad> findAll(Specification<Ad> spec);
 
     List<Ad> findAll(Specification<Ad> spec, Sort sort);
+
+    List<Ad> findAll(Sort sort);
 }

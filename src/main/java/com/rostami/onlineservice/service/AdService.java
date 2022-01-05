@@ -7,6 +7,7 @@ import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.repository.AdRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
+import net.bytebuddy.TypeCache;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -21,8 +22,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AdService extends BaseService<Ad, Long> {
     private final AdRepository repository;
-
     private final ExpertService expertService;
+    private final OfferService offerService;
 
     @PostConstruct
     public void init() {
@@ -31,9 +32,8 @@ public class AdService extends BaseService<Ad, Long> {
 
     @Transactional(readOnly = true)
     public List<Offer> orderOffersByPrice(Ad ad) {
-        List<Offer> offers = ad.getOffers();
-        offers.sort(Comparator.comparing(Offer::getPrice));
-        return offers;
+        Sort byPrice = Sort.by(Sort.Direction.ASC, "price");
+        return offerService.findAll(byPrice);
     }
 
     @Transactional(readOnly = true)
@@ -63,5 +63,10 @@ public class AdService extends BaseService<Ad, Long> {
     @Transactional(readOnly = true)
     public List<Ad> findAll(Specification<Ad> specification, Pageable pageable){
         return repository.findAll(specification, pageable).getContent();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ad> findAll(Sort sort){
+        return repository.findAll(sort);
     }
 }

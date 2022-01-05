@@ -3,13 +3,18 @@ package com.rostami.onlineservice.entity;
 import com.rostami.onlineservice.entity.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+import org.hibernate.Hibernate;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.ManyToOne;
+import javax.persistence.PrePersist;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Objects;
 
 @Setter
 @Getter

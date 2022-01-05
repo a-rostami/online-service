@@ -12,4 +12,6 @@ public interface OfferRepository extends JpaRepository<Offer, Long>, JpaSpecific
     List<Offer> findAll(Specification<Offer> spec);
 
     List<Offer> findAll(Specification<Offer> spec, Sort sort);
+
+    List<Offer> findAll(Sort sort);
 }
