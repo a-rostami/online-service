@@ -1,13 +1,15 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.entity.Ad;
-import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.repository.AdRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,13 +27,6 @@ public class AdService extends BaseService<Ad, Long> {
     @PostConstruct
     public void init() {
         setJpaRepository(repository);
-    }
-
-    @Transactional
-    public void createAd(Customer customer, Ad ad) {
-        ad.setCustomer(customer);
-        ad.setStatus(AdStatus.WAITING_FOR_OFFER);
-        repository.save(ad);
     }
 
     @Transactional(readOnly = true)
@@ -53,5 +48,20 @@ public class AdService extends BaseService<Ad, Long> {
         ad.setChosenExpert(expert);
         ad.setStatus(AdStatus.WAITING_FOR_EXPERT);
         repository.save(ad);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ad> findAll(Specification<Ad> specification){
+        return repository.findAll(specification);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ad> findAll(Specification<Ad> specification, Sort sort){
+        return repository.findAll(specification, sort);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Ad> findAll(Specification<Ad> specification, Pageable pageable){
+        return repository.findAll(specification, pageable).getContent();
     }
 }

@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
@@ -41,10 +42,16 @@ class CustomerServiceTest {
     @Test
     void is_change_password_ok(){
         String newPassword = "123456789";
+        String username = "mrrostami";
         Customer customer = customerService.findById(1L);
         customerService.changePassword(customer.getId(), newPassword);
         // username of found entity is : mrrostami
-        Customer newPassEntity = customerService.findByUserNameAndPassword("mrrostami", newPassword);
+        Customer newPassEntity = customerService.findAll(usernamePassSpecification(username, newPassword)).get(0);
         assertEquals(newPassEntity, customer);
+    }
+
+    static Specification<Customer> usernamePassSpecification(String username, String password){
+        return ((root, cq, cb) ->
+                cb.and(cb.equal(root.get("username"), username), cb.equal(root.get("password"), password)));
     }
 }

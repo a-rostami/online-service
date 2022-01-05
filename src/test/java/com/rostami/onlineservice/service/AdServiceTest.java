@@ -10,9 +10,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
-import java.math.BigDecimal;
-import java.sql.Date;
-import java.sql.Time;
 import java.util.Comparator;
 import java.util.List;
 

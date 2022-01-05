@@ -10,6 +10,7 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -27,13 +28,8 @@ class ExpertServiceTest {
 
     @Test
     void get_average_point_isOk(){
+        // expert only have two opinion with rates : 3 , 4
         Expert expert = expertService.findById(4L);
-        // rate of opinion is : 3
-        Opinion opinion = opinionService.findById(22L);
-        // rate of opinion is : 4
-        Opinion opinion2 = opinionService.findById(23L);
-        expert.setOpinions(List.of(opinion, opinion2));
-        expertService.save(expert);
         Double averagePoint = expertService.getAveragePoint(expert);
         assertEquals(averagePoint, 3.5);
     }

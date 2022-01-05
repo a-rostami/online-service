@@ -50,15 +50,19 @@ public class Ad extends BaseEntity {
     @ToString.Exclude
     @ManyToOne(optional = false)
     private Customer customer;
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "ad",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @ToString.Exclude
     private List<Offer> offers;
-    @ManyToOne
+
+    @ManyToOne(optional = false)
     @ToString.Exclude
     private SubServ subServ;
+
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "ad")
     @ToString.Exclude
     private List<Opinion> opinions;
+
     @ManyToOne
     @ToString.Exclude
     private Expert chosenExpert;

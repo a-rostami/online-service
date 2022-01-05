@@ -5,11 +5,15 @@ import com.rostami.onlineservice.exception.DuplicateEmailException;
 import com.rostami.onlineservice.repository.CustomerRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,24 +32,24 @@ public class CustomerService extends BaseService<Customer, Long> {
     }
 
     private void checkEmailExist(String email, Long id){
-        Customer byEmail = repository.findByEmail(email);
-        if (byEmail != null  && !byEmail.getId().equals(id))
+        List<Customer> byEmail = repository.findAll(((root, cq, cb) -> cb.equal(root.get("email"), email)));
+        if (id == null  && byEmail.size() > 0)
             throw new DuplicateEmailException("Email Exist!");
     }
 
-    @Transactional
-    public Customer findByEmail(String email){
-        return repository.findByEmail(email);
+    @Transactional(readOnly = true)
+    public List<Customer> findAll(Specification<Customer> specification){
+        return repository.findAll(specification);
     }
 
-    @Transactional
-    public Customer findByUsername(String username){
-        return repository.findByUsername(username);
+    @Transactional(readOnly = true)
+    public List<Customer> findAll(Specification<Customer> specification, Sort sort){
+        return repository.findAll(specification, sort);
     }
 
-    @Transactional
-    public Customer findByUserNameAndPassword(String username, String password){
-        return repository.findByUsernameAndPassword(username, password);
+    @Transactional(readOnly = true)
+    public List<Customer> findAll(Specification<Customer> specification, Pageable pageable){
+        return repository.findAll(specification, pageable).getContent();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

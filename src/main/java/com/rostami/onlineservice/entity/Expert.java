@@ -9,6 +9,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -27,11 +28,11 @@ public class Expert extends User {
     @OneToOne(mappedBy = "expert", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Credit credit;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Opinion> opinions;
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "expert", fetch = FetchType.EAGER)
+    private Set<Opinion> opinions;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Offer> offers;
+    private transient List<Offer> offers;
 
     @Override
     public String toString() {

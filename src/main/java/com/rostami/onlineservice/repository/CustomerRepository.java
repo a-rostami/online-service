@@ -1,18 +1,25 @@
 package com.rostami.onlineservice.repository;
 
 import com.rostami.onlineservice.entity.Customer;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
+import java.util.List;
 
-public interface CustomerRepository extends JpaRepository<Customer, Long>{
 
-    Customer findByEmail(String email);
+public interface CustomerRepository extends JpaRepository<Customer, Long>, JpaSpecificationExecutor<Customer> {
 
-    Customer findByUsername(String username);
+    List<Customer> findAll(Specification<Customer> spec);
 
-    Customer findByUsernameAndPassword(String username, String password);
+    List<Customer> findAll(Specification<Customer> spec, Sort sort);
+
+    Page<Customer> findAll(Specification<Customer> spec, Pageable pageable);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("UPDATE Customer c SET c.password=:password WHERE c.id=:id")

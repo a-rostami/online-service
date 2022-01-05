@@ -1,16 +1,20 @@
 package com.rostami.onlineservice.repository;
 
 import com.rostami.onlineservice.entity.Expert;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
-public interface ExpertRepository extends JpaRepository<Expert, Long> {
-    Expert findByEmail(String email);
+import java.util.List;
 
-    Expert findByUsername(String username);
+public interface ExpertRepository extends JpaRepository<Expert, Long>, JpaSpecificationExecutor<Expert> {
 
-    Expert findByUsernameAndPassword(String username, String password);
+    List<Expert> findAll(Specification<Expert> spec);
+
+    List<Expert> findAll(Specification<Expert> spec, Sort sort);
 
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     @Query("UPDATE Expert e SET e.password=:password WHERE e.id=:id")

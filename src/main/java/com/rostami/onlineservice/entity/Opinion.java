@@ -4,10 +4,7 @@ import com.rostami.onlineservice.entity.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
 
@@ -23,12 +20,13 @@ public class Opinion extends BaseEntity {
     @Max(value = 5)
     @Min(value = 1)
     private Integer rate;
+
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Expert expert;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     private Ad ad;
 }
