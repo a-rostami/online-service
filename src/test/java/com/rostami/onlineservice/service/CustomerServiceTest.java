@@ -26,7 +26,6 @@ class CustomerServiceTest {
     @Test
     void duplicate_email_is_throws_exception(){
         Customer customer = Customer.builder()
-                .id(2L)
                 .firstname("arash")
                 .lastname("rostami")
                 // this email exists in DB
@@ -42,18 +41,10 @@ class CustomerServiceTest {
     @Test
     void is_change_password_ok(){
         String newPassword = "123456789";
-        Customer customer = Customer.builder()
-                .id(1L)
-                .firstname("arash")
-                .lastname("rostami")
-                .email("test1@Gmail.com")
-                .password("12345678")
-                .username("mrrostami")
-                .role(Role.CUSTOMER)
-                .userStatus(UserStatus.NEW)
-                .build();
-        customerService.changePassword(1L, newPassword);
-        Customer entity = customerService.findByUserNameAndPassword("mrrostami", newPassword);
-        assertEquals(entity, customer);
+        Customer customer = customerService.findById(1L);
+        customerService.changePassword(customer.getId(), newPassword);
+        // username of found entity is : mrrostami
+        Customer newPassEntity = customerService.findByUserNameAndPassword("mrrostami", newPassword);
+        assertEquals(newPassEntity, customer);
     }
 }

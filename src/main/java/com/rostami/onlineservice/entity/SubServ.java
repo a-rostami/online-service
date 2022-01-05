@@ -20,7 +20,7 @@ public class SubServ extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal basePrice;
 
-    @ManyToOne(optional = false, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne
     private MainServ mainServ;
 
     @OneToMany(mappedBy = "subServ", cascade = {CascadeType.MERGE, CascadeType.PERSIST})

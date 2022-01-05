@@ -18,21 +18,18 @@ public class LoggingAspect {
     @Around("execution(* com.rostami.onlineservice.service.*.*(..))")
     public Object logAllMethods(ProceedingJoinPoint joinPoint) throws Throwable {
         MethodSignature methodSignature = (MethodSignature) joinPoint.getSignature();
-
         //Get intercepted method details
         String className = methodSignature.getDeclaringType().getSimpleName();
         String methodName = methodSignature.getName();
 
-        StopWatch stopWatch = new StopWatch();
-
         //Measure method execution time
+        StopWatch stopWatch = new StopWatch();
         stopWatch.start();
         Object result = joinPoint.proceed();
         stopWatch.stop();
 
         //Log method execution time
         logger.info("Execution time of " + className + "." + methodName + " :: " + stopWatch.getTotalTimeMillis() + " ms");
-
         return result;
     }
 

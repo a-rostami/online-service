@@ -36,32 +36,8 @@ class AdServiceTest {
     SubServService subServService;
 
     @Test
-    void add_newAd_isOk() {
-        Customer customer = customerService.findById(1L);
-        SubServ subServ = subServService.findById(1L);
-        Ad ad = Ad.builder()
-                .id(1L)
-                .address("Tabriz")
-                .completionDate(Date.valueOf("2021-12-30"))
-                .completionTime(Time.valueOf("21:00:00"))
-                .price(BigDecimal.valueOf(100000L))
-                .recordTime(Time.valueOf("24:00:00"))
-                .recordDate(Date.valueOf("2022-01-31"))
-                .workDescription("I Want You To Do SomeThing Good")
-                .status(AdStatus.WAITING_FOR_OFFER)
-                .customer(customer)
-                .subServ(subServ)
-                .build();
-        customer.setAds(List.of(ad));
-        adService.save(ad);
-        customerService.save(customer);
-        Ad entity = customerService.findById(1L).getAds().get(0);
-        assertEquals(ad, entity);
-    }
-
-    @Test
     void order_byPrice_isOk(){
-        Ad ad = adService.findById(1L);
+        Ad ad = adService.findById(10L);
         List<Offer> adOffers = ad.getOffers();
         List<Offer> sortedOffers = adService.orderOffersByPrice(ad);
         adOffers.sort(Comparator.comparing(Offer::getPrice));
@@ -70,7 +46,7 @@ class AdServiceTest {
 
     @Test
     void order_byExpert_point_isOk(){
-        Ad ad = adService.findById(1L);
+        Ad ad = adService.findById(10L);
         List<Offer> offers = adService.orderOffersByExpertPoint(ad);
         List<Offer> adOffers = ad.getOffers();
         // at this point we only have 1 expert
@@ -80,8 +56,8 @@ class AdServiceTest {
 
     @Test
     void choose_expert_isOk(){
-        Ad ad = adService.findById(1L);
-        Expert expert = expertService.findById(1L);
+        Ad ad = adService.findById(10L);
+        Expert expert = expertService.findById(4L);
         adService.chooseExpert(ad, expert);
         assertEquals(ad.getStatus(), AdStatus.WAITING_FOR_EXPERT);
     }

@@ -10,6 +10,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.List;
 
 @Setter
@@ -24,6 +26,13 @@ public class Ad extends BaseEntity {
     private Date recordDate;
     @Column(nullable = false)
     private Time recordTime;
+
+    @PrePersist
+    private void currentDateOnCreate(){
+        recordDate = Date.valueOf(LocalDate.now());
+        recordTime = Time.valueOf(LocalTime.now());
+    }
+
     @Column(nullable = false)
     private Date completionDate;
     @Column(nullable = false)
@@ -38,14 +47,19 @@ public class Ad extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AdStatus status;
 
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ToString.Exclude
+    @ManyToOne(optional = false)
     private Customer customer;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "ad",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ToString.Exclude
     private List<Offer> offers;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
+    @ToString.Exclude
     private SubServ subServ;
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "ad")
+    @ToString.Exclude
     private List<Opinion> opinions;
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
+    @ToString.Exclude
     private Expert chosenExpert;
 }

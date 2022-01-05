@@ -8,6 +8,8 @@ import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Setter
 @Getter
@@ -21,6 +23,13 @@ public class Offer extends BaseEntity {
     private Date recordDate;
     @Column(nullable = false)
     private Time recordTime;
+
+    @PrePersist
+    private void currentDateOnCreate(){
+        recordDate = Date.valueOf(LocalDate.now());
+        recordTime = Time.valueOf(LocalTime.now());
+    }
+
     @Column(nullable = false)
     private Date startDate;
     @Column(nullable = false)
@@ -32,9 +41,9 @@ public class Offer extends BaseEntity {
     @Column(precision = 17, scale = 2)
     private BigDecimal price;
 
-    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(optional = false)
     private Ad ad;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     private Expert expert;
 }

@@ -37,8 +37,7 @@ public class ExpertService extends BaseService<Expert, Long> {
             throw new DuplicateEmailException("Email Exist!");
     }
 
-    public Double getAveragePoint(Long id){
-        Expert expert = repository.findById(id).orElseThrow(() ->new EntityLoadException("Expert Was Not Found."));
+    public Double getAveragePoint(Expert expert){
         List<Opinion> opinions = expert.getOpinions();
         return opinions.stream().mapToInt(Opinion::getRate).average().orElse(0);
     }

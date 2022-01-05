@@ -30,13 +30,10 @@ class OpinionServiceTest {
 
     @Test
     void not_allowed_submit_opinion_throws_isOk(){
-        Expert expert = expertService.findById(1L);
-        Ad ad = adService.findById(1L);
-        Opinion opinion = Opinion.builder()
-                .id(1L)
-                .description("That Was Great...")
-                .rate(4)
-                .build();
+        Expert expert = expertService.findById(4L);
+        // ad status of this ad is : WAITING FOR OFFER
+        Ad ad = adService.findById(10L);
+        Opinion opinion = opinionService.findById(15L);
         opinionService.save(opinion);
         assertThrows(NotAllowedToSubmitOpinionException.class, () ->
                 opinionService.submitOpinion(opinion, expert, ad));

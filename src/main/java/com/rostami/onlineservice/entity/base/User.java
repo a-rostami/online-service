@@ -26,7 +26,7 @@ public abstract class User extends BaseEntity {
     private String username;
 
     @Email
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String email;
 
     @Column(nullable = false)

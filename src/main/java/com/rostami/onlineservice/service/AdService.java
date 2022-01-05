@@ -44,7 +44,7 @@ public class AdService extends BaseService<Ad, Long> {
     @Transactional(readOnly = true)
     public List<Offer> orderOffersByExpertPoint(Ad ad) {
         List<Offer> offers = ad.getOffers();
-        offers.sort(Comparator.comparing(offer -> expertService.getAveragePoint(offer.getExpert().getId())));
+        offers.sort(Comparator.comparing(offer -> expertService.getAveragePoint(offer.getExpert())));
         return offers;
     }
 

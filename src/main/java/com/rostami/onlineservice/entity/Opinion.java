@@ -26,9 +26,9 @@ public class Opinion extends BaseEntity {
     @Column(nullable = false)
     private String description;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     private Expert expert;
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne
     private Ad ad;
 }
