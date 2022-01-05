@@ -7,7 +7,6 @@ import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.repository.AdRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
-import net.bytebuddy.TypeCache;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -33,7 +32,7 @@ public class AdService extends BaseService<Ad, Long> {
     @Transactional(readOnly = true)
     public List<Offer> orderOffersByPrice(Ad ad) {
         Sort byPrice = Sort.by(Sort.Direction.ASC, "price");
-        return offerService.findAll(byPrice);
+        return offerService.findAll(((root, cq, cb) -> cb.equal(root.get("ad"), ad)), byPrice);
     }
 
     @Transactional(readOnly = true)
