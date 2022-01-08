@@ -3,7 +3,6 @@ package com.rostami.onlineservice.entity;
 import com.rostami.onlineservice.entity.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
-import org.hibernate.Hibernate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -14,7 +13,6 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.Objects;
 
 @Setter
 @Getter
@@ -24,9 +22,9 @@ import java.util.Objects;
 @SuperBuilder
 @Entity
 public class Offer extends BaseEntity {
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Date recordDate;
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Time recordTime;
 
     @PrePersist

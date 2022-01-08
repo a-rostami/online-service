@@ -23,9 +23,11 @@ public class SubServ extends BaseEntity {
     @ManyToOne
     private MainServ mainServ;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "subServ", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Ad> ads;
 
+    @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<Expert> experts;
 

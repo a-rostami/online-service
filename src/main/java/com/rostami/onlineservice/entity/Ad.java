@@ -22,9 +22,9 @@ import java.util.List;
 @SuperBuilder
 @Entity
 public class Ad extends BaseEntity {
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Date recordDate;
-    @Column(nullable = false)
+    @Column(nullable = false, updatable = false)
     private Time recordTime;
 
     @PrePersist
@@ -47,7 +47,6 @@ public class Ad extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private AdStatus status;
 
-    @ToString.Exclude
     @ManyToOne(optional = false)
     private Customer customer;
 
@@ -56,7 +55,6 @@ public class Ad extends BaseEntity {
     private List<Offer> offers;
 
     @ManyToOne(optional = false)
-    @ToString.Exclude
     private SubServ subServ;
 
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "ad")
@@ -64,6 +62,5 @@ public class Ad extends BaseEntity {
     private List<Opinion> opinions;
 
     @ManyToOne
-    @ToString.Exclude
     private Expert chosenExpert;
 }

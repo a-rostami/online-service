@@ -50,19 +50,19 @@ class AdServiceTest {
 
     @Test
     void order_byExpert_point_isOk(){
-        Ad ad = adService.findById(10L);
+        /*Ad ad = adService.findById(10L);
         List<Offer> offers = adService.orderOffersByExpertPoint(ad);
-        List<Offer> adOffers = ad.getOffers();
+        List<Offer> adOffers = ad.getOffers();*/
         // at this point we only have 1 expert
         // FIXME: 1/2/2022 add more expert for test average point sort
     }
 
     @Test
     void choose_expert_isOk(){
+        // exist ad is new in DB
         Ad ad = adService.findById(10L);
         Expert expert = expertService.findById(4L);
         adService.chooseExpert(ad, expert);
         assertEquals(ad.getStatus(), AdStatus.WAITING_FOR_EXPERT);
     }
-
 }

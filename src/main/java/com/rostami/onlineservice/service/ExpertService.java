@@ -2,7 +2,7 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Opinion;
-import com.rostami.onlineservice.exception.DuplicateEmailException;
+import com.rostami.onlineservice.exception.DuplicatedEmailException;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -37,7 +37,7 @@ public class ExpertService extends BaseService<Expert, Long> {
     private void checkEmailExist(String email, Long id){
         List<Expert> byEmail = repository.findAll(((root, cq, cb) -> cb.equal(root.get("email"), email)));
         if (id == null && byEmail.size() > 0)
-            throw new DuplicateEmailException("Email Exist!");
+            throw new DuplicatedEmailException("Email Exist!");
     }
 
     public Double getAveragePoint(Expert expert){

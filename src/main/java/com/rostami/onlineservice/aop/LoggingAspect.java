@@ -32,5 +32,4 @@ public class LoggingAspect {
         logger.info("Execution time of " + className + "." + methodName + " :: " + stopWatch.getTotalTimeMillis() + " ms");
         return result;
     }
-
 }

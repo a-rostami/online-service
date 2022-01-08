@@ -1,10 +1,7 @@
 package com.rostami.onlineservice.entity;
 
 import com.rostami.onlineservice.entity.base.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.CascadeType;
@@ -20,8 +17,12 @@ import java.util.List;
 @SuperBuilder
 @Entity
 public class Customer extends User {
+
+    @ToString.Exclude
     @OneToOne(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Credit credit;
+
+    @ToString.Exclude
     @OneToMany(mappedBy = "customer", cascade = {CascadeType.MERGE,CascadeType.PERSIST})
     private List<Ad> ads;
 

@@ -4,7 +4,7 @@ import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
-import com.rostami.onlineservice.exception.DuplicateEmailException;
+import com.rostami.onlineservice.exception.DuplicatedEmailException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -36,7 +36,7 @@ class CustomerServiceTest {
                 .role(Role.CUSTOMER)
                 .userStatus(UserStatus.NEW)
                 .build();
-        assertThrows(DuplicateEmailException.class, () -> customerService.save(customer));
+        assertThrows(DuplicatedEmailException.class, () -> customerService.save(customer));
     }
 
     @Test

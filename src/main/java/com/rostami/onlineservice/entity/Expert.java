@@ -1,10 +1,7 @@
 package com.rostami.onlineservice.entity;
 
 import com.rostami.onlineservice.entity.base.User;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
@@ -25,12 +22,15 @@ public class Expert extends User {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private List<SubServ> subServs;
 
+    @ToString.Exclude
     @OneToOne(mappedBy = "expert", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Credit credit;
 
+    @ToString.Exclude
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "expert", fetch = FetchType.EAGER)
     private Set<Opinion> opinions;
 
+    @ToString.Exclude
     @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private transient List<Offer> offers;
 

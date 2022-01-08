@@ -21,9 +21,11 @@ public class Credit extends BaseEntity {
     @Column(nullable = false)
     private BigDecimal balance;
 
+    @ToString.Exclude
     @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Expert expert;
 
+    @ToString.Exclude
     @OneToOne( cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     private Customer customer;
 }
