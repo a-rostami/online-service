@@ -48,19 +48,14 @@ public class Ad extends BaseEntity {
     private AdStatus status;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "ad",cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @ToString.Exclude
-    private List<Offer> offers;
-
     @ManyToOne(optional = false)
+    @JoinColumn(name = "subServ_id")
     private SubServ subServ;
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST}, mappedBy = "ad")
-    @ToString.Exclude
-    private List<Opinion> opinions;
-
     @ManyToOne
+    @JoinColumn(name = "chosenExpert_id")
     private Expert chosenExpert;
 }

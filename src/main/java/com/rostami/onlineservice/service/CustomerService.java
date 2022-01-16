@@ -35,7 +35,7 @@ public class CustomerService extends BaseService<Customer, Long> {
     private void checkEmailExist(String email, Long id){
         List<Customer> byEmail = repository.findAll(((root, cq, cb) -> cb.equal(root.get("email"), email)));
         if (id == null  && !CollectionUtils.isEmpty(byEmail))
-            throw new DuplicatedEmailException("Email Exist!");
+            throw new DuplicatedEmailException("Email Already Exist!");
     }
 
     @Transactional(readOnly = true)

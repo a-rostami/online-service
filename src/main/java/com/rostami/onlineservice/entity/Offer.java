@@ -4,10 +4,7 @@ import com.rostami.onlineservice.entity.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.ManyToOne;
-import javax.persistence.PrePersist;
+import javax.persistence.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
@@ -45,8 +42,10 @@ public class Offer extends BaseEntity {
     private BigDecimal price;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "ad_id")
     private Ad ad;
 
     @ManyToOne
+    @JoinColumn(name = "expert_id")
     private Expert expert;
 }

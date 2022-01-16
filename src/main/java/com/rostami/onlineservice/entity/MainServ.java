@@ -12,19 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
 @Entity
 public class MainServ extends BaseEntity {
     @Column(nullable = false)
     private String name;
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "mainServ", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<SubServ> subServs;
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + getId() + ", " +
-                "name = " + getName() + ")";
-    }
 }

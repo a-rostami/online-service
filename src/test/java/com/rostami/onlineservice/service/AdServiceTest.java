@@ -32,10 +32,13 @@ class AdServiceTest {
     @Autowired
     SubServService subServService;
 
+    @Autowired
+    OfferService offerService;
+
     @Test
     void order_byPrice_isOk(){
         Ad ad = adService.findById(10L);
-        List<Offer> adOffers = ad.getOffers();
+        List<Offer> adOffers = offerService.findAll(((root, query, cb) -> cb.equal(root.get("ad"), ad)));
         List<Offer> sortedOffers = adService.orderOffersByPrice(ad);
         adOffers.sort(Comparator.comparing(Offer::getPrice));
         boolean result = true;
@@ -50,10 +53,6 @@ class AdServiceTest {
 
     @Test
     void order_byExpert_point_isOk(){
-        /*Ad ad = adService.findById(10L);
-        List<Offer> offers = adService.orderOffersByExpertPoint(ad);
-        List<Offer> adOffers = ad.getOffers();*/
-        // at this point we only have 1 expert
         // FIXME: 1/2/2022 add more expert for test average point sort
     }
 

@@ -13,6 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@ToString(callSuper = true)
 @Entity
 public class SubServ extends BaseEntity {
     @Column(nullable = false)
@@ -21,21 +22,6 @@ public class SubServ extends BaseEntity {
     private BigDecimal basePrice;
 
     @ManyToOne
+    @JoinColumn(name = "mainServ_id")
     private MainServ mainServ;
-
-    @ToString.Exclude
-    @OneToMany(mappedBy = "subServ", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Ad> ads;
-
-    @ToString.Exclude
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    private List<Expert> experts;
-
-    @Override
-    public String toString() {
-        return getClass().getSimpleName() + "(" +
-                "id = " + getId() + ", " +
-                "name = " + getName() + ", " +
-                "basePrice = " + getBasePrice() + ")";
-    }
 }

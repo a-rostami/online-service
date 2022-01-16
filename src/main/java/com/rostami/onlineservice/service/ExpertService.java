@@ -15,12 +15,12 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.util.List;
-import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class ExpertService extends BaseService<Expert, Long> {
     private final ExpertRepository repository;
+    private final OpinionService opinionService;
 
     @PostConstruct
     public void init(){
@@ -37,11 +37,11 @@ public class ExpertService extends BaseService<Expert, Long> {
     private void checkEmailExist(String email, Long id){
         List<Expert> byEmail = repository.findAll(((root, cq, cb) -> cb.equal(root.get("email"), email)));
         if (id == null && byEmail.size() > 0)
-            throw new DuplicatedEmailException("Email Exist!");
+            throw new DuplicatedEmailException("Email Already Exist!");
     }
 
     public Double getAveragePoint(Expert expert){
-        Set<Opinion> opinions = expert.getOpinions();
+        List<Opinion> opinions = opinionService.findAll(((root, query, cb) -> cb.equal(root.get("expert"), expert)));
         return opinions.stream().mapToInt(Opinion::getRate).average().orElse(0);
     }
 

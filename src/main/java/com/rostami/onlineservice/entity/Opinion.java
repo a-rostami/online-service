@@ -25,8 +25,10 @@ public class Opinion extends BaseEntity {
     private String description;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "expert_id")
     private Expert expert;
 
     @ManyToOne(optional = false)
+    @JoinColumn(name = "ad_id")
     private Ad ad;
 }
