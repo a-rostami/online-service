@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.Id;
 import java.util.List;
 
 @Setter
@@ -17,6 +18,11 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long> {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void save(T entity){
         jpaRepository.save(entity);
+    }
+
+    @Transactional
+    public void deleteById(ID id){
+        jpaRepository.deleteById(id);
     }
 
     @Transactional(readOnly = true)
