@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 @Setter
 @Builder
 public class CustomerFindResult implements BaseOutDto<Customer, CustomerFindResult> {
+    private Long id;
     private String firstname;
     private String lastname;
     private String username;
@@ -20,6 +21,7 @@ public class CustomerFindResult implements BaseOutDto<Customer, CustomerFindResu
 
     @Override
     public CustomerFindResult convertToDto(Customer entity) {
+        id = entity.getId();
         firstname = entity.getFirstname();
         lastname = entity.getLastname();
         username = entity.getUsername();

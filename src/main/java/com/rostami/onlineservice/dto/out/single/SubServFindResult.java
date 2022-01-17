@@ -12,11 +12,13 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 public class SubServFindResult implements BaseOutDto<SubServ, SubServFindResult> {
+    private Long id;
     private String name;
     private BigDecimal basePrice;
 
     @Override
     public SubServFindResult convertToDto(SubServ entity) {
+        id = entity.getId();
         name = entity.getName();
         basePrice = entity.getBasePrice();
         return this;

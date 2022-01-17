@@ -12,6 +12,7 @@ import javax.validation.constraints.Email;
 @Setter
 @Builder
 public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
+    private Long id;
     private String firstname;
     private String lastname;
     private String username;
@@ -20,6 +21,7 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
 
     @Override
     public ExpertFindResult convertToDto(Expert entity) {
+        id = entity.getId();
         firstname = entity.getFirstname();
         lastname = entity.getLastname();
         username = entity.getUsername();

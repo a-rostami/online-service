@@ -2,6 +2,7 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
+import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
@@ -26,8 +27,6 @@ class CustomerServiceTest {
     @Autowired
     CustomerService customerService;
 
-    @Autowired
-    CustomerRepository customerRepository;
 
     @Test
     void duplicate_email_is_throws_exception(){
@@ -46,7 +45,8 @@ class CustomerServiceTest {
     void is_change_password_ok(){
         String newPassword = "123456789";
         String username = "mrrostami";
-        Customer customer = customerRepository.findById(1L).orElse(new Customer());
+        CustomerFindResult customerDto = (CustomerFindResult) customerService.get(1L);
+        Customer customer = Customer.builder().id(customerDto.getId()).build();
         customerService.changePassword(customer.getId(), newPassword);
         // username of found entity is : mrrostami
         Customer newPassEntity = customerService.findAll(usernamePassSpecification(username, newPassword)).get(0);

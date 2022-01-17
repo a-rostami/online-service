@@ -6,12 +6,14 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @Builder
 public class CreditUpdateParam implements BaseInDto<Credit> {
+    @NotNull
     private Long id;
     private BigDecimal balance;
 

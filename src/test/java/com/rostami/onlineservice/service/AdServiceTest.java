@@ -1,6 +1,8 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
+import com.rostami.onlineservice.dto.out.single.AdFindResult;
+import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
 import com.rostami.onlineservice.entity.*;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.repository.AdRepository;
@@ -26,9 +28,6 @@ class AdServiceTest {
     AdService adService;
 
     @Autowired
-    AdRepository adRepository;
-
-    @Autowired
     CustomerService customerService;
 
     @Autowired
@@ -40,12 +39,11 @@ class AdServiceTest {
     @Autowired
     OfferService offerService;
 
-    @Autowired
-    ExpertRepository expertRepository;
 
     @Test
     void order_byPrice_isOk(){
-        Ad ad = adRepository.findById(10L).orElse(null);
+        AdFindResult dto = (AdFindResult) adService.get(10L);
+        Ad ad = Ad.builder().id(dto.getId()).build();
         List<Offer> adOffers = offerService.findAll(((root, query, cb) -> cb.equal(root.get("ad"), ad)));
         List<Offer> sortedOffers = adService.orderOffersByPrice(ad);
         adOffers.sort(Comparator.comparing(Offer::getPrice));
@@ -67,8 +65,10 @@ class AdServiceTest {
     @Test
     void choose_expert_isOk(){
         // exist ad is new in DB
-        Ad ad = adRepository.findById(10L).orElse(new Ad());
-        Expert expert = expertRepository.findById(4L).orElse(new Expert());
+        AdFindResult adDto = (AdFindResult) adService.get(10L);
+        Ad ad = Ad.builder().id(adDto.getId()).build();
+        ExpertFindResult expertDto = (ExpertFindResult) expertService.get(4L);
+        Expert expert = Expert.builder().id(expertDto.getId()).build();
         adService.chooseExpert(ad, expert);
         assertEquals(ad.getStatus(), AdStatus.WAITING_FOR_EXPERT);
     }

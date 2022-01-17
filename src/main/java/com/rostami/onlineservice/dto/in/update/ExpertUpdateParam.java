@@ -9,12 +9,14 @@ import lombok.SneakyThrows;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 @Builder
 public class ExpertUpdateParam implements BaseInDto<Expert> {
+    @NotNull
     private Long id;
     private String firstname;
     private String lastname;

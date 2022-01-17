@@ -14,6 +14,7 @@ import java.sql.Time;
 @Setter
 @Builder
 public class OfferFindResult implements BaseOutDto<Offer, OfferFindResult> {
+    private Long id;
     private Date startDate;
     private Time startTime;
     private Date completionDate;
@@ -22,6 +23,7 @@ public class OfferFindResult implements BaseOutDto<Offer, OfferFindResult> {
 
     @Override
     public OfferFindResult convertToDto(Offer entity) {
+        id = entity.getId();
         startDate = entity.getStartDate();
         startTime = entity.getStartTime();
         completionDate = entity.getCompletionDate();

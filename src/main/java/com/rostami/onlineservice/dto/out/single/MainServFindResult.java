@@ -10,10 +10,12 @@ import lombok.Setter;
 @Setter
 @Builder
 public class MainServFindResult implements BaseOutDto<MainServ, MainServFindResult> {
+    private Long id;
     private String name;
 
     @Override
     public MainServFindResult convertToDto(MainServ entity) {
+        id = entity.getId();
         name = entity.getName();
         return this;
     }

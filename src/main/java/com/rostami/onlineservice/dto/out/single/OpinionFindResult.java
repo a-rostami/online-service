@@ -13,6 +13,7 @@ import javax.validation.constraints.Min;
 @Setter
 @Builder
 public class OpinionFindResult implements BaseOutDto<Opinion, OpinionFindResult> {
+    private Long id;
     @Max(value = 5)
     @Min(value = 1)
     private Integer rate;
@@ -21,6 +22,7 @@ public class OpinionFindResult implements BaseOutDto<Opinion, OpinionFindResult>
 
     @Override
     public OpinionFindResult convertToDto(Opinion entity) {
+        id = entity.getId();
         rate = entity.getRate();
         description = entity.getDescription();
         return this;

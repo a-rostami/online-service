@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
+import com.rostami.onlineservice.dto.out.single.OfferFindResult;
 import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.exception.BelowBasePriceException;
 import com.rostami.onlineservice.repository.OfferRepository;
@@ -34,7 +35,8 @@ class OfferServiceTest {
 
     @Test
     void submit_offer_throws_below_priceException_isOk(){
-        Offer offer = offerRepository.findById(13L).orElse(new Offer());
+        OfferFindResult offerDto = (OfferFindResult) offerService.get(13L);
+        Offer offer = offerRepository.findById(offerDto.getId()).orElse(new Offer());
         // base price of subService of this ad is 100000
         offer.setPrice(BigDecimal.valueOf(50000));
         assertThrows(BelowBasePriceException.class, () -> offerService.submitOffer(offer));

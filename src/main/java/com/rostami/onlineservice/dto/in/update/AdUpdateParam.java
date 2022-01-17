@@ -6,6 +6,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
@@ -14,6 +15,7 @@ import java.sql.Time;
 @Setter
 @Builder
 public class AdUpdateParam implements BaseInDto<Ad> {
+    @NotNull
     private Long id;
     private Date completionDate;
     private Time completionTime;

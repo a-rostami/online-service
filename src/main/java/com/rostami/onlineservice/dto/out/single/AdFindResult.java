@@ -16,6 +16,7 @@ import java.sql.Time;
 @Setter
 @Builder
 public class AdFindResult implements BaseOutDto<Ad, AdFindResult> {
+    private Long id;
     private Date completionDate;
     private Time completionTime;
     private BigDecimal price;
@@ -24,6 +25,7 @@ public class AdFindResult implements BaseOutDto<Ad, AdFindResult> {
 
     @Override
     public AdFindResult convertToDto(Ad entity) {
+        id = entity.getId();
         completionDate = entity.getCompletionDate();
         completionTime = entity.getCompletionTime();
         price = entity.getPrice();

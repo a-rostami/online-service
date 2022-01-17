@@ -12,10 +12,12 @@ import java.math.BigDecimal;
 @Setter
 @Builder
 public class CreditFindResult implements BaseOutDto<Credit, CreditFindResult> {
+    private Long id;
     private BigDecimal balance;
 
     @Override
     public CreditFindResult convertToDto(Credit entity) {
+        id = entity.getId();
         balance = entity.getBalance();
         return this;
     }

@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
+import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import org.junit.jupiter.api.Test;
@@ -24,13 +25,11 @@ class ExpertServiceTest {
     @Autowired
     OpinionService opinionService;
 
-    @Autowired
-    ExpertRepository expertRepository;
-
     @Test
     void get_average_point_isOk(){
         // expert only have two opinion with rates : 3 , 4
-        Expert expert = expertRepository.findById(4L).orElse(new Expert());
+        ExpertFindResult expertDto = (ExpertFindResult) expertService.get(4L);
+        Expert expert = Expert.builder().id(expertDto.getId()).build();
         Double averagePoint = expertService.getAveragePoint(expert);
         assertEquals(averagePoint, 3.5);
     }
