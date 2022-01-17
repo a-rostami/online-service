@@ -1,4 +1,4 @@
-package com.rostami.onlineservice.dto.in;
+package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import lombok.Builder;
@@ -15,11 +15,10 @@ import java.sql.Time;
 @Setter
 @Getter
 @Builder
-public class AdInDto {
+public class AdCreateParam {
     private Date completionDate;
     private Time completionTime;
     private BigDecimal price;
     private String workDescription;
     private String address;
-    private AdStatus status;
 }

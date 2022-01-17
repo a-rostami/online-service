@@ -1,7 +1,5 @@
-package com.rostami.onlineservice.dto.in;
+package com.rostami.onlineservice.dto.in.update;
 
-import com.rostami.onlineservice.entity.enums.Role;
-import com.rostami.onlineservice.entity.enums.UserStatus;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -9,10 +7,10 @@ import lombok.Setter;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 
-@Setter
 @Getter
+@Setter
 @Builder
-public class ExpertInDto {
+public class CustomerUpdateParam {
     private String firstname;
     private String lastname;
     private String username;
@@ -20,6 +18,4 @@ public class ExpertInDto {
     private String email;
     @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
     private String password;
-    private Role role;
-    private UserStatus userStatus;
 }

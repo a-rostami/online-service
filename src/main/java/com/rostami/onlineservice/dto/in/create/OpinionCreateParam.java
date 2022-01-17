@@ -1,4 +1,4 @@
-package com.rostami.onlineservice.dto.in;
+package com.rostami.onlineservice.dto.in.create;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import javax.validation.constraints.Min;
 @Setter
 @Getter
 @Builder
-public class OpinionInDto {
+public class OpinionCreateParam {
     @Max(value = 5)
     @Min(value = 1)
     private Integer rate;
