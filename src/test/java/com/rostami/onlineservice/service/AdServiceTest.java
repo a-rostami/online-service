@@ -3,6 +3,8 @@ package com.rostami.onlineservice.service;
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.entity.*;
 import com.rostami.onlineservice.entity.enums.AdStatus;
+import com.rostami.onlineservice.repository.AdRepository;
+import com.rostami.onlineservice.repository.ExpertRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -24,6 +26,9 @@ class AdServiceTest {
     AdService adService;
 
     @Autowired
+    AdRepository adRepository;
+
+    @Autowired
     CustomerService customerService;
 
     @Autowired
@@ -35,9 +40,12 @@ class AdServiceTest {
     @Autowired
     OfferService offerService;
 
+    @Autowired
+    ExpertRepository expertRepository;
+
     @Test
     void order_byPrice_isOk(){
-        Ad ad = adService.findById(10L);
+        Ad ad = adRepository.findById(10L).orElse(null);
         List<Offer> adOffers = offerService.findAll(((root, query, cb) -> cb.equal(root.get("ad"), ad)));
         List<Offer> sortedOffers = adService.orderOffersByPrice(ad);
         adOffers.sort(Comparator.comparing(Offer::getPrice));
@@ -59,8 +67,8 @@ class AdServiceTest {
     @Test
     void choose_expert_isOk(){
         // exist ad is new in DB
-        Ad ad = adService.findById(10L);
-        Expert expert = expertService.findById(4L);
+        Ad ad = adRepository.findById(10L).orElse(new Ad());
+        Expert expert = expertRepository.findById(4L).orElse(new Expert());
         adService.chooseExpert(ad, expert);
         assertEquals(ad.getStatus(), AdStatus.WAITING_FOR_EXPERT);
     }

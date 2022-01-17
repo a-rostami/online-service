@@ -1,10 +1,15 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.CreditFindResult;
+import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Opinion;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
+import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -27,11 +32,12 @@ public class ExpertService extends BaseService<Expert, Long> {
     @PostConstruct
     public void init(){
         setJpaRepository(repository);
+        setBaseOutDto(ExpertFindResult.builder().build());
     }
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public CreateUpdateResult saveOrUpdate(BaseDto<Expert> dto) {
+    public CreateUpdateResult saveOrUpdate(BaseInDto<Expert> dto) {
         Expert entity = dto.convertToDomain();
         checkEmailExist(entity.getEmail(), entity.getId());
         Expert saved = repository.save(entity);

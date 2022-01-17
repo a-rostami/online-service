@@ -6,6 +6,7 @@ import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
+import com.rostami.onlineservice.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -25,6 +26,9 @@ class CustomerServiceTest {
     @Autowired
     CustomerService customerService;
 
+    @Autowired
+    CustomerRepository customerRepository;
+
     @Test
     void duplicate_email_is_throws_exception(){
         CustomerCreateParam customer = CustomerCreateParam.builder()
@@ -42,7 +46,7 @@ class CustomerServiceTest {
     void is_change_password_ok(){
         String newPassword = "123456789";
         String username = "mrrostami";
-        Customer customer = customerService.findById(1L);
+        Customer customer = customerRepository.findById(1L).orElse(new Customer());
         customerService.changePassword(customer.getId(), newPassword);
         // username of found entity is : mrrostami
         Customer newPassEntity = customerService.findAll(usernamePassSpecification(username, newPassword)).get(0);

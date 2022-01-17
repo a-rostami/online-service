@@ -1,7 +1,12 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.dto.out.BaseOutDto;
+import com.rostami.onlineservice.dto.out.single.CreditFindResult;
+import com.rostami.onlineservice.dto.out.single.OfferFindResult;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.exception.BelowBasePriceException;
+import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.OfferRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -23,6 +28,7 @@ public class OfferService extends BaseService<Offer, Long> {
     @PostConstruct
     public void init(){
         setJpaRepository(repository);
+        setBaseOutDto(OfferFindResult.builder().build());
     }
 
     @Transactional

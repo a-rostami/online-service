@@ -1,6 +1,11 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.dto.out.BaseOutDto;
+import com.rostami.onlineservice.dto.out.single.CreditFindResult;
+import com.rostami.onlineservice.dto.out.single.MainServFindResult;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.MainServ;
+import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.MainServRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +26,7 @@ public class MainServService extends BaseService<MainServ, Long> {
     @PostConstruct
     public void init(){
         setJpaRepository(repository);
+        setBaseOutDto(MainServFindResult.builder().build());
     }
 
     @Transactional(readOnly = true)

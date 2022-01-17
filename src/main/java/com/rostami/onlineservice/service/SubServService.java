@@ -1,6 +1,11 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.dto.out.BaseOutDto;
+import com.rostami.onlineservice.dto.out.single.CreditFindResult;
+import com.rostami.onlineservice.dto.out.single.SubServFindResult;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.SubServ;
+import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.SubServRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +26,7 @@ public class SubServService extends BaseService<SubServ, Long> {
     @PostConstruct
     public void init(){
         setJpaRepository(repository);
+        setBaseOutDto(SubServFindResult.builder().build());
     }
 
     @Transactional(readOnly = true)

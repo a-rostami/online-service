@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.create;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Offer;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.sql.Time;
 @Setter
 @Getter
 @Builder
-public class OfferCreateParam implements BaseDto<Offer> {
+public class OfferCreateParam implements BaseInDto<Offer> {
     private Date startDate;
     private Time startTime;
     private Date completionDate;

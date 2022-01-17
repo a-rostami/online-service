@@ -3,6 +3,7 @@ package com.rostami.onlineservice.service;
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.exception.BelowBasePriceException;
+import com.rostami.onlineservice.repository.OfferRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -28,9 +29,12 @@ class OfferServiceTest {
     @Autowired
     ExpertService expertService;
 
+    @Autowired
+    OfferRepository offerRepository;
+
     @Test
     void submit_offer_throws_below_priceException_isOk(){
-        Offer offer = offerService.findById(13L);
+        Offer offer = offerRepository.findById(13L).orElse(new Offer());
         // base price of subService of this ad is 100000
         offer.setPrice(BigDecimal.valueOf(50000));
         assertThrows(BelowBasePriceException.class, () -> offerService.submitOffer(offer));

@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.create;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
@@ -16,7 +16,7 @@ import javax.validation.constraints.Pattern;
 @Setter
 @Getter
 @Builder
-public class ExpertCreateParam implements BaseDto<Expert> {
+public class ExpertCreateParam implements BaseInDto<Expert> {
     private String firstname;
     private String lastname;
     private String username;
@@ -25,8 +25,6 @@ public class ExpertCreateParam implements BaseDto<Expert> {
     private String email;
     @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
     private String password;
-    private Role role;
-    private UserStatus userStatus;
 
     @SneakyThrows
     @Override

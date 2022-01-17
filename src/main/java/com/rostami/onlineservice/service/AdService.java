@@ -1,9 +1,12 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.dto.out.BaseOutDto;
+import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.entity.enums.AdStatus;
+import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.AdRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -27,6 +30,7 @@ public class AdService extends BaseService<Ad, Long> {
     @PostConstruct
     public void init() {
         setJpaRepository(repository);
+        setBaseOutDto(AdFindResult.builder().build());
     }
 
     @Transactional(readOnly = true)

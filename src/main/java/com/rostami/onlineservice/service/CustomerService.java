@@ -1,9 +1,14 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.CreditFindResult;
+import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
+import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.CustomerRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -26,10 +31,11 @@ public class CustomerService extends BaseService<Customer, Long> {
     @PostConstruct
     public void init(){
         setJpaRepository(repository);
+        setBaseOutDto(CustomerFindResult.builder().build());
     }
 
     @Override
-    public CreateUpdateResult saveOrUpdate(BaseDto<Customer> dto) {
+    public CreateUpdateResult saveOrUpdate(BaseInDto<Customer> dto) {
         Customer entity = dto.convertToDomain();
         checkEmailExist(entity.getEmail(), entity.getId());
         Customer saved = repository.save(entity);

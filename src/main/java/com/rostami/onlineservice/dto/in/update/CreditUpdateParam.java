@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.update;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Credit;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Builder
-public class CreditUpdateParam implements BaseDto<Credit> {
+public class CreditUpdateParam implements BaseInDto<Credit> {
     private Long id;
     private BigDecimal balance;
 

@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.create;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.SubServ;
 import lombok.Builder;
 import lombok.Getter;
@@ -11,7 +11,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Builder
-public class SubServCreateParam implements BaseDto<SubServ> {
+public class SubServCreateParam implements BaseInDto<SubServ> {
     private String name;
     private BigDecimal basePrice;
     private MainServCreateParam mainServCreateParam;

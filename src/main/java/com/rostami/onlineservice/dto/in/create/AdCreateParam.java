@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.create;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import lombok.Builder;
@@ -14,7 +14,7 @@ import java.sql.Time;
 @Setter
 @Getter
 @Builder
-public class AdCreateParam implements BaseDto<Ad> {
+public class AdCreateParam implements BaseInDto<Ad> {
     private Date completionDate;
     private Time completionTime;
     private BigDecimal price;

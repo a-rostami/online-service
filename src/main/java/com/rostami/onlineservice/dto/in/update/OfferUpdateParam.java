@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.update;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Offer;
 import lombok.Builder;
 import lombok.Getter;
@@ -13,7 +13,7 @@ import java.sql.Time;
 @Getter
 @Setter
 @Builder
-public class OfferUpdateParam implements BaseDto<Offer> {
+public class OfferUpdateParam implements BaseInDto<Offer> {
     private Long id;
     private Date startDate;
     private Time startTime;

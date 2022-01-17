@@ -2,6 +2,7 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.entity.Expert;
+import com.rostami.onlineservice.repository.ExpertRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -23,10 +24,13 @@ class ExpertServiceTest {
     @Autowired
     OpinionService opinionService;
 
+    @Autowired
+    ExpertRepository expertRepository;
+
     @Test
     void get_average_point_isOk(){
         // expert only have two opinion with rates : 3 , 4
-        Expert expert = expertService.findById(4L);
+        Expert expert = expertRepository.findById(4L).orElse(new Expert());
         Double averagePoint = expertService.getAveragePoint(expert);
         assertEquals(averagePoint, 3.5);
     }

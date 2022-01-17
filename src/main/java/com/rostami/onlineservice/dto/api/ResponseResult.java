@@ -1,4 +1,4 @@
-package com.rostami.onlineservice.dto;
+package com.rostami.onlineservice.dto.api;
 
 import lombok.Builder;
 import lombok.Getter;

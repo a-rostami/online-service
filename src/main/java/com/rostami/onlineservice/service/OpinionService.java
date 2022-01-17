@@ -1,9 +1,14 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.dto.out.BaseOutDto;
+import com.rostami.onlineservice.dto.out.single.CreditFindResult;
+import com.rostami.onlineservice.dto.out.single.OpinionFindResult;
 import com.rostami.onlineservice.entity.Ad;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Opinion;
 import com.rostami.onlineservice.entity.enums.AdStatus;
+import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.exception.NotAllowedToSubmitOpinionException;
 import com.rostami.onlineservice.repository.OpinionRepository;
 import com.rostami.onlineservice.service.base.BaseService;
@@ -25,6 +30,7 @@ public class OpinionService extends BaseService<Opinion, Long> {
     @PostConstruct
     public void init(){
         setJpaRepository(repository);
+        setBaseOutDto(OpinionFindResult.builder().build());
     }
 
     @Transactional

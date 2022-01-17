@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.create;
 
-import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.MainServ;
 import lombok.Builder;
 import lombok.Getter;
@@ -9,7 +9,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class MainServCreateParam implements BaseDto<MainServ> {
+public class MainServCreateParam implements BaseInDto<MainServ> {
     private String name;
 
     @Override
