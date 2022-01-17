@@ -22,6 +22,12 @@ public class CustomerController {
     }
 
 
+    @GetMapping("")
+    public ModelAndView signupSignIn(ModelAndView model){
+        model.setViewName("customer-signup");
+        return model;
+    }
+
     @PostMapping("/saveCustomer")
     public ModelAndView saveCustomer(@ModelAttribute Customer customer) {
         customerService.save(customer);
