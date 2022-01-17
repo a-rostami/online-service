@@ -7,6 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 @Builder
-public class CreateResult {
+public class CreateUpdateResult {
     private Long id;
+    private Boolean success;
 }

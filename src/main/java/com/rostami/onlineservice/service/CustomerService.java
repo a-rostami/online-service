@@ -1,5 +1,7 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
 import com.rostami.onlineservice.repository.CustomerRepository;
@@ -27,9 +29,11 @@ public class CustomerService extends BaseService<Customer, Long> {
     }
 
     @Override
-    public void save(Customer entity) {
+    public CreateUpdateResult saveOrUpdate(BaseDto<Customer> dto) {
+        Customer entity = dto.convertToDomain();
         checkEmailExist(entity.getEmail(), entity.getId());
-        repository.save(entity);
+        Customer saved = repository.save(entity);
+        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
     private void checkEmailExist(String email, Long id){

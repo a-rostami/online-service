@@ -1,5 +1,7 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Opinion;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
@@ -29,9 +31,11 @@ public class ExpertService extends BaseService<Expert, Long> {
 
     @Override
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void save(Expert entity) {
+    public CreateUpdateResult saveOrUpdate(BaseDto<Expert> dto) {
+        Expert entity = dto.convertToDomain();
         checkEmailExist(entity.getEmail(), entity.getId());
-        repository.save(entity);
+        Expert saved = repository.save(entity);
+        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
     private void checkEmailExist(String email, Long id){

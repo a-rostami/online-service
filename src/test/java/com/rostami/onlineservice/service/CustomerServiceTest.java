@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
+import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
@@ -26,17 +27,15 @@ class CustomerServiceTest {
 
     @Test
     void duplicate_email_is_throws_exception(){
-        Customer customer = Customer.builder()
+        CustomerCreateParam customer = CustomerCreateParam.builder()
                 .firstname("arash")
                 .lastname("rostami")
                 // this email exists in DB
                 .email("test@Gmail.com")
                 .password("56556128")
                 .username("mrrostami")
-                .role(Role.CUSTOMER)
-                .userStatus(UserStatus.NEW)
                 .build();
-        assertThrows(DuplicatedEmailException.class, () -> customerService.save(customer));
+        assertThrows(DuplicatedEmailException.class, () -> customerService.saveOrUpdate(customer));
     }
 
     @Test

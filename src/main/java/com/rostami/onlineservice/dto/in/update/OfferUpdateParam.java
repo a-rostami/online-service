@@ -1,5 +1,7 @@
 package com.rostami.onlineservice.dto.in.update;
 
+import com.rostami.onlineservice.dto.in.BaseDto;
+import com.rostami.onlineservice.entity.Offer;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,10 +13,23 @@ import java.sql.Time;
 @Getter
 @Setter
 @Builder
-public class OfferUpdateParam {
+public class OfferUpdateParam implements BaseDto<Offer> {
+    private Long id;
     private Date startDate;
     private Time startTime;
     private Date completionDate;
     private Time completionTime;
     private BigDecimal price;
+
+    @Override
+    public Offer convertToDomain() {
+        return Offer.builder()
+                .id(id)
+                .startDate(startDate)
+                .startTime(startTime)
+                .completionDate(completionDate)
+                .completionTime(completionTime)
+                .price(price)
+                .build();
+    }
 }

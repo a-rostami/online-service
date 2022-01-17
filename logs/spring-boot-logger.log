@@ -363,3 +363,7 @@
 2022-01-17 14:42:44,710 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-8080-exec-2] Completed initialization in 0 ms
 2022-01-17 14:42:45,455 INFO com.rostami.onlineservice.aop.LoggingAspect [http-nio-8080-exec-2] Execution time of ExpertService.save :: 587 ms
 2022-01-17 15:01:04,800 WARN com.zaxxer.hikari.pool.HikariPool$HouseKeeper [HikariPool-1 housekeeper] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=10m25s811ms779µs).
+2022-01-17 15:45:11,761 WARN com.zaxxer.hikari.pool.HikariPool$HouseKeeper [HikariPool-1 housekeeper] HikariPool-1 - Thread starvation or clock leap detected (housekeeper delta=17m5s680ms236µs400ns).
+2022-01-17 15:48:18,918 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
+2022-01-17 15:48:19,324 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
+2022-01-17 15:48:19,596 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.
