@@ -1,9 +1,52 @@
 package com.rostami.onlineservice.controller;
 
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.servlet.ModelAndView;
+import com.rostami.onlineservice.dto.api.ResponseResult;
+import com.rostami.onlineservice.dto.in.create.OfferCreateParam;
+import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.OfferFindResult;
+import com.rostami.onlineservice.service.OfferService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.List;
+import java.util.stream.Collectors;
+
+@RequiredArgsConstructor
+@RequestMapping("/offers")
+@RestController
 public class OfferController {
+    private final OfferService offerService;
+
+    @PostMapping("/create")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody OfferCreateParam param){
+        CreateUpdateResult result = offerService.saveOrUpdate(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("Offer Successfully Created.")
+                .data(result)
+                .build());
+    }
+
+    @GetMapping("/load/{id}")
+    public ResponseEntity<ResponseResult<OfferFindResult>> read(@Validated @PathVariable Long id){
+        OfferFindResult result = (OfferFindResult) offerService.get(id);
+        return ResponseEntity.ok(ResponseResult.<OfferFindResult>builder()
+                .code(0)
+                .message("Successfully Found Offer.")
+                .data(result).build());
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<ResponseResult<List<OfferFindResult>>> readAll(){
+        List<OfferFindResult> results = offerService.list().stream()
+                .map((baseOutDto -> (OfferFindResult) baseOutDto))
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseResult.<List<OfferFindResult>>builder()
+                .code(0)
+                .message("Successfully Found All Offers.")
+                .data(results)
+                .build());
+    }
 }

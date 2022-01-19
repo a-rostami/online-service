@@ -6,6 +6,7 @@ import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
 import com.rostami.onlineservice.service.ExpertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -18,7 +19,7 @@ public class ExpertController {
     private final ExpertService expertService;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@RequestBody ExpertCreateParam param){
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody ExpertCreateParam param){
         CreateUpdateResult result = expertService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
@@ -27,8 +28,8 @@ public class ExpertController {
                 .build());
     }
 
-    @GetMapping("/find/{id}")
-    public ResponseEntity<ResponseResult<ExpertFindResult>> read(@PathVariable Long id){
+    @GetMapping("/load/{id}")
+    public ResponseEntity<ResponseResult<ExpertFindResult>> read(@Validated @PathVariable Long id){
         ExpertFindResult result = (ExpertFindResult) expertService.get(id);
         return ResponseEntity.ok(ResponseResult.<ExpertFindResult>builder()
                 .code(0)
@@ -36,10 +37,10 @@ public class ExpertController {
                 .data(result).build());
     }
 
-    @GetMapping("/find/all")
+    @GetMapping("/all")
     public ResponseEntity<ResponseResult<List<ExpertFindResult>>> readAll(){
         List<ExpertFindResult> results = expertService.list().stream()
-                .map((expertBaseOutDto -> (ExpertFindResult) expertBaseOutDto))
+                .map((baseOutDto -> (ExpertFindResult) baseOutDto))
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseResult.<List<ExpertFindResult>>builder()
                 .code(0)

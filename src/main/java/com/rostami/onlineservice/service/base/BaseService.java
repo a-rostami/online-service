@@ -26,13 +26,13 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long> {
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public BaseOutDto<T, ?> get(ID id){
         T entity = jpaRepository.findById(id).orElseThrow(() -> new EntityLoadException("There is no entity with this id"));
         return baseOutDto.convertToDto(entity);
     }
 
-    @Transactional(readOnly = true)
+    @Transactional
     public List<BaseOutDto<T, ?>> list(){
         List<T> all = jpaRepository.findAll();
         return all.stream().map((entity) -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
