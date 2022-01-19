@@ -2,9 +2,7 @@ package com.rostami.onlineservice.dto.in.update;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Customer;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -13,6 +11,8 @@ import javax.validation.constraints.Pattern;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerUpdateParam implements BaseInDto<Customer> {
     @NotNull
     private Long id;

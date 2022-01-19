@@ -2,9 +2,7 @@ package com.rostami.onlineservice.dto.in.update;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Ad;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
@@ -14,6 +12,8 @@ import java.sql.Time;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdUpdateParam implements BaseInDto<Ad> {
     @NotNull
     private Long id;

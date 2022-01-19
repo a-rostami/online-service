@@ -2,16 +2,18 @@ package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Credit;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreditCreateParam implements BaseInDto<Credit> {
+    // id can be null when there is no relation
+    private Long id;
     private BigDecimal balance;
 
     @Override

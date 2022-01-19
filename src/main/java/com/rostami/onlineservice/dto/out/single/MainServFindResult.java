@@ -2,13 +2,13 @@ package com.rostami.onlineservice.dto.out.single;
 
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.entity.MainServ;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class MainServFindResult implements BaseOutDto<MainServ, MainServFindResult> {
     private Long id;
     private String name;

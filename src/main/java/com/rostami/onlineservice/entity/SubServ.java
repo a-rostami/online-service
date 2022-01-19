@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -17,11 +18,13 @@ import java.util.List;
 @Entity
 public class SubServ extends BaseEntity {
     @Column(nullable = false)
+    @NotNull
     private String name;
     @Column(nullable = false)
+    @NotNull
     private BigDecimal basePrice;
 
-    @ManyToOne
+    @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "mainServ_id")
     private MainServ mainServ;
 }

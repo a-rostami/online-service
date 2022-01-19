@@ -18,6 +18,6 @@ import javax.persistence.OneToOne;
 public class Customer extends User {
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "customer", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(mappedBy = "customer", cascade = {CascadeType.MERGE})
     private Credit credit;
 }

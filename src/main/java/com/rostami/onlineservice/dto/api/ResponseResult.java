@@ -1,12 +1,12 @@
 package com.rostami.onlineservice.dto.api;
 
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ResponseResult<T> {
     private int code;
     private String message;

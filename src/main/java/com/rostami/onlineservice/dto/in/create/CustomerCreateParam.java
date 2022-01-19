@@ -4,9 +4,7 @@ import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
@@ -14,7 +12,11 @@ import javax.validation.constraints.Pattern;
 @Setter
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerCreateParam implements BaseInDto<Customer> {
+    // id can be null when there is no relation
+    private Long id;
     private String firstname;
     private String lastname;
     private String username;

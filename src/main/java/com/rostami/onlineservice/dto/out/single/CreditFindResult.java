@@ -2,15 +2,15 @@ package com.rostami.onlineservice.dto.out.single;
 
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.entity.Credit;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CreditFindResult implements BaseOutDto<Credit, CreditFindResult> {
     private Long id;
     private BigDecimal balance;

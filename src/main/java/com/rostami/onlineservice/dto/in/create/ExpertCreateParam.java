@@ -4,10 +4,7 @@ import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.SneakyThrows;
+import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
@@ -16,7 +13,11 @@ import javax.validation.constraints.Pattern;
 @Setter
 @Getter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ExpertCreateParam implements BaseInDto<Expert> {
+    // id can be null when there is no relation
+    private Long id;
     private String firstname;
     private String lastname;
     private String username;

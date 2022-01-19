@@ -2,9 +2,7 @@ package com.rostami.onlineservice.dto.out.single;
 
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.entity.Opinion;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -12,6 +10,8 @@ import javax.validation.constraints.Min;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OpinionFindResult implements BaseOutDto<Opinion, OpinionFindResult> {
     private Long id;
     @Max(value = 5)

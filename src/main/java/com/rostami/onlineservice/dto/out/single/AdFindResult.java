@@ -4,9 +4,7 @@ import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
 import com.rostami.onlineservice.dto.in.create.SubServCreateParam;
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.entity.Ad;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -15,6 +13,8 @@ import java.sql.Time;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class AdFindResult implements BaseOutDto<Ad, AdFindResult> {
     private Long id;
     private Date completionDate;

@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.Set;
 
@@ -18,9 +19,10 @@ import java.util.Set;
 public class Expert extends User {
     @Lob
     @Column( columnDefinition = "BLOB", nullable = false)
+    @NotNull
     private byte[] avatar;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "expert", cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @OneToOne(mappedBy = "expert", cascade = {CascadeType.MERGE})
     private Credit credit;
 }

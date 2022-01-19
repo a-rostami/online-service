@@ -2,9 +2,7 @@ package com.rostami.onlineservice.dto.in.update;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.entity.Opinion;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Max;
 import javax.validation.constraints.Min;
@@ -13,6 +11,8 @@ import javax.validation.constraints.NotNull;
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class OpinionUpdateParam implements BaseInDto<Opinion> {
     @NotNull
     private Long id;

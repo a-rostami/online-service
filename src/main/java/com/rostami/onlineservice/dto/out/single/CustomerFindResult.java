@@ -2,15 +2,15 @@ package com.rostami.onlineservice.dto.out.single;
 
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.entity.Customer;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 
 @Getter
 @Setter
 @Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class CustomerFindResult implements BaseOutDto<Customer, CustomerFindResult> {
     private Long id;
     private String firstname;

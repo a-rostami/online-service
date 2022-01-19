@@ -5,6 +5,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Setter
@@ -16,5 +17,6 @@ import java.util.List;
 @Entity
 public class MainServ extends BaseEntity {
     @Column(nullable = false)
+    @NotNull
     private String name;
 }
