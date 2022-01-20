@@ -1,27 +1,21 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
-import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
-import com.rostami.onlineservice.dto.in.create.OpinionCreateParam;
-import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
 import com.rostami.onlineservice.entity.Expert;
-import com.rostami.onlineservice.entity.Opinion;
-import com.rostami.onlineservice.repository.ExpertRepository;
+import com.rostami.onlineservice.entity.SubServ;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.*;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
-import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @DataJpaTest
 @ActiveProfiles("test")
@@ -34,12 +28,32 @@ class ExpertServiceTest {
     @Autowired
     OpinionService opinionService;
 
+    @Autowired
+    AdService adService;
+
     @Test
-    void get_average_point_isOk(){
+    void get_average_point_isOk() {
         ExpertFindResult expertDto = (ExpertFindResult) expertService.get(4L);
         Expert expert = Expert.builder().id(expertDto.getId()).build();
         Double averagePoint = expertService.getAveragePoint(expert);
         assertEquals(averagePoint, 3.5);
     }
 
+    @Test
+    void test_find_all_relatedAds_isOk() {
+        List<AdFindResult> adsRelatedToSubServ = expertService.findAdsRelatedToSubServ(4L);
+        // id 9 exist in DB
+        SubServ subServ = SubServ.builder().id(9L).build();
+        List<AdFindResult> ads = adService.findAll(((root, query, cb) -> cb.equal(root.get("subServ"), subServ)))
+                .stream().map(p -> AdFindResult.builder().build()
+                        .convertToDto(p)).collect(Collectors.toList());
+        boolean result = true;
+        for (int i = 0; i < adsRelatedToSubServ.size(); i++){
+            if (!adsRelatedToSubServ.get(i).getId().equals(ads.get(i).getId())) {
+                result = false;
+                break;
+            }
+        }
+        assertTrue(result);
+    }
 }

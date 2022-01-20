@@ -5,6 +5,7 @@ import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
 import com.rostami.onlineservice.dto.out.single.SubServFindResult;
@@ -14,6 +15,8 @@ import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -22,20 +25,40 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class ExpertService extends BaseService<Expert, Long> {
     private final ExpertRepository repository;
     private final OpinionService opinionService;
-    private final SubServService subServService;
+    private final AdService adService;
+
+    @Autowired
+    public ExpertService(@Lazy AdService adService, ExpertRepository repository, OpinionService opinionService) {
+        this.adService = adService;
+        this.repository = repository;
+        this.opinionService = opinionService;
+    }
 
     @PostConstruct
     public void init(){
         setJpaRepository(repository);
         setBaseOutDto(ExpertFindResult.builder().build());
+    }
+
+    @Transactional
+    public List<AdFindResult> findAdsRelatedToSubServ(Long expertId){
+        Expert expert = repository.findById(expertId).orElseThrow(
+                () -> new EntityLoadException("There is no expert with this id"));
+        List<SubServ> subServs = expert.getSubServs();
+
+        List<Ad> results = adService.findAll((root, query, cb) -> root.get("subServ").in(subServs));
+        return results.stream().map((ad) -> AdFindResult.builder().build()
+                .convertToDto(ad)).collect(Collectors.toList());
     }
 
     @Transactional

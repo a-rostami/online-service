@@ -1,12 +1,11 @@
 package com.rostami.onlineservice.controller;
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
-import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
 import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
-import com.rostami.onlineservice.dto.out.single.SubServFindResult;
 import com.rostami.onlineservice.service.ExpertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +20,16 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExpertController {
     private final ExpertService expertService;
+
+    @GetMapping("/findRelatedAds/{id}")
+    public ResponseEntity<ResponseResult<List<AdFindResult>>> findRelatedAds(@PathVariable Long id){
+        List<AdFindResult> result = expertService.findAdsRelatedToSubServ(id);
+        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
+                .code(0)
+                .message("Successfully Load All Related Ads.")
+                .data(result)
+                .build());
+    }
 
     @PostMapping("/addSubServ/{id}")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@PathVariable Long id,
