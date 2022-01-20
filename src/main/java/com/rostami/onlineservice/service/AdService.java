@@ -3,13 +3,16 @@ package com.rostami.onlineservice.service;
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.entity.Ad;
+import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.AdRepository;
+import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -20,6 +23,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -28,10 +32,25 @@ public class AdService extends BaseService<Ad, Long> {
     private final ExpertService expertService;
     private final OfferService offerService;
 
+    @Autowired
+    public AdService(@Lazy OfferService offerService, AdRepository repository, ExpertService expertService) {
+        this.expertService= expertService;
+        this.repository = repository;
+        this.offerService = offerService;
+    }
+
     @PostConstruct
     public void init() {
         setJpaRepository(repository);
         setBaseOutDto(AdFindResult.builder().build());
+    }
+
+    @Transactional
+    public List<AdFindResult> findAllAdsOfCustomer(Long customerId){
+        Customer customer = Customer.builder().id(customerId).build();
+        List<Ad> ads = findAll((root, query, cb) -> cb.equal(root.get("customer"), customer));
+        return ads.stream().map(p -> AdFindResult.builder().build().convertToDto(p))
+                .collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)

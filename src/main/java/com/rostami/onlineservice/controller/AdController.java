@@ -20,6 +20,16 @@ import java.util.stream.Collectors;
 public class AdController {
     private final AdService adService;
 
+    @GetMapping("/loadAllAdsOfCustomer/{id}")
+    public ResponseEntity<ResponseResult<List<AdFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id){
+        List<AdFindResult> allAdsOfCustomer = adService.findAllAdsOfCustomer(id);
+        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
+                .code(0)
+                .message("Successfully Load All Related Ads.")
+                .data(allAdsOfCustomer)
+                .build());
+    }
+
     @PostMapping("/create")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody AdCreateParam param){
         CreateUpdateResult result = adService.saveOrUpdate(param);
