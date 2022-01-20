@@ -2,6 +2,8 @@ package com.rostami.onlineservice.controller;
 
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.OfferCreateParam;
+import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
+import com.rostami.onlineservice.dto.in.update.OfferUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.OfferFindResult;
 import com.rostami.onlineservice.service.OfferService;
@@ -27,6 +29,21 @@ public class OfferController {
                 .message("Offer Successfully Created.")
                 .data(result)
                 .build());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody OfferUpdateParam param){
+        CreateUpdateResult result = offerService.saveOrUpdate(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("Offer Successfully Updated.").data(result).build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
+        offerService.delete(id);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                        builder().code(0).message("Offer Successfully Deleted.")
+                .data(CreateUpdateResult.builder().success(true).id(id).build()).build());
     }
 
     @GetMapping("/load/{id}")

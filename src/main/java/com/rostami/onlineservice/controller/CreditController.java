@@ -2,6 +2,8 @@ package com.rostami.onlineservice.controller;
 
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.CreditCreateParam;
+import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
+import com.rostami.onlineservice.dto.in.update.CreditUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.service.CreditService;
@@ -24,6 +26,21 @@ public class CreditController {
         CreateUpdateResult result = creditService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0).message("Credit Successfully Created.").data(result).build());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CreditUpdateParam param){
+        CreateUpdateResult result = creditService.saveOrUpdate(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("Credit Successfully Updated.").data(result).build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
+        creditService.delete(id);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                        builder().code(0).message("Credit Successfully Deleted.")
+                .data(CreateUpdateResult.builder().success(true).id(id).build()).build());
     }
 
     @GetMapping("/load/{id}")

@@ -2,6 +2,7 @@ package com.rostami.onlineservice.controller;
 
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.AdCreateParam;
+import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.service.AdService;
@@ -20,10 +21,25 @@ public class AdController {
     private final AdService adService;
 
     @PostMapping("/create")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> save(@Validated @RequestBody AdCreateParam param){
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody AdCreateParam param){
         CreateUpdateResult result = adService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0).message("Ad Successfully Created.").data(result).build());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody AdUpdateParam param){
+        CreateUpdateResult result = adService.saveOrUpdate(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("Ad Successfully Updated.").data(result).build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
+        adService.delete(id);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("Ad Successfully Deleted.")
+                .data(CreateUpdateResult.builder().success(true).id(id).build()).build());
     }
 
     @GetMapping("/load/{id}")

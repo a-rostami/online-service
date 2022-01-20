@@ -11,7 +11,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MainServParam implements BaseInDto<MainServ> {
+public class MainServUpdateParam implements BaseInDto<MainServ> {
     @NotNull
     private Long id;
     private String name;

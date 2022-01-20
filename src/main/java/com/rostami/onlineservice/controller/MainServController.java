@@ -2,6 +2,8 @@ package com.rostami.onlineservice.controller;
 
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.MainServCreateParam;
+import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
+import com.rostami.onlineservice.dto.in.update.MainServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.MainServFindResult;
 import com.rostami.onlineservice.service.MainServService;
@@ -27,6 +29,21 @@ public class MainServController {
                 .message("MainServ Successfully Created.")
                 .data(result)
                 .build());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody MainServUpdateParam param){
+        CreateUpdateResult result = mainServService.saveOrUpdate(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("MainServ Successfully Updated.").data(result).build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
+        mainServService.delete(id);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                        builder().code(0).message("MainServ Successfully Deleted.")
+                .data(CreateUpdateResult.builder().success(true).id(id).build()).build());
     }
 
     @GetMapping("/load/{id}")

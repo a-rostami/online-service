@@ -2,6 +2,8 @@ package com.rostami.onlineservice.controller;
 
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
+import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
+import com.rostami.onlineservice.dto.in.update.CustomerUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
 import com.rostami.onlineservice.service.CustomerService;
@@ -24,6 +26,21 @@ public class CustomerController {
         CreateUpdateResult result = customerService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0).message("Customer Successfully Created.").data(result).build());
+    }
+
+    @PutMapping("/update")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CustomerUpdateParam param){
+        CreateUpdateResult result = customerService.saveOrUpdate(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("Customer Successfully Updated.").data(result).build());
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
+        customerService.delete(id);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                        builder().code(0).message("Customer Successfully Deleted.")
+                .data(CreateUpdateResult.builder().success(true).id(id).build()).build());
     }
 
     @GetMapping("/load/{id}")
