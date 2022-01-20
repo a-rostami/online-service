@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.util.List;
-import java.util.Set;
 
 @Setter
 @Getter
@@ -25,4 +24,9 @@ public class Expert extends User {
     @ToString.Exclude
     @OneToOne(mappedBy = "expert", cascade = {CascadeType.MERGE})
     private Credit credit;
+
+    @ToString.Exclude
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<SubServ> subServs;
 }

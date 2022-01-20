@@ -24,7 +24,13 @@ public class SubServ extends BaseEntity {
     @NotNull
     private BigDecimal basePrice;
 
+
     @ManyToOne(cascade = {CascadeType.MERGE})
     @JoinColumn(name = "mainServ_id")
     private MainServ mainServ;
+
+    @ToString.Exclude
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinColumn
+    private List<Expert> experts;
 }

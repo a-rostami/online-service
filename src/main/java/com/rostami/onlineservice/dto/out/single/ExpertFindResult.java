@@ -5,6 +5,8 @@ import com.rostami.onlineservice.entity.Expert;
 import lombok.*;
 
 import javax.validation.constraints.Email;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Getter
 @Setter
@@ -18,6 +20,7 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
     private String username;
     @Email
     private String email;
+    private List<SubServFindResult> subServFindResults;
 
     @Override
     public ExpertFindResult convertToDto(Expert entity) {
@@ -26,6 +29,8 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
         lastname = entity.getLastname();
         username = entity.getUsername();
         email = entity.getEmail();
+        subServFindResults = entity.getSubServs().stream().map((subServ ->
+                SubServFindResult.builder().build().convertToDto(subServ))).collect(Collectors.toList());
         return this;
     }
 }

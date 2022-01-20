@@ -3,8 +3,10 @@ import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
 import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
 import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
+import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
+import com.rostami.onlineservice.dto.out.single.SubServFindResult;
 import com.rostami.onlineservice.service.ExpertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,17 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class ExpertController {
     private final ExpertService expertService;
+
+    @PostMapping("/addSubServ/{id}")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@PathVariable Long id,
+                                                                           @RequestBody SubServUpdateParam subServParam){
+        CreateUpdateResult result = expertService.addSubServ(id, subServParam);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("SubServ Successfully Added To Expert SubServs.")
+                .data(result)
+                .build());
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody ExpertCreateParam param){
