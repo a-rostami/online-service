@@ -15,6 +15,7 @@ import java.math.BigDecimal;
 public class CreditUpdateParam implements BaseInDto<Credit> {
     @NotNull
     private Long id;
+    @NotNull
     private BigDecimal balance;
 
     @Override

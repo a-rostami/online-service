@@ -14,6 +14,7 @@ import javax.validation.constraints.NotNull;
 public class MainServUpdateParam implements BaseInDto<MainServ> {
     @NotNull
     private Long id;
+    @NotNull
     private String name;
 
 

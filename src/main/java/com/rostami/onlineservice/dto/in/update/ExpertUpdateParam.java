@@ -18,13 +18,19 @@ import java.util.List;
 public class ExpertUpdateParam implements BaseInDto<Expert> {
     @NotNull
     private Long id;
+    @NotNull
     private String firstname;
+    @NotNull
     private String lastname;
+    @NotNull
     private String username;
+    @NotNull
     private MultipartFile avatar;
     @Email
+    @NotNull
     private String email;
     @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
+    @NotNull
     private String password;
 
     @SneakyThrows

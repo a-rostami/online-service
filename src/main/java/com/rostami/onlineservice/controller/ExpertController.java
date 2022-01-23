@@ -23,7 +23,7 @@ public class ExpertController {
 
     @GetMapping("/findRelatedAds/{id}")
     public ResponseEntity<ResponseResult<List<AdFindResult>>> findRelatedAds(@PathVariable Long id){
-        List<AdFindResult> result = expertService.findAdsRelatedToSubServ(id);
+        List<AdFindResult> result = expertService.findAdsRelatedToExpertSubServ(id);
         return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
                 .code(0)
                 .message("Successfully Load All Related Ads.")

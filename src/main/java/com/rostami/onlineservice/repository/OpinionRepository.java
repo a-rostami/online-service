@@ -1,15 +1,9 @@
 package com.rostami.onlineservice.repository;
 
 import com.rostami.onlineservice.entity.Opinion;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.rostami.onlineservice.repository.base.BaseRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface OpinionRepository extends JpaRepository<Opinion, Long>, JpaSpecificationExecutor<Opinion> {
-    List<Opinion> findAll(Specification<Opinion> spec, Sort sort);
-
-    List<Opinion> findAll(Specification<Opinion> spec);
+@Repository
+public interface OpinionRepository extends BaseRepository<Opinion, Long> {
 }

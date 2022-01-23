@@ -1,15 +1,8 @@
 package com.rostami.onlineservice.repository;
 
 import com.rostami.onlineservice.entity.SubServ;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
+import com.rostami.onlineservice.repository.base.BaseRepository;
+import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
-public interface SubServRepository extends JpaRepository<SubServ, Long>, JpaSpecificationExecutor<SubServ> {
-    List<SubServ> findAll(Specification<SubServ> spec);
-
-    List<SubServ> findAll(Specification<SubServ> spec, Sort sort);
-}
+@Repository
+public interface SubServRepository extends BaseRepository<SubServ, Long> {}

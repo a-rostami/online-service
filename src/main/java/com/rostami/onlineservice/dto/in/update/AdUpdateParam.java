@@ -17,10 +17,15 @@ import java.sql.Time;
 public class AdUpdateParam implements BaseInDto<Ad> {
     @NotNull
     private Long id;
+    @NotNull
     private Date completionDate;
+    @NotNull
     private Time completionTime;
+    @NotNull
     private BigDecimal price;
+    @NotNull
     private String workDescription;
+    @NotNull
     private String address;
 
     @Override

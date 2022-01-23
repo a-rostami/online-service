@@ -18,6 +18,7 @@ public class OpinionUpdateParam implements BaseInDto<Opinion> {
     private Long id;
     @Max(value = 5)
     @Min(value = 1)
+    @NotNull
     private Integer rate;
 
     @Override

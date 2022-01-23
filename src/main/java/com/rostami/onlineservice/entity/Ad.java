@@ -37,18 +37,23 @@ public class Ad extends BaseEntity {
     @Column(nullable = false)
     @NotNull
     private Date completionDate;
+
     @Column(nullable = false)
     @NotNull
     private Time completionTime;
+
     @Column(precision = 17, scale = 2, nullable = false)
     @NotNull
     private BigDecimal price;
+
     @Column(nullable = false)
     @NotNull
     private String workDescription;
+
     @Column(nullable = false)
     @NotNull
     private String address;
+
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     @NotNull

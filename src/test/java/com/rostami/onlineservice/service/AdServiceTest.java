@@ -1,75 +1,58 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
-import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
 import com.rostami.onlineservice.entity.*;
-import com.rostami.onlineservice.entity.enums.AdStatus;
-import com.rostami.onlineservice.repository.AdRepository;
-import com.rostami.onlineservice.repository.ExpertRepository;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
-import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.mockito.Mockito;
+import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
+import java.math.BigDecimal;
 import java.util.Comparator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doReturn;
 
-@DataJpaTest
 @ActiveProfiles("test")
-@SpringJUnitConfig({AppConfig.class})
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class AdServiceTest {
-    @Autowired
+    @MockBean
     AdService adService;
-
-    @Autowired
-    CustomerService customerService;
-
-    @Autowired
-    ExpertService expertService;
-
-    @Autowired
-    SubServService subServService;
-
-    @Autowired
+    @MockBean
     OfferService offerService;
+
+    @BeforeEach
+    void init(){
+        adService = Mockito.mock(AdService.class);
+        offerService = Mockito.mock(OfferService.class);
+        AdFindResult result = AdFindResult.builder().id(1L).build();
+        Ad ad = Ad.builder().id(result.getId()).build();
+        doReturn(result).when(adService).get(1L);
+
+        Offer offer = Offer.builder().id(1L).price(BigDecimal.valueOf(150000)).build();
+        Offer offer2 = Offer.builder().id(2L).price(BigDecimal.valueOf(140000)).build();
+        Offer offer3 = Offer.builder().id(3L).price(BigDecimal.valueOf(130000)).build();
+        doReturn(List.of(offer, offer2, offer3)).when(offerService).findAll(((root, query, cb) ->
+                cb.equal(root.get("ad"), ad)));
+        doReturn(List.of(offer3, offer2, offer)).when(adService).orderOffersByPrice(ad.getId());
+    }
 
 
     @Test
-    void order_byPrice_isOk(){
-        AdFindResult dto = (AdFindResult) adService.get(10L);
+    void order_byPrice_isOk() {
+        AdFindResult dto = (AdFindResult) adService.get(1L);
         Ad ad = Ad.builder().id(dto.getId()).build();
         List<Offer> adOffers = offerService.findAll(((root, query, cb) -> cb.equal(root.get("ad"), ad)));
-        List<Offer> sortedOffers = adService.orderOffersByPrice(ad);
+        List<Offer> sortedOffers = adService.orderOffersByPrice(ad.getId());
         adOffers.sort(Comparator.comparing(Offer::getPrice));
         boolean result = true;
-        for (int i = 0; i < adOffers.size(); i++){
+        for (int i = 0; i < adOffers.size(); i++) {
             if (!adOffers.get(i).equals(sortedOffers.get(i))) {
                 result = false;
                 break;
             }
         }
         assertTrue(result);
-    }
-
-    @Test
-    void order_byExpert_point_isOk(){
-        // FIXME: 1/2/2022 add more expert for test average point sort
-    }
-
-    @Test
-    void choose_expert_isOk(){
-        // exist ad is new in DB
-        AdFindResult adDto = (AdFindResult) adService.get(10L);
-        Ad ad = Ad.builder().id(adDto.getId()).build();
-        ExpertFindResult expertDto = (ExpertFindResult) expertService.get(4L);
-        Expert expert = Expert.builder().id(expertDto.getId()).build();
-        adService.chooseExpert(ad, expert);
-        assertEquals(ad.getStatus(), AdStatus.WAITING_FOR_EXPERT);
     }
 }

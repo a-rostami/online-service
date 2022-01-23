@@ -16,11 +16,16 @@ import javax.validation.constraints.Pattern;
 public class CustomerUpdateParam implements BaseInDto<Customer> {
     @NotNull
     private Long id;
+    @NotNull
     private String firstname;
+    @NotNull
     private String lastname;
+    @NotNull
     private String username;
     @Email
+    @NotNull
     private String email;
+    @NotNull
     @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
     private String password;
 

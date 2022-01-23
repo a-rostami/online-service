@@ -1,10 +1,8 @@
 package com.rostami.onlineservice.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.rostami.onlineservice.dto.in.update.MainServUpdateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
-import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.service.ExpertService;
 import lombok.SneakyThrows;
 import org.junit.jupiter.api.Test;
@@ -18,7 +16,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.math.BigDecimal;
-import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -34,24 +31,24 @@ public class ExpertControllerTest extends AbstractRestControllerTest {
     @MockBean
     private ExpertService expertService;
 
-    @SneakyThrows
-    @Test
-    public void test_add_subServ_isOk() {
-        //mock Service
-        CreateUpdateResult result = CreateUpdateResult.builder()
-                .success(true)
-                .id(1L)
-                .build();
-        SubServUpdateParam subServParam = SubServUpdateParam.builder()
-                .id(1L)
-                .name("testSubService")
-                .basePrice(BigDecimal.valueOf(15000))
-                .mainServUpdateParam(MainServUpdateParam.builder().id(1L).name("HomeAppliance").build())
-                .build();
+        @SneakyThrows
+        @Test
+        public void test_add_subServ_isOk() {
+            //mock Service
+            CreateUpdateResult result = CreateUpdateResult.builder()
+                    .success(true)
+                    .id(1L)
+                    .build();
+            SubServUpdateParam subServParam = SubServUpdateParam.builder()
+                    .id(1L)
+                    .name("testSubService")
+                    .basePrice(BigDecimal.valueOf(15000))
+                    .mainServUpdateParam(MainServUpdateParam.builder().id(1L).name("HomeAppliance").build())
+                    .build();
 
-        Mockito.when(expertService.addSubServ(1L, subServParam)).thenReturn(result);
+            Mockito.when(expertService.addSubServ(1L, subServParam)).thenReturn(result);
 
-        mvc.perform(post("/experts/addSubServ/{id}", 1)
+            mvc.perform(post("/experts/addSubServ/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(toJson(subServParam))
                         .accept(MediaType.APPLICATION_JSON))

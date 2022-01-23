@@ -1,11 +1,13 @@
 package com.rostami.onlineservice.controller;
 
+import com.rostami.onlineservice.controller.api.filter.CustomerSpecification;
 import com.rostami.onlineservice.dto.api.ResponseResult;
+import com.rostami.onlineservice.dto.api.filter.CustomerFilter;
 import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
-import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
 import com.rostami.onlineservice.dto.in.update.CustomerUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
+import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,18 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
+
+    @GetMapping("/filter")
+    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> getCustomers(@RequestBody CustomerFilter filter){
+        List<Customer> all = customerService.findAll(CustomerSpecification.getCustomers(filter));
+        List<CustomerFindResult> results =
+                all.stream().map(p -> CustomerFindResult.builder().build().convertToDto(p)).collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseResult.<List<CustomerFindResult>>builder()
+                .code(0)
+                .message("Successfully Load Customers Based Filters.")
+                .data(results)
+                .build());
+    }
 
     @PostMapping("/create")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> save(@Validated @RequestBody CustomerCreateParam param){

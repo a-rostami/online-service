@@ -34,15 +34,19 @@ public class Offer extends BaseEntity {
     @Column(nullable = false)
     @NotNull
     private Date startDate;
+
     @Column(nullable = false)
     @NotNull
     private Time startTime;
+
     @Column(nullable = false)
     @NotNull
     private Date completionDate;
+
     @Column(nullable = false)
     @NotNull
     private Time completionTime;
+
     @Column(precision = 17, scale = 2)
     @NotNull
     private BigDecimal price;

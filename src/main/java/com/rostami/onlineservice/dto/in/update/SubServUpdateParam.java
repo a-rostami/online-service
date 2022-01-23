@@ -17,9 +17,12 @@ import java.math.BigDecimal;
 public class SubServUpdateParam implements BaseInDto<SubServ> {
     @NotNull
     private Long id;
+    @NotNull
     private String name;
+    @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal basePrice;
+    @NotNull
     private MainServUpdateParam mainServUpdateParam;
 
     @Override

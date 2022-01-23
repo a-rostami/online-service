@@ -17,10 +17,15 @@ import java.sql.Time;
 public class OfferUpdateParam implements BaseInDto<Offer> {
     @NotNull
     private Long id;
+    @NotNull
     private Date startDate;
+    @NotNull
     private Time startTime;
+    @NotNull
     private Date completionDate;
+    @NotNull
     private Time completionTime;
+    @NotNull
     private BigDecimal price;
 
     @Override

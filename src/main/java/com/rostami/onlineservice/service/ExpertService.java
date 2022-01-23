@@ -1,57 +1,41 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
-import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
-import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
-import com.rostami.onlineservice.dto.out.single.SubServFindResult;
 import com.rostami.onlineservice.entity.*;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Lazy
 public class ExpertService extends BaseService<Expert, Long> {
     private final ExpertRepository repository;
     private final OpinionService opinionService;
     private final AdService adService;
 
-    @Autowired
-    public ExpertService(@Lazy AdService adService, ExpertRepository repository, OpinionService opinionService) {
-        this.adService = adService;
-        this.repository = repository;
-        this.opinionService = opinionService;
-    }
-
     @PostConstruct
     public void init(){
-        setJpaRepository(repository);
+        setRepository(repository);
         setBaseOutDto(ExpertFindResult.builder().build());
     }
 
     @Transactional
-    public List<AdFindResult> findAdsRelatedToSubServ(Long expertId){
+    public List<AdFindResult> findAdsRelatedToExpertSubServ(Long expertId){
         Expert expert = repository.findById(expertId).orElseThrow(
                 () -> new EntityLoadException("There is no expert with this id"));
         List<SubServ> subServs = expert.getSubServs();
@@ -90,25 +74,12 @@ public class ExpertService extends BaseService<Expert, Long> {
             throw new DuplicatedEmailException("Email Already Exist!");
     }
 
-    public Double getAveragePoint(Expert expert){
+    public Double getAveragePoint(Long id){
+        Expert expert = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no expert with this id"));
         List<Opinion> opinions = opinionService.findAll(((root, query, cb) -> cb.equal(root.get("expert"), expert)));
         return opinions.stream().mapToInt(Opinion::getRate).average().orElse(0);
     }
 
-    @Transactional(readOnly = true)
-    public List<Expert> findAll(Specification<Expert> specification){
-        return repository.findAll(specification);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Expert> findAll(Specification<Expert> specification, Sort sort){
-        return repository.findAll(specification, sort);
-    }
-
-    @Transactional(readOnly = true)
-    public List<Expert> findAll(Specification<Expert> specification, Pageable pageable){
-        return repository.findAll(specification, pageable).getContent();
-    }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public void changePassword(Long id, String newPassword){

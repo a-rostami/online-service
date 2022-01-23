@@ -4,10 +4,7 @@ import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
 import com.rostami.onlineservice.entity.Customer;
-import com.rostami.onlineservice.entity.enums.Role;
-import com.rostami.onlineservice.entity.enums.UserStatus;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
-import com.rostami.onlineservice.repository.CustomerRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
@@ -15,7 +12,6 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
 
 import static org.junit.jupiter.api.Assertions.*;
 
