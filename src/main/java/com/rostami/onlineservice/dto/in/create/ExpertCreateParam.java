@@ -24,7 +24,7 @@ public class ExpertCreateParam implements BaseInDto<Expert> {
     private MultipartFile avatar;
     @Email
     private String email;
-    @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
     private String password;
 
     @SneakyThrows
@@ -37,7 +37,7 @@ public class ExpertCreateParam implements BaseInDto<Expert> {
                 .password(password)
                 .email(email)
                 .avatar(avatar.getBytes())
-                .role(Role.CUSTOMER)
+                .role(Role.EXPERT)
                 .userStatus(UserStatus.NEW)
                 .build();
     }

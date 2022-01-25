@@ -31,6 +31,9 @@ public class SubServ extends BaseEntity {
 
     @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinTable(name="expert_subServ",
+            joinColumns=@JoinColumn(name="subServ_id"),
+            inverseJoinColumns=@JoinColumn(name="expert_id")
+    )
     private List<Expert> experts;
 }

@@ -26,7 +26,7 @@ public class CustomerUpdateParam implements BaseInDto<Customer> {
     @NotNull
     private String email;
     @NotNull
-    @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
     private String password;
 
     @Override

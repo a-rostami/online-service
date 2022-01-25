@@ -4,6 +4,7 @@ import com.rostami.onlineservice.controller.api.core.ServiceResult;
 import com.rostami.onlineservice.controller.api.errors.api.ApiError;
 import com.rostami.onlineservice.exception.*;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
@@ -43,9 +44,23 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
+    @ExceptionHandler(SizeLimitExceededException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
+            SizeLimitExceededException ex) {
+        var apiError = new ApiError(BAD_REQUEST);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
 
     @ExceptionHandler(BelowBasePriceException.class)
     protected ResponseEntity<ServiceResult<Void>> handleBadRequest(BelowBasePriceException ex){
+        var apiError = new ApiError(BAD_REQUEST);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(NullPointerException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(NullPointerException ex){
         var apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);

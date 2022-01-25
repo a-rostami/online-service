@@ -1,11 +1,14 @@
 package com.rostami.onlineservice.controller;
+import com.rostami.onlineservice.controller.api.filter.ExpertSpecification;
 import com.rostami.onlineservice.dto.api.ResponseResult;
+import com.rostami.onlineservice.dto.api.filter.ExpertFilter;
 import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
 import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
+import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.service.ExpertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -21,29 +24,8 @@ import java.util.stream.Collectors;
 public class ExpertController {
     private final ExpertService expertService;
 
-    @GetMapping("/findRelatedAds/{id}")
-    public ResponseEntity<ResponseResult<List<AdFindResult>>> findRelatedAds(@PathVariable Long id){
-        List<AdFindResult> result = expertService.findAdsRelatedToExpertSubServ(id);
-        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
-                .code(0)
-                .message("Successfully Load All Related Ads.")
-                .data(result)
-                .build());
-    }
-
-    @PostMapping("/addSubServ/{id}")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@PathVariable Long id,
-                                                                           @RequestBody SubServUpdateParam subServParam){
-        CreateUpdateResult result = expertService.addSubServ(id, subServParam);
-        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
-                .code(0)
-                .message("SubServ Successfully Added To Expert SubServs.")
-                .data(result)
-                .build());
-    }
-
     @PostMapping("/create")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody ExpertCreateParam param){
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @ModelAttribute ExpertCreateParam param){
         CreateUpdateResult result = expertService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
@@ -84,6 +66,39 @@ public class ExpertController {
         return ResponseEntity.ok(ResponseResult.<List<ExpertFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All Experts.")
+                .data(results)
+                .build());
+    }
+
+    @GetMapping("/findRelatedAds/{id}")
+    public ResponseEntity<ResponseResult<List<AdFindResult>>> findRelatedAds(@PathVariable Long id){
+        List<AdFindResult> result = expertService.findAdsRelatedToExpertSubServ(id);
+        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
+                .code(0)
+                .message("Successfully Load All Related Ads.")
+                .data(result)
+                .build());
+    }
+
+    @PostMapping("/addSubServ/{id}")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@PathVariable Long id,
+                                                                           @RequestBody SubServUpdateParam subServParam){
+        CreateUpdateResult result = expertService.addSubServ(id, subServParam);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("SubServ Successfully Added To Expert SubServs.")
+                .data(result)
+                .build());
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<ResponseResult<List<ExpertFindResult>>> getCustomers(@RequestBody ExpertFilter filter){
+        List<Expert> all = expertService.findAll(new ExpertSpecification().getUsers(filter));
+        List<ExpertFindResult> results =
+                all.stream().map(p -> ExpertFindResult.builder().build().convertToDto(p)).collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseResult.<List<ExpertFindResult>>builder()
+                .code(0)
+                .message("Successfully Load Experts Based Filters.")
                 .data(results)
                 .build());
     }

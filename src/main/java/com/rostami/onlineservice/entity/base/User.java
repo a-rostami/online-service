@@ -35,7 +35,7 @@ public abstract class User extends BaseEntity {
     private String email;
 
     @Column(nullable = false)
-    @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
     @NotNull
     private String password;
 

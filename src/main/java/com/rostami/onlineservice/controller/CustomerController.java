@@ -23,18 +23,6 @@ import java.util.stream.Collectors;
 public class CustomerController {
     private final CustomerService customerService;
 
-    @GetMapping("/filter")
-    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> getCustomers(@RequestBody CustomerFilter filter){
-        List<Customer> all = customerService.findAll(CustomerSpecification.getCustomers(filter));
-        List<CustomerFindResult> results =
-                all.stream().map(p -> CustomerFindResult.builder().build().convertToDto(p)).collect(Collectors.toList());
-        return ResponseEntity.ok(ResponseResult.<List<CustomerFindResult>>builder()
-                .code(0)
-                .message("Successfully Load Customers Based Filters.")
-                .data(results)
-                .build());
-    }
-
     @PostMapping("/create")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> save(@Validated @RequestBody CustomerCreateParam param){
         CreateUpdateResult result = customerService.saveOrUpdate(param);
@@ -75,6 +63,30 @@ public class CustomerController {
                 .code(0)
                 .message("All Customers Loaded Successfully.")
                 .data(results)
+                .build());
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> getCustomers(@RequestBody CustomerFilter filter){
+        List<Customer> all = customerService.findAll(new CustomerSpecification().getUsers(filter));
+        List<CustomerFindResult> results =
+                all.stream().map(p -> CustomerFindResult.builder().build().convertToDto(p)).collect(Collectors.toList());
+        return ResponseEntity.ok(ResponseResult.<List<CustomerFindResult>>builder()
+                .code(0)
+                .message("Successfully Load Customers Based Filters.")
+                .data(results)
+                .build());
+    }
+
+
+    // TODO : change to spring security
+    @PutMapping("/changePassword/{id}")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> changePassword(@RequestBody String password, @PathVariable Long id){
+        customerService.changePassword(id, password);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("password Successfully Changed.")
+                .data(CreateUpdateResult.builder().id(id).success(true).build())
                 .build());
     }
 }

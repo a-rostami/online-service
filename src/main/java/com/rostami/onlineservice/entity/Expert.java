@@ -27,6 +27,9 @@ public class Expert extends User {
 
     @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinColumn
+    @JoinTable(name="expert_subServ",
+            joinColumns=@JoinColumn(name="expert_id"),
+            inverseJoinColumns=@JoinColumn(name="subServ_id")
+    )
     private List<SubServ> subServs;
 }

@@ -9,9 +9,8 @@ import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.AdRepository;
 import com.rostami.onlineservice.service.base.BaseService;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,13 +21,18 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-@RequiredArgsConstructor
-@Builder
 public class AdService extends BaseService<Ad, Long> {
     private final AdRepository repository;
 
     private final ExpertService expertService;
     private final OfferService offerService;
+
+    @Autowired
+    public AdService(AdRepository repository, @Lazy ExpertService expertService, @Lazy OfferService offerService) {
+        this.repository = repository;
+        this.expertService = expertService;
+        this.offerService = offerService;
+    }
 
     @PostConstruct
     public void init() {

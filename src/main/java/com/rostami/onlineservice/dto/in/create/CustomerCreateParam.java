@@ -22,7 +22,7 @@ public class CustomerCreateParam implements BaseInDto<Customer> {
     private String username;
     @Email
     private String email;
-    @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
     private String password;
 
     @Override

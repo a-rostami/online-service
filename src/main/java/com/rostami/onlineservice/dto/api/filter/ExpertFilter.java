@@ -6,4 +6,6 @@ import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class CustomerFilter extends UserFilter {}
+public class ExpertFilter extends UserFilter {
+    private Long subServId;
+}

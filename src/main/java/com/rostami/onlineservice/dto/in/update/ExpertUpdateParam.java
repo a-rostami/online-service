@@ -29,7 +29,7 @@ public class ExpertUpdateParam implements BaseInDto<Expert> {
     @Email
     @NotNull
     private String email;
-    @Pattern(regexp = "^(?=.*?[0-9]).{8,}$")
+    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
     @NotNull
     private String password;
 

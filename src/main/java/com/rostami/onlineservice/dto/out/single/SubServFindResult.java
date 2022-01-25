@@ -15,14 +15,12 @@ public class SubServFindResult implements BaseOutDto<SubServ, SubServFindResult>
     private Long id;
     private String name;
     private BigDecimal basePrice;
-    private MainServFindResult mainServFindResult;
 
     @Override
     public SubServFindResult convertToDto(SubServ entity) {
         id = entity.getId();
         name = entity.getName();
         basePrice = entity.getBasePrice();
-        mainServFindResult = mainServFindResult.convertToDto(entity.getMainServ());
         return this;
     }
 }

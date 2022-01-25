@@ -16,7 +16,6 @@ import java.math.BigDecimal;
 
 @Service
 @RequiredArgsConstructor
-@Builder
 public class OfferService extends BaseService<Offer, Long> {
     private final OfferRepository repository;
 
