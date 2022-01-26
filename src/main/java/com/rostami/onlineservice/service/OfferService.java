@@ -6,7 +6,6 @@ import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.exception.BelowBasePriceException;
 import com.rostami.onlineservice.repository.OfferRepository;
 import com.rostami.onlineservice.service.base.BaseService;
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

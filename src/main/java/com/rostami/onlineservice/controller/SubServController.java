@@ -2,7 +2,6 @@ package com.rostami.onlineservice.controller;
 
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.SubServCreateParam;
-import com.rostami.onlineservice.dto.in.update.OfferUpdateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.SubServFindResult;

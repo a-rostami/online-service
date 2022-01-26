@@ -2,7 +2,6 @@ package com.rostami.onlineservice.controller;
 
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.OpinionCreateParam;
-import com.rostami.onlineservice.dto.in.update.OfferUpdateParam;
 import com.rostami.onlineservice.dto.in.update.OpinionUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.OpinionFindResult;

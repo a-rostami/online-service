@@ -10,8 +10,6 @@ import lombok.*;
 @AllArgsConstructor
 @NoArgsConstructor
 public class MainServCreateParam implements BaseInDto<MainServ> {
-    // id can be null when there is no relation
-    private Long id;
     private String name;
 
     @Override

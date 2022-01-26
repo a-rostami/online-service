@@ -14,21 +14,19 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SubServCreateParam implements BaseInDto<SubServ> {
-    // id can be null when there is no relation
-    private Long id;
     private String name;
     private BigDecimal basePrice;
-    private MainServCreateParam mainServCreateParam;
+    private Long mainServId;
 
     @Override
     public SubServ convertToDomain() {
-        if (mainServCreateParam == null || mainServCreateParam.getId() == null)
+        if (mainServId == null)
             throw new EntityRelationException("SubServ Should have Main Serv!");
 
         return SubServ.builder()
                 .basePrice(basePrice)
                 .name(name)
-                .mainServ(MainServ.builder().id(mainServCreateParam.getId()).build())
+                .mainServ(MainServ.builder().id(mainServId).build())
                 .build();
     }
 }

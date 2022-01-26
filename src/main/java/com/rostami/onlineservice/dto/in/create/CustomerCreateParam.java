@@ -15,8 +15,6 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerCreateParam implements BaseInDto<Customer> {
-    // id can be null when there is no relation
-    private Long id;
     private String firstname;
     private String lastname;
     private String username;

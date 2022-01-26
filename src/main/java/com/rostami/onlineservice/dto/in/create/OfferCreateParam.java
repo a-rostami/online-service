@@ -17,21 +17,19 @@ import java.sql.Time;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OfferCreateParam implements BaseInDto<Offer> {
-    // id can be null when there is no relation
-    private Long id;
     private Date startDate;
     private Time startTime;
     private Date completionDate;
     private Time completionTime;
     private BigDecimal price;
-    ExpertCreateParam expertCreateParam;
-    AdCreateParam adCreateParam;
+    private Long expertId;
+    private Long adId;
 
     @Override
     public Offer convertToDomain() {
-        if (expertCreateParam == null || expertCreateParam.getId() == null)
+        if (expertId == null)
             throw new EntityRelationException("Offer Should have Expert!");
-        if (adCreateParam == null || adCreateParam.getId() == null)
+        if (adId == null)
             throw new EntityRelationException("Offer Should have ad!");
         return Offer.builder()
                 .startDate(startDate)
@@ -39,8 +37,8 @@ public class OfferCreateParam implements BaseInDto<Offer> {
                 .completionDate(completionDate)
                 .completionTime(completionTime)
                 .price(price)
-                .expert(Expert.builder().id(expertCreateParam.getId()).build())
-                .ad(Ad.builder().id(adCreateParam.getId()).build())
+                .expert(Expert.builder().id(expertId).build())
+                .ad(Ad.builder().id(adId).build())
                 .build();
     }
 }

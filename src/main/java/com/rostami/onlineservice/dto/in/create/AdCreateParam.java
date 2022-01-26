@@ -18,21 +18,19 @@ import java.sql.Time;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdCreateParam implements BaseInDto<Ad> {
-    // id can be null when there is no relation
-    private Long id;
     private Date completionDate;
     private Time completionTime;
     private BigDecimal price;
     private String workDescription;
     private String address;
-    private CustomerCreateParam customerCreateParam;
-    private SubServCreateParam subServCreateParam;
+    private Long customerId;
+    private Long subServId;
 
     @Override
     public Ad convertToDomain() {
-        if (customerCreateParam == null || customerCreateParam.getId() == null)
+        if (customerId == null)
             throw new EntityRelationException("Ad Should have a customer !");
-        if (subServCreateParam == null || subServCreateParam.getId() == null)
+        if (subServId == null)
             throw new EntityRelationException("Ad Should have a SubServ !");
 
         return Ad.builder()
@@ -42,8 +40,8 @@ public class AdCreateParam implements BaseInDto<Ad> {
                 .workDescription(workDescription)
                 .address(address)
                 .status(AdStatus.WAITING_FOR_OFFER)
-                .customer(Customer.builder().id(customerCreateParam.getId()).build())
-                .subServ(SubServ.builder().id(subServCreateParam.getId()).build())
+                .customer(Customer.builder().id(customerId).build())
+                .subServ(SubServ.builder().id(subServId).build())
                 .build();
     }
 }

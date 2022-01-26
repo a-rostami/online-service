@@ -16,28 +16,26 @@ import javax.validation.constraints.Min;
 @AllArgsConstructor
 @NoArgsConstructor
 public class OpinionCreateParam implements BaseInDto<Opinion> {
-    // id can be null when there is no relation
-    private Long id;
     @Max(value = 5)
     @Min(value = 1)
     private Integer rate;
     private String description;
-    private AdCreateParam adCreateParam;
-    private ExpertCreateParam expertCreateParam;
+    private Long adId;
+    private Long expertId;
 
 
     @Override
     public Opinion convertToDomain() {
-        if (expertCreateParam == null || expertCreateParam.getId() == null)
+        if (expertId == null)
             throw new EntityRelationException("Opinion Should have Expert!");
-        if (adCreateParam == null || adCreateParam.getId() == null)
+        if (adId == null)
             throw new EntityRelationException("Opinion Should have Ad!");
 
         return Opinion.builder()
                 .description(description)
                 .rate(rate)
-                .ad(Ad.builder().id(adCreateParam.getId()).build())
-                .expert(Expert.builder().id(expertCreateParam.getId()).build())
+                .ad(Ad.builder().id(adId).build())
+                .expert(Expert.builder().id(expertId).build())
                 .build();
     }
 }

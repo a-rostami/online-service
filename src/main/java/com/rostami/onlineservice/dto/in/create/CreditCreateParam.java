@@ -12,8 +12,6 @@ import java.math.BigDecimal;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreditCreateParam implements BaseInDto<Credit> {
-    // id can be null when there is no relation
-    private Long id;
     private BigDecimal balance;
 
     @Override

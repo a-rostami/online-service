@@ -16,8 +16,6 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @NoArgsConstructor
 public class ExpertCreateParam implements BaseInDto<Expert> {
-    // id can be null when there is no relation
-    private Long id;
     private String firstname;
     private String lastname;
     private String username;
