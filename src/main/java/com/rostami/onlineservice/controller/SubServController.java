@@ -65,4 +65,14 @@ public class SubServController {
                 .data(results)
                 .build());
     }
+
+    @GetMapping("/subServsOfMainServ/{mainServId}")
+    public ResponseEntity<ResponseResult<List<SubServFindResult>>> findSubServsOfMainServ(@PathVariable Long mainServId){
+        List<SubServFindResult> results = subServService.findSubServsOfMainServ(mainServId);
+        return ResponseEntity.ok(ResponseResult.<List<SubServFindResult>>builder()
+                .code(0)
+                .message("Successfully Load All SubServices Of Given MainService")
+                .data(results)
+                .build());
+    }
 }

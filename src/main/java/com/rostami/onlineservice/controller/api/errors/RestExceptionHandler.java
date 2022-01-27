@@ -25,6 +25,7 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import java.sql.SQLSyntaxErrorException;
 import java.util.Objects;
 
 import static org.springframework.http.HttpStatus.*;
@@ -44,6 +45,23 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
+
+    @ExceptionHandler(NotEnoughCreditBalanceException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
+            NotEnoughCreditBalanceException ex) {
+        var apiError = new ApiError(NOT_ACCEPTABLE);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(SQLSyntaxErrorException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
+            SQLSyntaxErrorException ex) {
+        var apiError = new ApiError(NOT_FOUND);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
     @ExceptionHandler(SizeLimitExceededException.class)
     protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
             SizeLimitExceededException ex) {
@@ -53,35 +71,35 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(BelowBasePriceException.class)
-    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(BelowBasePriceException ex){
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(BelowBasePriceException ex) {
         var apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
 
     @ExceptionHandler(NullPointerException.class)
-    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(NullPointerException ex){
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(NullPointerException ex) {
         var apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
 
     @ExceptionHandler(DuplicatedEmailException.class)
-    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(DuplicatedEmailException ex){
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(DuplicatedEmailException ex) {
         var apiError = new ApiError(NOT_ACCEPTABLE);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
 
     @ExceptionHandler(EntityRelationException.class)
-    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(EntityRelationException ex){
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(EntityRelationException ex) {
         var apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
 
     @ExceptionHandler(NotAllowedToSubmitOpinionException.class)
-    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(NotAllowedToSubmitOpinionException ex){
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(NotAllowedToSubmitOpinionException ex) {
         var apiError = new ApiError(NOT_ACCEPTABLE);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);

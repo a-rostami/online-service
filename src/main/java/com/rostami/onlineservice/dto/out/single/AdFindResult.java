@@ -22,9 +22,13 @@ public class AdFindResult implements BaseOutDto<Ad, AdFindResult> {
     private String workDescription;
     private String address;
     private AdStatus adStatus;
+    private ExpertFindResult chosenExpert;
 
     @Override
     public AdFindResult convertToDto(Ad entity) {
+        if (entity.getChosenExpert() != null)
+            chosenExpert = ExpertFindResult.builder().build().convertToDto(entity.getChosenExpert());
+
         id = entity.getId();
         completionDate = entity.getCompletionDate();
         completionTime = entity.getCompletionTime();

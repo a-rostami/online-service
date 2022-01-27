@@ -1,6 +1,8 @@
 package com.rostami.onlineservice.service;
 
+import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.dto.in.create.OpinionCreateParam;
+import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.OpinionFindResult;
 import com.rostami.onlineservice.entity.Opinion;
@@ -32,13 +34,19 @@ public class OpinionService extends BaseService<Opinion, Long> {
         setBaseOutDto(OpinionFindResult.builder().build());
     }
 
+    @Override
+    public CreateUpdateResult saveOrUpdate(BaseInDto<Opinion> dto) {
+        return submitOpinion((OpinionCreateParam) dto);
+    }
+
     @Transactional
-    public void submitOpinion(OpinionCreateParam opinionCreateParam){
+    public CreateUpdateResult submitOpinion(OpinionCreateParam opinionCreateParam){
         Opinion opinion = opinionCreateParam.convertToDomain();
         Long adId = opinion.getAd().getId();
         AdFindResult ad = (AdFindResult) adService.get(adId);
         checkPermission(ad);
-        repository.save(opinion);
+        Opinion saved = repository.save(opinion);
+        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
     private void checkPermission(AdFindResult ad){

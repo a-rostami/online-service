@@ -63,6 +63,16 @@ public class AdController {
                 .build());
     }
 
+    @PutMapping("/chooseExpert")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@RequestParam Long adId, @RequestParam Long expertId){
+        CreateUpdateResult res = adService.chooseExpert(adId, expertId);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("Successfully Chose Expert For Ad")
+                .data(res)
+                .build());
+    }
+
     @GetMapping("/loadAllAdsOfCustomer/{id}")
     public ResponseEntity<ResponseResult<List<AdFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id){
         List<AdFindResult> allAdsOfCustomer = adService.findAllAdsOfCustomer(id);

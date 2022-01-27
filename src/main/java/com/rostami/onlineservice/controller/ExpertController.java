@@ -5,8 +5,10 @@ import com.rostami.onlineservice.dto.api.filter.ExpertFilter;
 import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
 import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
+import com.rostami.onlineservice.dto.in.update.api.DepositParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
+import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.service.ExpertService;
@@ -67,6 +69,26 @@ public class ExpertController {
                 .code(0)
                 .message("Successfully Found All Experts.")
                 .data(results)
+                .build());
+    }
+
+    @GetMapping("/credit/{id}")
+    public ResponseEntity<ResponseResult<CreditFindResult>> loadCredit(@PathVariable Long id){
+        CreditFindResult creditFindResult = expertService.loadCredit(id);
+        return ResponseEntity.ok(ResponseResult.<CreditFindResult>builder()
+                .code(0)
+                .message("Successfully Load Credit.")
+                .data(creditFindResult)
+                .build());
+    }
+
+    @PutMapping("/deposit")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> depositToCredit(@RequestBody DepositParam param){
+        CreateUpdateResult result = expertService.depositToCredit(param.getUserId(), param.getAmount());
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("Successfully Deposit To Credit")
+                .data(result)
                 .build());
     }
 

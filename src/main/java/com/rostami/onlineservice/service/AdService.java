@@ -1,9 +1,10 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
+import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.Customer;
+import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.Offer;
 import com.rostami.onlineservice.entity.enums.AdStatus;
 import com.rostami.onlineservice.exception.EntityLoadException;
@@ -64,10 +65,10 @@ public class AdService extends BaseService<Ad, Long> {
     }
 
     @Transactional
-    public void chooseExpert(Long adId, ExpertUpdateParam expertParam){
+    public CreateUpdateResult chooseExpert(Long adId, Long expertId){
         Ad ad = repository.findById(adId).orElseThrow(() -> new EntityLoadException("There is no Ad with this id!"));
-        ad.setChosenExpert(expertParam.convertToDomain());
-        ad.setStatus(AdStatus.WAITING_FOR_EXPERT);
-        repository.save(ad);
+        ad.setChosenExpert(Expert.builder().id(expertId).build());
+        ad.setStatus(AdStatus.STARTED);
+        return CreateUpdateResult.builder().id(adId).success(true).build();
     }
 }

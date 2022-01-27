@@ -65,4 +65,14 @@ public class OfferController {
                 .data(results)
                 .build());
     }
+
+    @GetMapping("/loadAllOffersOfExpert/{id}")
+    public ResponseEntity<ResponseResult<List<OfferFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id){
+        List<OfferFindResult> allOffersOfExpert = offerService.loadAllOffersOfExpert(id);
+        return ResponseEntity.ok(ResponseResult.<List<OfferFindResult>>builder()
+                .code(0)
+                .message("Successfully Load All Related Offers.")
+                .data(allOffersOfExpert)
+                .build());
+    }
 }

@@ -22,7 +22,7 @@ public class OpinionController {
 
     @PostMapping("/create")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody OpinionCreateParam param){
-        CreateUpdateResult result = opinionService.saveOrUpdate(param);
+        CreateUpdateResult result = opinionService.submitOpinion(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
                 .message("Opinion Successfully Created.")

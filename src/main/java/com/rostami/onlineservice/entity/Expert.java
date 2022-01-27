@@ -22,12 +22,9 @@ public class Expert extends User {
     private byte[] avatar;
 
     @ToString.Exclude
-    @OneToOne(mappedBy = "expert", cascade = {CascadeType.MERGE})
-    private Credit credit;
-
-    @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
-    @JoinTable(name="expert_subServ",
+    @JoinTable(
+            name="expert_subServ",
             joinColumns=@JoinColumn(name="expert_id"),
             inverseJoinColumns=@JoinColumn(name="subServ_id")
     )

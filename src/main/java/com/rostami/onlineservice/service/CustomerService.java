@@ -1,25 +1,29 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.Customer;
-import com.rostami.onlineservice.exception.DuplicatedEmailException;
+import com.rostami.onlineservice.exception.EntityLoadException;
+import com.rostami.onlineservice.exception.NotEnoughCreditBalanceException;
 import com.rostami.onlineservice.repository.CustomerRepository;
-import com.rostami.onlineservice.service.base.BaseService;
+import com.rostami.onlineservice.service.base.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import javax.annotation.PostConstruct;
-import java.util.List;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService extends BaseService<Customer, Long> {
+public class CustomerService extends UserService<Customer, Long> {
+    public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
     private final CustomerRepository repository;
+    private final ExpertService expertService;
+
 
     @PostConstruct
     public void init(){
@@ -27,18 +31,29 @@ public class CustomerService extends BaseService<Customer, Long> {
         setBaseOutDto(CustomerFindResult.builder().build());
     }
 
-    @Override
-    public CreateUpdateResult saveOrUpdate(BaseInDto<Customer> dto) {
-        Customer entity = dto.convertToDomain();
-        checkEmailExist(entity.getEmail(), entity.getId());
-        Customer saved = repository.save(entity);
-        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public CreateUpdateResult depositToCredit(Long customerId, BigDecimal amount){
+        Customer customer = repository.findById(customerId).orElseThrow(() ->
+                new EntityLoadException("There Is No Customer With This ID!"));
+        return super.depositToCredit(customer, amount);
     }
 
-    private void checkEmailExist(String email, Long id){
-        List<Customer> byEmail = repository.findAll(((root, cq, cb) -> cb.equal(root.get("email"), email)));
-        if (id == null  && !CollectionUtils.isEmpty(byEmail))
-            throw new DuplicatedEmailException("Email Already Exist!");
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public CreateUpdateResult purchase(Long customerId, Long expertId, BigDecimal amount){
+        Customer customer = repository.findById(customerId).orElseThrow(() ->
+                new EntityLoadException("There Is No Customer With This Id!"));
+        Credit credit = customer.getCredit();
+        BigDecimal balance = credit.getBalance();
+
+        if (balance.compareTo(amount) <= 0)
+            throw new NotEnoughCreditBalanceException("Not Enough Balance Please Charge Your Account!");
+        credit.setBalance(balance.subtract(amount));
+        customer.setCredit(credit);
+
+        BigDecimal percentage = amount.multiply(BigDecimal.valueOf(70)).divide(ONE_HUNDRED, 2, RoundingMode.UP);
+        expertService.depositToCredit(expertId, percentage);
+        Customer saved = repository.save(customer);
+        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

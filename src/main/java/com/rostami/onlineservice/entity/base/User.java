@@ -1,5 +1,6 @@
 package com.rostami.onlineservice.entity.base;
 
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
 import lombok.*;
@@ -15,7 +16,8 @@ import javax.validation.constraints.Pattern;
 @AllArgsConstructor
 @ToString(callSuper = true)
 @SuperBuilder
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User extends BaseEntity {
     @Column(nullable = false)
     @NotNull
@@ -48,4 +50,8 @@ public abstract class User extends BaseEntity {
     @Enumerated(EnumType.STRING)
     @NotNull
     private UserStatus userStatus;
+
+    @ToString.Exclude
+    @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    private Credit credit;
 }

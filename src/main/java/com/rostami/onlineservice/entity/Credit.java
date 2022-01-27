@@ -4,10 +4,7 @@ import com.rostami.onlineservice.entity.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
@@ -22,14 +19,4 @@ public class Credit extends BaseEntity {
     @Column(nullable = false)
     @NotNull
     private BigDecimal balance;
-
-    @ToString.Exclude
-    @OneToOne(cascade = {CascadeType.MERGE})
-    @NotNull
-    private Expert expert;
-
-    @ToString.Exclude
-    @OneToOne( cascade = {CascadeType.MERGE})
-    @NotNull
-    private Customer customer;
 }

@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
@@ -8,6 +9,7 @@ import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
 
 @Setter
 @Getter
@@ -33,6 +35,7 @@ public class CustomerCreateParam implements BaseInDto<Customer> {
                 .email(email)
                 .role(Role.CUSTOMER)
                 .userStatus(UserStatus.NEW)
+                .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())
                 .build();
     }
 }

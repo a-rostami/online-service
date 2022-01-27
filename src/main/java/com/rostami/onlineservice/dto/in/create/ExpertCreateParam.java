@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.entity.Credit;
 import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.entity.enums.Role;
 import com.rostami.onlineservice.entity.enums.UserStatus;
@@ -9,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
+import java.math.BigDecimal;
 
 @Setter
 @Getter
@@ -37,6 +39,7 @@ public class ExpertCreateParam implements BaseInDto<Expert> {
                 .avatar(avatar.getBytes())
                 .role(Role.EXPERT)
                 .userStatus(UserStatus.NEW)
+                .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())
                 .build();
     }
 }

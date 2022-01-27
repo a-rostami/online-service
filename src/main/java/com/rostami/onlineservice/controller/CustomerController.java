@@ -5,7 +5,10 @@ import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.api.filter.CustomerFilter;
 import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
 import com.rostami.onlineservice.dto.in.update.CustomerUpdateParam;
+import com.rostami.onlineservice.dto.in.update.api.DepositParam;
+import com.rostami.onlineservice.dto.in.update.api.PurchaseParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.service.CustomerService;
@@ -63,6 +66,36 @@ public class CustomerController {
                 .code(0)
                 .message("All Customers Loaded Successfully.")
                 .data(results)
+                .build());
+    }
+
+    @PutMapping("/deposit")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> depositToCredit(@RequestBody DepositParam param){
+        CreateUpdateResult result = customerService.depositToCredit(param.getUserId(), param.getAmount());
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("Successfully Deposit To Credit")
+                .data(result)
+                .build());
+    }
+
+    @PutMapping("/purchase")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> purchase(@RequestBody PurchaseParam param){
+        CreateUpdateResult result = customerService.purchase(param.getCustomerId(), param.getExpertId(), param.getAmount());
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("Successfully Purchased.")
+                .data(result)
+                .build());
+    }
+
+    @GetMapping("/credit/{id}")
+    public ResponseEntity<ResponseResult<CreditFindResult>> loadCredit(@PathVariable Long id){
+        CreditFindResult creditFindResult = customerService.loadCredit(id);
+        return ResponseEntity.ok(ResponseResult.<CreditFindResult>builder()
+                .code(0)
+                .message("Successfully Load Credit.")
+                .data(creditFindResult)
                 .build());
     }
 
