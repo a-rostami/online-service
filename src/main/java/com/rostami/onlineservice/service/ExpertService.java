@@ -4,6 +4,7 @@ import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
+import com.rostami.onlineservice.dto.out.single.SubServFindResult;
 import com.rostami.onlineservice.entity.*;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.ExpertRepository;
@@ -24,6 +25,7 @@ public class ExpertService extends UserService<Expert, Long> {
     private final ExpertRepository repository;
     private final OpinionService opinionService;
     private final AdService adService;
+    private final SubServService subServService;
 
     @PostConstruct
     public void init(){
@@ -43,10 +45,17 @@ public class ExpertService extends UserService<Expert, Long> {
     }
 
     @Transactional
-    public CreateUpdateResult addSubServ(Long id, SubServUpdateParam subServParam){
-        SubServ subServ = subServParam.convertToDomain();
-        Expert expert = repository.findById(id).orElseThrow(
+    public CreateUpdateResult addSubServ(Long expertId, Long subServId){
+        SubServFindResult subServFindResult = (SubServFindResult) subServService.get(subServId);
+        SubServ subServ = SubServ.builder()
+                .id(subServId)
+                .basePrice(subServFindResult.getBasePrice())
+                .name(subServFindResult.getName())
+                .build();
+
+        Expert expert = repository.findById(expertId).orElseThrow(
                 () -> new EntityLoadException("There is no expert with this id"));
+
         List<SubServ> subServs = expert.getSubServs();
         subServs.add(subServ);
         expert.setSubServs(subServs);

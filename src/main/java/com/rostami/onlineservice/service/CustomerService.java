@@ -62,9 +62,4 @@ public class CustomerService extends UserService<Customer, Long> {
         Customer customer = Customer.builder().id(customerId).build();
         return adService.count((root, query, cb) -> cb.equal(root.get("customer"), customer));
     }
-
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public void changePassword(Long id, String newPassword){
-        repository.changePassword(id, newPassword);
-    }
 }

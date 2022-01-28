@@ -2,6 +2,7 @@ package com.rostami.onlineservice.controller.api.filter;
 
 import com.rostami.onlineservice.dto.api.filter.AdFilter;
 import com.rostami.onlineservice.entity.Ad;
+import com.rostami.onlineservice.entity.SubServ;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 
@@ -20,6 +21,11 @@ public class AdSpecification {
 
             if (notNull(filter.getFromDate()))
                 predicates.add(cb.greaterThan(root.get("recordDate"), filter.getFromDate()));
+
+            if (notNull(filter.getSubServId())){
+                SubServ subServ = SubServ.builder().id(filter.getSubServId()).build();
+                predicates.add(cb.equal(root.get("subServ"), subServ));
+            }
 
             if (notNull(filter.getToDate()))
                 predicates.add(cb.lessThan(root.get("recordDate"), filter.getToDate()));

@@ -6,8 +6,4 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 public interface CustomerRepository extends BaseRepository<Customer, Long> {
-
-    @Modifying(flushAutomatically = true, clearAutomatically = true)
-    @Query("UPDATE Customer c SET c.password=:password WHERE c.id=:id")
-    void changePassword(Long id, String password);
 }

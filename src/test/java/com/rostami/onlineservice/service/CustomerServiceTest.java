@@ -37,7 +37,7 @@ class CustomerServiceTest {
         assertThrows(DuplicatedEmailException.class, () -> customerService.saveOrUpdate(customer));
     }
 
-    @Test
+    /*@Test
     void is_change_password_ok(){
         String newPassword = "123456789";
         String username = "mrrostami";
@@ -47,7 +47,7 @@ class CustomerServiceTest {
         // username of found entity is : mrrostami
         Customer newPassEntity = customerService.findAll(usernamePassSpecification(username, newPassword)).get(0);
         assertEquals(newPassEntity, customer);
-    }
+    }*/
 
     static Specification<Customer> usernamePassSpecification(String username, String password){
         return ((root, cq, cb) ->

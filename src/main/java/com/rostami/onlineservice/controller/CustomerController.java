@@ -120,16 +120,4 @@ public class CustomerController {
                 .data(count)
                 .build());
     }
-
-
-    // TODO : change to spring security
-    @PutMapping("/changePassword/{id}")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> changePassword(@RequestBody String password, @PathVariable Long id){
-        customerService.changePassword(id, password);
-        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
-                .code(0)
-                .message("password Successfully Changed.")
-                .data(CreateUpdateResult.builder().id(id).success(true).build())
-                .build());
-    }
 }

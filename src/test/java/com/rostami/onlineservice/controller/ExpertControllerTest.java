@@ -46,7 +46,7 @@ public class ExpertControllerTest extends AbstractRestControllerTest {
                     .mainServUpdateParam(MainServUpdateParam.builder().id(1L).name("HomeAppliance").build())
                     .build();
 
-            Mockito.when(expertService.addSubServ(1L, subServParam)).thenReturn(result);
+//            Mockito.when(expertService.addSubServ(1L, subServParam)).thenReturn(result);
 
             mvc.perform(post("/experts/addSubServ/{id}", 1)
                         .contentType(MediaType.APPLICATION_JSON)

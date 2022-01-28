@@ -102,10 +102,9 @@ public class ExpertController {
                 .build());
     }
 
-    @PostMapping("/addSubServ/{id}")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@PathVariable Long id,
-                                                                           @RequestBody SubServUpdateParam subServParam){
-        CreateUpdateResult result = expertService.addSubServ(id, subServParam);
+    @PostMapping("/addSubServ")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@RequestParam Long expertId, @RequestParam Long subServId){
+        CreateUpdateResult result = expertService.addSubServ(expertId, subServId);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
                 .message("SubServ Successfully Added To Expert SubServs.")
