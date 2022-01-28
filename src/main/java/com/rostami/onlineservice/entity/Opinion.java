@@ -28,7 +28,7 @@ public class Opinion extends BaseEntity {
     private String description;
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "expert_id")
+    @JoinColumn(name = "expert_id", updatable = false)
     private Expert expert;
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE})

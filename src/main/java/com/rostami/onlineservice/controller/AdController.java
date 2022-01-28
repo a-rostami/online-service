@@ -1,12 +1,16 @@
 package com.rostami.onlineservice.controller;
 
+import com.rostami.onlineservice.controller.api.filter.AdSpecification;
 import com.rostami.onlineservice.dto.api.ResponseResult;
+import com.rostami.onlineservice.dto.api.filter.AdFilter;
 import com.rostami.onlineservice.dto.in.create.AdCreateParam;
 import com.rostami.onlineservice.dto.in.update.AdUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
+import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.service.AdService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -60,6 +64,18 @@ public class AdController {
                 .code(0)
                 .message("All Ads Loaded Successfully.")
                 .data(results)
+                .build());
+    }
+
+    @GetMapping("/filter")
+    public ResponseEntity<ResponseResult<List<AdFindResult>>> filter(@RequestBody AdFilter filter){
+        Specification<Ad> specification = new AdSpecification().getAds(filter);
+        List<Ad> all = adService.findAll(specification);
+        List<AdFindResult> result = all.stream().map(ad -> AdFindResult.builder().build().convertToDto(ad)).toList();
+        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
+                .code(0)
+                .message("Successfully Load All Ads Based On Filter.")
+                .data(result)
                 .build());
     }
 

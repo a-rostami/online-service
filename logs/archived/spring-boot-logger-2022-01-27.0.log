@@ -1,7 +1,0 @@
-2022-01-27 23:02:32,332 INFO org.apache.juli.logging.DirectJDKLog [http-nio-8080-exec-2] Initializing Spring DispatcherServlet 'dispatcherServlet'
-2022-01-27 23:02:32,333 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-8080-exec-2] Initializing Servlet 'dispatcherServlet'
-2022-01-27 23:02:32,336 INFO org.springframework.web.servlet.FrameworkServlet [http-nio-8080-exec-2] Completed initialization in 3 ms
-2022-01-27 23:02:32,735 INFO com.rostami.onlineservice.aop.LoggingAspect [http-nio-8080-exec-2] Execution time of CustomerService.saveOrUpdate :: 190 ms
-2022-01-27 23:17:03,390 INFO org.springframework.orm.jpa.AbstractEntityManagerFactoryBean [SpringApplicationShutdownHook] Closing JPA EntityManagerFactory for persistence unit 'default'
-2022-01-27 23:17:03,443 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown initiated...
-2022-01-27 23:17:03,597 INFO com.zaxxer.hikari.HikariDataSource [SpringApplicationShutdownHook] HikariPool-1 - Shutdown completed.

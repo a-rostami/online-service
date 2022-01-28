@@ -59,7 +59,7 @@ public class Ad extends BaseEntity {
     private AdStatus status;
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "customer_id")
+    @JoinColumn(name = "customer_id", updatable = false)
     private Customer customer;
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE})

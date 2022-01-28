@@ -52,10 +52,10 @@ public class Offer extends BaseEntity {
     private BigDecimal price;
 
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "ad_id")
+    @JoinColumn(name = "ad_id", updatable = false)
     private Ad ad;
 
     @ManyToOne(cascade = {CascadeType.MERGE})
-    @JoinColumn(name = "expert_id")
+    @JoinColumn(name = "expert_id", updatable = false)
     private Expert expert;
 }

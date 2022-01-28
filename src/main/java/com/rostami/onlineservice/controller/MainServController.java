@@ -61,7 +61,7 @@ public class MainServController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(ResponseResult.<List<MainServFindResult>>builder()
                 .code(0)
-                .message("Successfully Found All Experts.")
+                .message("Successfully Found All Main Services.")
                 .data(results)
                 .build());
     }
