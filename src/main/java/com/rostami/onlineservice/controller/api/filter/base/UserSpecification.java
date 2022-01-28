@@ -25,6 +25,12 @@ public class UserSpecification<T> {
             if (notNull(filter.getUserStatus()))
                 predicates.add(cb.equal(root.get("userStatus"), filter.getUserStatus()));
 
+            if (notNull(filter.getFromRecordDate()))
+                predicates.add(cb.greaterThan(root.get("recordDate"), filter.getFromRecordDate()));
+
+            if (notNull(filter.getToRecordDate()))
+                predicates.add(cb.lessThan(root.get("recordDate"), filter.getToRecordDate()));
+
             return cb.and(predicates.toArray(new Predicate[0]));
         };
     }

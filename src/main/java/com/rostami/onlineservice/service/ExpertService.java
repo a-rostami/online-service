@@ -69,4 +69,9 @@ public class ExpertService extends UserService<Expert, Long> {
         return super.depositToCredit(expert, amount);
     }
 
+    @Transactional
+    public long getNumberOfDoneAds(Long expertId){
+        Expert expert = Expert.builder().id(expertId).build();
+        return adService.count((root, query, cb) -> cb.equal(root.get("chosenExpert"), expert));
+    }
 }

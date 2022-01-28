@@ -124,4 +124,14 @@ public class ExpertController {
                 .data(results)
                 .build());
     }
+
+    @GetMapping("/countOfDoneAds/{expertId}")
+    public ResponseEntity<ResponseResult<Long>> countOfDoneAds(@PathVariable Long expertId){
+        long count = expertService.getNumberOfDoneAds(expertId);
+        return ResponseEntity.ok(ResponseResult.<Long>builder()
+                .code(0)
+                .message("Successfully Load Number Of Done Ads By Given Expert.")
+                .data(count)
+                .build());
+    }
 }

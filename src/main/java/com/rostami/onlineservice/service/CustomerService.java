@@ -23,6 +23,7 @@ public class CustomerService extends UserService<Customer, Long> {
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
     private final CustomerRepository repository;
     private final ExpertService expertService;
+    private final AdService adService;
 
 
     @PostConstruct
@@ -54,6 +55,12 @@ public class CustomerService extends UserService<Customer, Long> {
         expertService.depositToCredit(expertId, percentage);
         Customer saved = repository.save(customer);
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    }
+
+    @Transactional
+    public long getNumberOfRelatedAds(Long customerId){
+        Customer customer = Customer.builder().id(customerId).build();
+        return adService.count((root, query, cb) -> cb.equal(root.get("customer"), customer));
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

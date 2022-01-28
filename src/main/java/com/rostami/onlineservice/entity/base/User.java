@@ -9,6 +9,10 @@ import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.sql.Date;
+import java.sql.Time;
+import java.time.LocalDate;
+import java.time.LocalTime;
 
 @Setter
 @Getter
@@ -19,6 +23,17 @@ import javax.validation.constraints.Pattern;
 @Entity
 @Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class User extends BaseEntity {
+    @Column(nullable = false, updatable = false)
+    private Date recordDate;
+    @Column(nullable = false, updatable = false)
+    private Time recordTime;
+
+    @PrePersist
+    private void currentDateOnCreate(){
+        recordDate = Date.valueOf(LocalDate.now());
+        recordTime = Time.valueOf(LocalTime.now());
+    }
+
     @Column(nullable = false)
     @NotNull
     private String firstname;

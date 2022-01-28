@@ -16,6 +16,7 @@ import java.util.List;
 @ToString(callSuper = true)
 @Entity
 public class Expert extends User {
+
     @Lob
     @Column( columnDefinition = "BLOB", nullable = false)
     @NotNull

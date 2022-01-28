@@ -18,4 +18,6 @@ public interface BaseRepository<T, ID> extends JpaRepository<T, ID>, JpaSpecific
     List<T> findAll(Specification<T> spec, Sort sort);
 
     Page<T> findAll(Specification<T> spec, Pageable pageable);
+
+    long count(Specification<T> spec);
 }

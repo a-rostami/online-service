@@ -111,6 +111,16 @@ public class CustomerController {
                 .build());
     }
 
+    @GetMapping("/countOfRelatedAds/{customerId}")
+    public ResponseEntity<ResponseResult<Long>> countOfAds(@PathVariable Long customerId){
+        long count = customerService.getNumberOfRelatedAds(customerId);
+        return ResponseEntity.ok(ResponseResult.<Long>builder()
+                .code(0)
+                .message("Successfully Found Number Of Customer's Ads.")
+                .data(count)
+                .build());
+    }
+
 
     // TODO : change to spring security
     @PutMapping("/changePassword/{id}")

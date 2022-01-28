@@ -3,7 +3,6 @@ package com.rostami.onlineservice.service.base;
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
-import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.base.BaseEntity;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.base.BaseRepository;
@@ -12,7 +11,6 @@ import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -66,5 +64,10 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long> {
     @Transactional(readOnly = true)
     public List<T> findAll(Sort sort){
         return repository.findAll(sort);
+    }
+
+    @Transactional
+    public long count(Specification<T> specification){
+        return repository.count(specification);
     }
 }
