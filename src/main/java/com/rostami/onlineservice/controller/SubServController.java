@@ -4,15 +4,22 @@ import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.SubServCreateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.OpinionFindResult;
 import com.rostami.onlineservice.dto.out.single.SubServFindResult;
+import com.rostami.onlineservice.entity.Opinion;
+import com.rostami.onlineservice.entity.SubServ;
 import com.rostami.onlineservice.service.SubServService;
+import io.swagger.models.auth.In;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequestMapping("/subServs")
 @RequiredArgsConstructor
@@ -55,10 +62,11 @@ public class SubServController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ResponseResult<List<SubServFindResult>>> readAll(){
-        List<SubServFindResult> results = subServService.list().stream()
-                .map((baseOutDto -> (SubServFindResult) baseOutDto))
-                .collect(Collectors.toList());
+    public ResponseEntity<ResponseResult<List<SubServFindResult>>> readAll(@RequestParam Integer page){
+        Pageable pageable = PageRequest.of(page, 5);
+        Stream<SubServ> stream = subServService.findAll(pageable).get();
+        List<SubServFindResult> results =
+                stream.map(subServ -> SubServFindResult.builder().build().convertToDto(subServ)).collect(Collectors.toList());
         return ResponseEntity.ok(ResponseResult.<List<SubServFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All SubServs.")

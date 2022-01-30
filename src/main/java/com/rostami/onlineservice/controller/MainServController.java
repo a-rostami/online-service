@@ -5,14 +5,18 @@ import com.rostami.onlineservice.dto.in.create.MainServCreateParam;
 import com.rostami.onlineservice.dto.in.update.MainServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.MainServFindResult;
+import com.rostami.onlineservice.entity.MainServ;
 import com.rostami.onlineservice.service.MainServService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @RequestMapping("/mainServs")
@@ -55,10 +59,11 @@ public class MainServController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ResponseResult<List<MainServFindResult>>> readAll(){
-        List<MainServFindResult> results = mainServService.list().stream()
-                .map((baseOutDto -> (MainServFindResult) baseOutDto))
-                .collect(Collectors.toList());
+    public ResponseEntity<ResponseResult<List<MainServFindResult>>> readAll(@RequestParam Integer page){
+        Pageable pageable = PageRequest.of(page, 5);
+        Stream<MainServ> stream = mainServService.findAll(pageable).get();
+        List<MainServFindResult> results =
+                stream.map(mainServ -> MainServFindResult.builder().build().convertToDto(mainServ)).collect(Collectors.toList());
         return ResponseEntity.ok(ResponseResult.<List<MainServFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All Main Services.")

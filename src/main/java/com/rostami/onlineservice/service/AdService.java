@@ -12,6 +12,7 @@ import com.rostami.onlineservice.repository.AdRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,9 +43,9 @@ public class AdService extends BaseService<Ad, Long> {
     }
 
     @Transactional
-    public List<AdFindResult> findAllAdsOfCustomer(Long customerId){
+    public List<AdFindResult> findAllAdsOfCustomer(Long customerId, Pageable pageable){
         Customer customer = Customer.builder().id(customerId).build();
-        List<Ad> ads = findAll((root, query, cb) -> cb.equal(root.get("customer"), customer));
+        List<Ad> ads = findAll((root, query, cb) -> cb.equal(root.get("customer"), customer), pageable);
         return ads.stream().map(p -> AdFindResult.builder().build().convertToDto(p))
                 .collect(Collectors.toList());
     }

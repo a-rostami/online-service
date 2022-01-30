@@ -16,7 +16,7 @@ import java.util.List;
 @ToString(callSuper = true)
 @Entity
 public class MainServ extends BaseEntity {
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     @NotNull
     private String name;
 }

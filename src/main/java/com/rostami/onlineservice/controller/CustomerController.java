@@ -8,17 +8,22 @@ import com.rostami.onlineservice.dto.in.update.CustomerUpdateParam;
 import com.rostami.onlineservice.dto.in.update.api.DepositParam;
 import com.rostami.onlineservice.dto.in.update.api.PurchaseParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
+import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
+import com.rostami.onlineservice.entity.Ad;
 import com.rostami.onlineservice.entity.Customer;
 import com.rostami.onlineservice.service.CustomerService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/customers")
@@ -59,9 +64,11 @@ public class CustomerController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> readAll(){
-        List<CustomerFindResult> results = customerService.list()
-                .stream().map((baseOutDto) -> (CustomerFindResult) baseOutDto).collect(Collectors.toList());
+    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> readAll(@RequestParam Integer page){
+        Pageable pageable = PageRequest.of(page, 5);
+        Stream<Customer> stream = customerService.findAll(pageable).get();
+        List<CustomerFindResult> results =
+                stream.map(customer -> CustomerFindResult.builder().build().convertToDto(customer)).collect(Collectors.toList());
         return ResponseEntity.ok(ResponseResult.<List<CustomerFindResult>>builder()
                 .code(0)
                 .message("All Customers Loaded Successfully.")
@@ -100,8 +107,9 @@ public class CustomerController {
     }
 
     @GetMapping("/filter")
-    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> getCustomers(@RequestBody CustomerFilter filter){
-        List<Customer> all = customerService.findAll(new CustomerSpecification().getUsers(filter));
+    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> getCustomers(@RequestBody CustomerFilter filter, @RequestParam Integer page){
+        Pageable pageable = PageRequest.of(page, 5);
+        List<Customer> all = customerService.findAll(new CustomerSpecification().getUsers(filter), pageable);
         List<CustomerFindResult> results =
                 all.stream().map(p -> CustomerFindResult.builder().build().convertToDto(p)).collect(Collectors.toList());
         return ResponseEntity.ok(ResponseResult.<List<CustomerFindResult>>builder()

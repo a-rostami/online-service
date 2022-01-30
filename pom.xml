@@ -98,13 +98,6 @@
             <optional>true</optional>
         </dependency>
 
-        <!-- Captcha -->
-
-
-
-
-
-
     </dependencies>
 
     <build>

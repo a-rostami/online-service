@@ -10,6 +10,7 @@ import com.rostami.onlineservice.exception.BelowBasePriceException;
 import com.rostami.onlineservice.repository.OfferRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,9 +50,9 @@ public class OfferService extends BaseService<Offer, Long> {
     }
 
     @Transactional
-    public List<OfferFindResult> loadAllOffersOfExpert(Long expertId){
+    public List<OfferFindResult> loadAllOffersOfExpert(Long expertId, Pageable pageable){
         Expert expert = Expert.builder().id(expertId).build();
-        List<Offer> offers = repository.findAll((root, query, cb) -> cb.equal(root.get("expert"), expert));
+        List<Offer> offers = repository.findAll((root, query, cb) -> cb.equal(root.get("expert"), expert), pageable).getContent();
         return offers.stream().map(offer -> OfferFindResult.builder().build().convertToDto(offer)).collect(Collectors.toList());
     }
 }

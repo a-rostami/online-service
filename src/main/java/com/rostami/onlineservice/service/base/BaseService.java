@@ -8,6 +8,7 @@ import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.base.BaseRepository;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -64,6 +65,11 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long> {
     @Transactional(readOnly = true)
     public List<T> findAll(Sort sort){
         return repository.findAll(sort);
+    }
+
+    @Transactional(readOnly = true)
+    public Page<T> findAll(Pageable pageable){
+        return repository.findAll(pageable);
     }
 
     @Transactional

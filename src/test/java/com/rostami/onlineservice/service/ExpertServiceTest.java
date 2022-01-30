@@ -38,22 +38,22 @@ class ExpertServiceTest {
 //        Double averagePoint = expertService.getAveragePoint(expert);
 //        assertEquals(averagePoint, 3.5);
     }
-
-    @Test
-    void test_find_all_relatedAds_isOk() {
-        List<AdFindResult> adsRelatedToSubServ = expertService.findAdsRelatedToExpertSubServ(4L);
-        // id 9 exist in DB
-        SubServ subServ = SubServ.builder().id(9L).build();
-        List<AdFindResult> ads = adService.findAll(((root, query, cb) -> cb.equal(root.get("subServ"), subServ)))
-                .stream().map(p -> AdFindResult.builder().build()
-                        .convertToDto(p)).collect(Collectors.toList());
-        boolean result = true;
-        for (int i = 0; i < adsRelatedToSubServ.size(); i++){
-            if (!adsRelatedToSubServ.get(i).getId().equals(ads.get(i).getId())) {
-                result = false;
-                break;
-            }
-        }
-        assertTrue(result);
-    }
+//
+//    @Test
+//    void test_find_all_relatedAds_isOk() {
+//        List<AdFindResult> adsRelatedToSubServ = expertService.findAdsRelatedToExpertSubServ(4L);
+//        // id 9 exist in DB
+//        SubServ subServ = SubServ.builder().id(9L).build();
+//        List<AdFindResult> ads = adService.findAll(((root, query, cb) -> cb.equal(root.get("subServ"), subServ)))
+//                .stream().map(p -> AdFindResult.builder().build()
+//                        .convertToDto(p)).collect(Collectors.toList());
+//        boolean result = true;
+//        for (int i = 0; i < adsRelatedToSubServ.size(); i++){
+//            if (!adsRelatedToSubServ.get(i).getId().equals(ads.get(i).getId())) {
+//                result = false;
+//                break;
+//            }
+//        }
+//        assertTrue(result);
+//    }
 }

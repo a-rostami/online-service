@@ -10,6 +10,7 @@ import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -34,12 +35,12 @@ public class ExpertService extends UserService<Expert, Long> {
     }
 
     @Transactional
-    public List<AdFindResult> findAdsRelatedToExpertSubServ(Long expertId){
+    public List<AdFindResult> findAdsRelatedToExpertSubServ(Long expertId, Pageable pageable){
         Expert expert = repository.findById(expertId).orElseThrow(
                 () -> new EntityLoadException("There is no expert with this id"));
         List<SubServ> subServs = expert.getSubServs();
 
-        List<Ad> results = adService.findAll((root, query, cb) -> root.get("subServ").in(subServs));
+        List<Ad> results = adService.findAll((root, query, cb) -> root.get("subServ").in(subServs), pageable);
         return results.stream().map((ad) -> AdFindResult.builder().build()
                 .convertToDto(ad)).collect(Collectors.toList());
     }
