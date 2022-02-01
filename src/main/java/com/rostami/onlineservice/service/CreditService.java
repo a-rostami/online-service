@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
-import com.rostami.onlineservice.entity.Credit;
+import com.rostami.onlineservice.model.Credit;
 import com.rostami.onlineservice.repository.CreditRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +11,7 @@ import javax.annotation.PostConstruct;
 
 @Service
 @RequiredArgsConstructor
-public class CreditService extends BaseService<Credit, Long> {
+public class CreditService extends BaseService<Credit, Long, CreditFindResult> {
     private final CreditRepository repository;
 
     @PostConstruct

@@ -1,21 +1,15 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
-import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
-import com.rostami.onlineservice.entity.Expert;
-import com.rostami.onlineservice.entity.SubServ;
+import com.rostami.onlineservice.model.Expert;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @DataJpaTest
 @ActiveProfiles("test")

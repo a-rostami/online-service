@@ -1,8 +1,8 @@
-package com.rostami.onlineservice.entity.base;
+package com.rostami.onlineservice.model.base;
 
-import com.rostami.onlineservice.entity.Credit;
-import com.rostami.onlineservice.entity.enums.Role;
-import com.rostami.onlineservice.entity.enums.UserStatus;
+import com.rostami.onlineservice.model.Credit;
+import com.rostami.onlineservice.model.enums.Role;
+import com.rostami.onlineservice.model.enums.UserStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import javax.persistence.*;

@@ -1,10 +1,11 @@
 package com.rostami.onlineservice.service.base;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
-import com.rostami.onlineservice.entity.Credit;
-import com.rostami.onlineservice.entity.base.User;
+import com.rostami.onlineservice.model.Credit;
+import com.rostami.onlineservice.model.base.User;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import lombok.Getter;
@@ -18,7 +19,7 @@ import java.util.List;
 
 @Getter
 @Setter
-public class UserService<T extends User, ID extends Long> extends BaseService<T, ID> {
+public class UserService<T extends User, ID extends Long, E extends BaseOutDto<T, E> > extends BaseService<T, ID, E> {
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     protected CreateUpdateResult depositToCredit(T user, BigDecimal amount){

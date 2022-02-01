@@ -1,8 +1,8 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.entity.MainServ;
-import com.rostami.onlineservice.entity.SubServ;
+import com.rostami.onlineservice.model.MainServ;
+import com.rostami.onlineservice.model.SubServ;
 import com.rostami.onlineservice.exception.EntityRelationException;
 import lombok.*;
 

@@ -1,6 +1,6 @@
-package com.rostami.onlineservice.entity;
+package com.rostami.onlineservice.model;
 
-import com.rostami.onlineservice.entity.base.BaseEntity;
+import com.rostami.onlineservice.model.base.BaseEntity;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 

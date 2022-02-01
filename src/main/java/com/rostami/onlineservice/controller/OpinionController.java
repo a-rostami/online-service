@@ -4,10 +4,7 @@ import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.in.create.OpinionCreateParam;
 import com.rostami.onlineservice.dto.in.update.OpinionUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
-import com.rostami.onlineservice.dto.out.single.OfferFindResult;
 import com.rostami.onlineservice.dto.out.single.OpinionFindResult;
-import com.rostami.onlineservice.entity.Offer;
-import com.rostami.onlineservice.entity.Opinion;
 import com.rostami.onlineservice.service.OpinionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -17,8 +14,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RequestMapping("/opinions")
 @RequiredArgsConstructor
@@ -63,9 +58,8 @@ public class OpinionController {
     @GetMapping("/all")
     public ResponseEntity<ResponseResult<List<OpinionFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        Stream<Opinion> stream = opinionService.findAll(pageable).get();
-        List<OpinionFindResult> results =
-                stream.map(opinion -> OpinionFindResult.builder().build().convertToDto(opinion)).collect(Collectors.toList());
+        List<OpinionFindResult> results = opinionService.findAll(pageable)
+                .stream().map(opinionOutDto -> (OpinionFindResult) opinionOutDto).toList();
         return ResponseEntity.ok(ResponseResult.<List<OpinionFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All Opinions.")

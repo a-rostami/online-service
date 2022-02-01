@@ -1,6 +1,6 @@
-package com.rostami.onlineservice.entity;
+package com.rostami.onlineservice.model;
 
-import com.rostami.onlineservice.entity.base.User;
+import com.rostami.onlineservice.model.base.User;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -23,7 +23,7 @@ public class Expert extends User {
     private byte[] avatar;
 
     @ToString.Exclude
-    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(
             name="expert_subServ",
             joinColumns=@JoinColumn(name="expert_id"),

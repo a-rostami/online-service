@@ -1,9 +1,9 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.entity.Ad;
-import com.rostami.onlineservice.entity.Expert;
-import com.rostami.onlineservice.entity.Offer;
+import com.rostami.onlineservice.model.Ad;
+import com.rostami.onlineservice.model.Expert;
+import com.rostami.onlineservice.model.Offer;
 import com.rostami.onlineservice.exception.EntityRelationException;
 import lombok.*;
 

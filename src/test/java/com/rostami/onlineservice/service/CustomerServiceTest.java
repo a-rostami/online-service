@@ -2,8 +2,7 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
-import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
-import com.rostami.onlineservice.entity.Customer;
+import com.rostami.onlineservice.model.Customer;
 import com.rostami.onlineservice.exception.DuplicatedEmailException;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +43,7 @@ class CustomerServiceTest {
         CustomerFindResult customerDto = (CustomerFindResult) customerService.get(1L);
         Customer customer = Customer.builder().id(customerDto.getId()).build();
         customerService.changePassword(customer.getId(), newPassword);
-        // username of found entity is : mrrostami
+        // username of found model is : mrrostami
         Customer newPassEntity = customerService.findAll(usernamePassSpecification(username, newPassword)).get(0);
         assertEquals(newPassEntity, customer);
     }*/

@@ -2,8 +2,8 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
-import com.rostami.onlineservice.entity.Credit;
-import com.rostami.onlineservice.entity.Customer;
+import com.rostami.onlineservice.model.Credit;
+import com.rostami.onlineservice.model.Customer;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.exception.NotEnoughCreditBalanceException;
 import com.rostami.onlineservice.repository.CustomerRepository;
@@ -19,7 +19,7 @@ import java.math.RoundingMode;
 
 @Service
 @RequiredArgsConstructor
-public class CustomerService extends UserService<Customer, Long> {
+public class CustomerService extends UserService<Customer, Long, CustomerFindResult> {
     public static final BigDecimal ONE_HUNDRED = new BigDecimal(100);
     private final CustomerRepository repository;
     private final ExpertService expertService;

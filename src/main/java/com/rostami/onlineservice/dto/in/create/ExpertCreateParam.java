@@ -1,10 +1,10 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.entity.Credit;
-import com.rostami.onlineservice.entity.Expert;
-import com.rostami.onlineservice.entity.enums.Role;
-import com.rostami.onlineservice.entity.enums.UserStatus;
+import com.rostami.onlineservice.model.Credit;
+import com.rostami.onlineservice.model.Expert;
+import com.rostami.onlineservice.model.enums.Role;
+import com.rostami.onlineservice.model.enums.UserStatus;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 

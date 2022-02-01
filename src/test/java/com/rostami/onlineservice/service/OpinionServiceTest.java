@@ -1,10 +1,9 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
-import com.rostami.onlineservice.entity.Ad;
-import com.rostami.onlineservice.entity.Expert;
-import com.rostami.onlineservice.entity.Opinion;
-import com.rostami.onlineservice.exception.NotAllowedToSubmitOpinionException;
+import com.rostami.onlineservice.model.Ad;
+import com.rostami.onlineservice.model.Expert;
+import com.rostami.onlineservice.model.Opinion;
 import com.rostami.onlineservice.repository.AdRepository;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.repository.OpinionRepository;
@@ -14,8 +13,6 @@ import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabas
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")

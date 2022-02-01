@@ -2,8 +2,7 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.config.AppConfig;
 import com.rostami.onlineservice.dto.out.single.OfferFindResult;
-import com.rostami.onlineservice.entity.Offer;
-import com.rostami.onlineservice.exception.BelowBasePriceException;
+import com.rostami.onlineservice.model.Offer;
 import com.rostami.onlineservice.repository.OfferRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,8 +12,6 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringJUnitConfig;
 
 import java.math.BigDecimal;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 @DataJpaTest
 @ActiveProfiles("test")

@@ -5,8 +5,8 @@ import com.rostami.onlineservice.dto.in.create.OpinionCreateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.OpinionFindResult;
-import com.rostami.onlineservice.entity.Opinion;
-import com.rostami.onlineservice.entity.enums.AdStatus;
+import com.rostami.onlineservice.model.Opinion;
+import com.rostami.onlineservice.model.enums.AdStatus;
 import com.rostami.onlineservice.exception.NotAllowedToSubmitOpinionException;
 import com.rostami.onlineservice.repository.OpinionRepository;
 import com.rostami.onlineservice.service.base.BaseService;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 
 @Service
-public class OpinionService extends BaseService<Opinion, Long> {
+public class OpinionService extends BaseService<Opinion, Long, OpinionFindResult> {
     private final OpinionRepository repository;
     private final AdService adService;
 

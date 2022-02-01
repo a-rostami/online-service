@@ -1,16 +1,14 @@
 package com.rostami.onlineservice.service;
 
-import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
-import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
+import com.rostami.onlineservice.dto.out.single.OpinionFindResult;
 import com.rostami.onlineservice.dto.out.single.SubServFindResult;
-import com.rostami.onlineservice.entity.*;
+import com.rostami.onlineservice.model.*;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
@@ -18,11 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class ExpertService extends UserService<Expert, Long> {
+public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     private final ExpertRepository repository;
     private final OpinionService opinionService;
     private final AdService adService;
@@ -32,17 +29,6 @@ public class ExpertService extends UserService<Expert, Long> {
     public void init(){
         setRepository(repository);
         setBaseOutDto(ExpertFindResult.builder().build());
-    }
-
-    @Transactional
-    public List<AdFindResult> findAdsRelatedToExpertSubServ(Long expertId, Pageable pageable){
-        Expert expert = repository.findById(expertId).orElseThrow(
-                () -> new EntityLoadException("There is no expert with this id"));
-        List<SubServ> subServs = expert.getSubServs();
-
-        List<Ad> results = adService.findAll((root, query, cb) -> root.get("subServ").in(subServs), pageable);
-        return results.stream().map((ad) -> AdFindResult.builder().build()
-                .convertToDto(ad)).collect(Collectors.toList());
     }
 
     @Transactional
@@ -68,8 +54,10 @@ public class ExpertService extends UserService<Expert, Long> {
     @Transactional
     public Double getAveragePoint(Long id){
         Expert expert = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no expert with this id"));
-        List<Opinion> opinions = opinionService.findAll(((root, query, cb) -> cb.equal(root.get("expert"), expert)));
-        return opinions.stream().mapToInt(Opinion::getRate).average().orElse(0);
+        List<OpinionFindResult> opinions =
+                opinionService.findAll(((root, query, cb) -> cb.equal(root.get("expert"), expert)))
+                        .stream().map(opinionDto -> (OpinionFindResult) opinionDto).toList();
+        return opinions.stream().mapToInt(OpinionFindResult::getRate).average().orElse(0);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

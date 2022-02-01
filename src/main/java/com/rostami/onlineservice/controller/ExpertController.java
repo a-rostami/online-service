@@ -4,15 +4,10 @@ import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.api.filter.ExpertFilter;
 import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
 import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
-import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.in.update.api.DepositParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
-import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
-import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
-import com.rostami.onlineservice.entity.Customer;
-import com.rostami.onlineservice.entity.Expert;
 import com.rostami.onlineservice.service.ExpertService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -22,8 +17,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/experts")
@@ -68,9 +61,8 @@ public class ExpertController {
     @GetMapping("/all")
     public ResponseEntity<ResponseResult<List<ExpertFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        Stream<Expert> stream = expertService.findAll(pageable).get();
-        List<ExpertFindResult> results =
-                stream.map(expert -> ExpertFindResult.builder().build().convertToDto(expert)).collect(Collectors.toList());
+        List<ExpertFindResult> results = expertService.findAll(pageable)
+                .stream().map(expertOutDto -> (ExpertFindResult) expertOutDto).toList();
         return ResponseEntity.ok(ResponseResult.<List<ExpertFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All Experts.")
@@ -98,17 +90,6 @@ public class ExpertController {
                 .build());
     }
 
-    @GetMapping("/findRelatedAds/{id}")
-    public ResponseEntity<ResponseResult<List<AdFindResult>>> findRelatedAds(@PathVariable Long id, @RequestParam Integer page){
-        Pageable pageable = PageRequest.of(page, 5);
-        List<AdFindResult> result = expertService.findAdsRelatedToExpertSubServ(id, pageable);
-        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
-                .code(0)
-                .message("Successfully Load All Related Ads.")
-                .data(result)
-                .build());
-    }
-
     @PostMapping("/addSubServ")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@RequestParam Long expertId, @RequestParam Long subServId){
         CreateUpdateResult result = expertService.addSubServ(expertId, subServId);
@@ -121,9 +102,8 @@ public class ExpertController {
 
     @GetMapping("/filter")
     public ResponseEntity<ResponseResult<List<ExpertFindResult>>> getCustomers(@RequestBody ExpertFilter filter){
-        List<Expert> all = expertService.findAll(new ExpertSpecification().getUsers(filter));
-        List<ExpertFindResult> results =
-                all.stream().map(p -> ExpertFindResult.builder().build().convertToDto(p)).collect(Collectors.toList());
+        List<ExpertFindResult> results = expertService.findAll(new ExpertSpecification().getUsers(filter))
+                .stream().map(expertOutDto -> (ExpertFindResult) expertOutDto).toList();
         return ResponseEntity.ok(ResponseResult.<List<ExpertFindResult>>builder()
                 .code(0)
                 .message("Successfully Load Experts Based Filters.")

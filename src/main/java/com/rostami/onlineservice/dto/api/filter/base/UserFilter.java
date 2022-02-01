@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.api.filter.base;
 
-import com.rostami.onlineservice.entity.enums.UserStatus;
+import com.rostami.onlineservice.model.enums.UserStatus;
 import lombok.Data;
 
 import java.sql.Date;

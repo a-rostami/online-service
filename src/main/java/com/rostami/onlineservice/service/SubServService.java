@@ -1,8 +1,8 @@
 package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.dto.out.single.SubServFindResult;
-import com.rostami.onlineservice.entity.MainServ;
-import com.rostami.onlineservice.entity.SubServ;
+import com.rostami.onlineservice.model.MainServ;
+import com.rostami.onlineservice.model.SubServ;
 import com.rostami.onlineservice.repository.SubServRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
-public class SubServService extends BaseService<SubServ, Long> {
+public class SubServService extends BaseService<SubServ, Long, SubServFindResult> {
     private final SubServRepository repository;
 
     @PostConstruct

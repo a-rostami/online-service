@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.dto.out.single;
 
 import com.rostami.onlineservice.dto.out.BaseOutDto;
-import com.rostami.onlineservice.entity.SubServ;
+import com.rostami.onlineservice.model.SubServ;
 import lombok.*;
 
 import java.math.BigDecimal;

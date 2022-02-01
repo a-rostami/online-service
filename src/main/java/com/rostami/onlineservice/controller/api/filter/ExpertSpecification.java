@@ -2,9 +2,8 @@ package com.rostami.onlineservice.controller.api.filter;
 
 import com.rostami.onlineservice.controller.api.filter.base.UserSpecification;
 import com.rostami.onlineservice.dto.api.filter.ExpertFilter;
-import com.rostami.onlineservice.dto.api.filter.base.UserFilter;
-import com.rostami.onlineservice.entity.Expert;
-import com.rostami.onlineservice.entity.SubServ;
+import com.rostami.onlineservice.model.Expert;
+import com.rostami.onlineservice.model.SubServ;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 

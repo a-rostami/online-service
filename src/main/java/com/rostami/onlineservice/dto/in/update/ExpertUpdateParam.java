@@ -1,14 +1,13 @@
 package com.rostami.onlineservice.dto.in.update;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.entity.Expert;
+import com.rostami.onlineservice.model.Expert;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
-import java.util.List;
 
 @Getter
 @Setter

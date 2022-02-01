@@ -3,7 +3,7 @@ package com.rostami.onlineservice.service.base;
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
-import com.rostami.onlineservice.entity.base.BaseEntity;
+import com.rostami.onlineservice.model.base.BaseEntity;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.base.BaseRepository;
 import lombok.Getter;
@@ -20,9 +20,9 @@ import java.util.stream.Collectors;
 
 @Setter
 @Getter
-public abstract class BaseService<T extends BaseEntity, ID extends Long> {
+public abstract class BaseService<T extends BaseEntity, ID extends Long, E extends BaseOutDto<T, E>> {
     private BaseRepository<T, ID> repository;
-    private BaseOutDto<T, ?> baseOutDto;
+    private BaseOutDto<T, E> baseOutDto;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CreateUpdateResult saveOrUpdate(BaseInDto<T> dto){
@@ -31,13 +31,13 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long> {
     }
 
     @Transactional
-    public BaseOutDto<T, ?> get(ID id){
-        T entity = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no entity with this id"));
+    public BaseOutDto<T, E> get(ID id){
+        T entity = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no model with this id"));
         return baseOutDto.convertToDto(entity);
     }
 
     @Transactional
-    public List<BaseOutDto<T, ?>> list(){
+    public List<BaseOutDto<T, E>> list(){
         List<T> all = repository.findAll();
         return all.stream().map((entity) -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
     }
@@ -48,28 +48,33 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long> {
     }
 
     @Transactional(readOnly = true)
-    public List<T> findAll(Specification<T> specification){
-        return repository.findAll(specification);
+    public List<BaseOutDto<T, E>> findAll(Specification<T> specification){
+        List<T> entities = repository.findAll(specification);
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<T> findAll(Specification<T> specification, Sort sort){
-        return repository.findAll(specification, sort);
+    public List<BaseOutDto<T, E>> findAll(Specification<T> specification, Sort sort){
+        List<T> entities = repository.findAll(specification, sort);
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<T> findAll(Specification<T> specification, Pageable pageable){
-        return repository.findAll(specification, pageable).getContent();
+    public List<BaseOutDto<T, E>> findAll(Specification<T> specification, Pageable pageable){
+        List<T> entities = repository.findAll(specification, pageable).getContent();
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public List<T> findAll(Sort sort){
-        return repository.findAll(sort);
+    public List<BaseOutDto<T, E>> findAll(Sort sort){
+        List<T> entities = repository.findAll(sort);
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
     }
 
     @Transactional(readOnly = true)
-    public Page<T> findAll(Pageable pageable){
-        return repository.findAll(pageable);
+    public List<BaseOutDto<T, E>> findAll(Pageable pageable){
+        List<T> entities = repository.findAll(pageable).getContent();
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
     }
 
     @Transactional

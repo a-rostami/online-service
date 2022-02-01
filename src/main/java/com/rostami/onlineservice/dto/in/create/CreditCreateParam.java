@@ -1,14 +1,9 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.entity.Credit;
-import com.rostami.onlineservice.entity.Customer;
-import com.rostami.onlineservice.entity.Expert;
-import com.rostami.onlineservice.entity.base.User;
-import com.rostami.onlineservice.entity.enums.Role;
+import com.rostami.onlineservice.model.Credit;
 import lombok.*;
 
-import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 
 @Getter

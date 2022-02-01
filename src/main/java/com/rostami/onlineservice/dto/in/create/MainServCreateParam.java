@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.entity.MainServ;
+import com.rostami.onlineservice.model.MainServ;
 import lombok.*;
 
 @Getter

@@ -1,8 +1,8 @@
 package com.rostami.onlineservice.dto.out.single;
 
 import com.rostami.onlineservice.dto.out.BaseOutDto;
-import com.rostami.onlineservice.entity.Ad;
-import com.rostami.onlineservice.entity.enums.AdStatus;
+import com.rostami.onlineservice.model.Ad;
+import com.rostami.onlineservice.model.enums.AdStatus;
 import lombok.*;
 
 import java.math.BigDecimal;

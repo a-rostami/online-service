@@ -13,11 +13,11 @@ import java.util.List;
 @NoRepositoryBean
 public interface BaseRepository<T, ID> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
 
+    Page<T> findAll(Specification<T> spec, Pageable pageable);
+
     List<T> findAll(Specification<T> spec);
 
     List<T> findAll(Specification<T> spec, Sort sort);
-
-    Page<T> findAll(Specification<T> spec, Pageable pageable);
 
     Page<T> findAll(Pageable pageable);
 

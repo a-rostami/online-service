@@ -1,4 +1,4 @@
-package com.rostami.onlineservice.entity.enums;
+package com.rostami.onlineservice.model.enums;
 
 public enum UserStatus {
     NEW,

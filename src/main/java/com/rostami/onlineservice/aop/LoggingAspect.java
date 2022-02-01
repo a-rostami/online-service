@@ -22,6 +22,8 @@ public class LoggingAspect {
         String className = methodSignature.getDeclaringType().getSimpleName();
         String methodName = methodSignature.getName();
 
+        logger.info("Start Execution time of " + className + "." + methodName );
+
         //Measure method execution time
         StopWatch stopWatch = new StopWatch();
         stopWatch.start();

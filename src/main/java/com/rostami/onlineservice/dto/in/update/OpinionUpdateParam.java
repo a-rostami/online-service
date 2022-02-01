@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.dto.in.update;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.entity.Opinion;
+import com.rostami.onlineservice.model.Opinion;
 import lombok.*;
 
 import javax.validation.constraints.Max;

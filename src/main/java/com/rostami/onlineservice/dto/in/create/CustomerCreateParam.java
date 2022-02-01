@@ -1,10 +1,10 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.entity.Credit;
-import com.rostami.onlineservice.entity.Customer;
-import com.rostami.onlineservice.entity.enums.Role;
-import com.rostami.onlineservice.entity.enums.UserStatus;
+import com.rostami.onlineservice.model.Credit;
+import com.rostami.onlineservice.model.Customer;
+import com.rostami.onlineservice.model.enums.Role;
+import com.rostami.onlineservice.model.enums.UserStatus;
 import lombok.*;
 
 import javax.validation.constraints.Email;

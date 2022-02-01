@@ -1,8 +1,8 @@
 package com.rostami.onlineservice.controller.api.filter;
 
 import com.rostami.onlineservice.dto.api.filter.AdFilter;
-import com.rostami.onlineservice.entity.Ad;
-import com.rostami.onlineservice.entity.SubServ;
+import com.rostami.onlineservice.model.Ad;
+import com.rostami.onlineservice.model.SubServ;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Component;
 

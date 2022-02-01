@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.dto.out.single;
 
 import com.rostami.onlineservice.dto.out.BaseOutDto;
-import com.rostami.onlineservice.entity.Expert;
+import com.rostami.onlineservice.model.Expert;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -20,6 +20,7 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
     private String username;
     @Email
     private String email;
+    private List<SubServFindResult> subServFindResults;
 
     @Override
     public ExpertFindResult convertToDto(Expert entity) {
@@ -28,6 +29,8 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
         lastname = entity.getLastname();
         username = entity.getUsername();
         email = entity.getEmail();
+        subServFindResults = entity.getSubServs().stream().map(subServ ->
+                new SubServFindResult().convertToDto(subServ)).collect(Collectors.toList());
         return this;
     }
 }
