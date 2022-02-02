@@ -1,10 +1,11 @@
 package com.rostami.onlineservice.model.base;
 
 import com.rostami.onlineservice.model.Credit;
-import com.rostami.onlineservice.model.enums.Role;
+import com.rostami.onlineservice.model.security.authentication.Role;
 import com.rostami.onlineservice.model.enums.UserStatus;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
@@ -13,6 +14,7 @@ import java.sql.Date;
 import java.sql.Time;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -42,10 +44,6 @@ public abstract class User extends BaseEntity {
     @NotNull
     private String lastname;
 
-    @Column(nullable = false)
-    @NotNull
-    private String username;
-
     @Email
     @Column(nullable = false, unique = true)
     @NotNull
@@ -56,10 +54,13 @@ public abstract class User extends BaseEntity {
     @NotNull
     private String password;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.STRING)
-    @NotNull
-    private Role role;
+    @ToString.Exclude
+    @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinTable(name="role_user",
+            joinColumns=@JoinColumn(name="user_id"),
+            inverseJoinColumns=@JoinColumn(name="role_id")
+    )
+    private Set<Role> roles;
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
@@ -69,4 +70,5 @@ public abstract class User extends BaseEntity {
     @ToString.Exclude
     @OneToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
     private Credit credit;
+
 }

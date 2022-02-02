@@ -3,29 +3,31 @@ package com.rostami.onlineservice.dto.in.create;
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.model.Credit;
 import com.rostami.onlineservice.model.Expert;
-import com.rostami.onlineservice.model.enums.Role;
 import com.rostami.onlineservice.model.enums.UserStatus;
+import com.rostami.onlineservice.service.bootstrap.SetupAuthorities;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
+import java.util.stream.Collectors;
+
+import static com.rostami.onlineservice.model.security.enums.RoleEnum.EXPERT;
 
 @Setter
 @Getter
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class ExpertCreateParam implements BaseInDto<Expert> {
     private String firstname;
     private String lastname;
-    private String username;
     private MultipartFile avatar;
     @Email
     private String email;
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
     private String password;
+
 
     @SneakyThrows
     @Override
@@ -33,11 +35,11 @@ public class ExpertCreateParam implements BaseInDto<Expert> {
         return Expert.builder()
                 .firstname(firstname)
                 .lastname(lastname)
-                .username(username)
                 .password(password)
                 .email(email)
                 .avatar(avatar.getBytes())
-                .role(Role.EXPERT)
+                .roles(SetupAuthorities.SAVED_ROLES.stream()
+                        .filter(role -> role.getName().equals(EXPERT.getName())).collect(Collectors.toSet()))
                 .userStatus(UserStatus.NEW)
                 .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())
                 .build();

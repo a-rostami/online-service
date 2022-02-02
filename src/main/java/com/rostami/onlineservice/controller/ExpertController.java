@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,9 +24,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ExpertController {
     private final ExpertService expertService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/create")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @ModelAttribute ExpertCreateParam param){
+        param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = expertService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
@@ -36,6 +39,7 @@ public class ExpertController {
 
     @PutMapping("/update")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody ExpertUpdateParam param){
+        param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = expertService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Expert Successfully Updated.").data(result).build());

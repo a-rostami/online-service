@@ -1,8 +1,8 @@
 package com.rostami.onlineservice.dto.in.create;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.model.Admin;
 import com.rostami.onlineservice.model.Credit;
-import com.rostami.onlineservice.model.Customer;
 import com.rostami.onlineservice.model.enums.UserStatus;
 import com.rostami.onlineservice.service.bootstrap.SetupAuthorities;
 import lombok.*;
@@ -12,13 +12,13 @@ import javax.validation.constraints.Pattern;
 import java.math.BigDecimal;
 import java.util.stream.Collectors;
 
-import static com.rostami.onlineservice.model.security.enums.RoleEnum.CUSTOMER;
+import static com.rostami.onlineservice.model.security.enums.RoleEnum.ADMIN;
 
 @Setter
 @Getter
 @Builder
 @AllArgsConstructor
-public class CustomerCreateParam implements BaseInDto<Customer> {
+public class AdminCreateParam implements BaseInDto<Admin> {
     private String firstname;
     private String lastname;
     @Email
@@ -26,15 +26,16 @@ public class CustomerCreateParam implements BaseInDto<Customer> {
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
     private String password;
 
+
     @Override
-    public Customer convertToDomain() {
-        return Customer.builder()
+    public Admin convertToDomain() {
+        return Admin.builder()
                 .firstname(firstname)
                 .lastname(lastname)
                 .password(password)
                 .email(email)
                 .roles(SetupAuthorities.SAVED_ROLES.stream()
-                        .filter(role -> role.getName().equals(CUSTOMER.getName())).collect(Collectors.toSet()))
+                        .filter(role -> role.getName().equals(ADMIN.getName())).collect(Collectors.toSet()))
                 .userStatus(UserStatus.NEW)
                 .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())
                 .build();

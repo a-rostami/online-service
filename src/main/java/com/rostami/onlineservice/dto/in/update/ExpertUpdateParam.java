@@ -22,8 +22,6 @@ public class ExpertUpdateParam implements BaseInDto<Expert> {
     @NotNull
     private String lastname;
     @NotNull
-    private String username;
-    @NotNull
     private MultipartFile avatar;
     @Email
     @NotNull
@@ -39,7 +37,6 @@ public class ExpertUpdateParam implements BaseInDto<Expert> {
                 .id(id)
                 .firstname(firstname)
                 .lastname(lastname)
-                .username(username)
                 .password(password)
                 .email(email)
                 .avatar(avatar.getBytes())

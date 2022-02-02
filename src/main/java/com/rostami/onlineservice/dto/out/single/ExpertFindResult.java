@@ -27,7 +27,6 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
         id = entity.getId();
         firstname = entity.getFirstname();
         lastname = entity.getLastname();
-        username = entity.getUsername();
         email = entity.getEmail();
         subServFindResults = entity.getSubServs().stream().map(subServ ->
                 new SubServFindResult().convertToDto(subServ)).collect(Collectors.toList());

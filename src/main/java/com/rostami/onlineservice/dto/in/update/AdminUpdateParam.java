@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.dto.in.update;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
-import com.rostami.onlineservice.model.Customer;
+import com.rostami.onlineservice.model.Admin;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -13,7 +13,7 @@ import javax.validation.constraints.Pattern;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CustomerUpdateParam implements BaseInDto<Customer> {
+public class AdminUpdateParam implements BaseInDto<Admin> {
     @NotNull
     private Long id;
     @NotNull
@@ -28,8 +28,8 @@ public class CustomerUpdateParam implements BaseInDto<Customer> {
     private String password;
 
     @Override
-    public Customer convertToDomain() {
-        return Customer.builder()
+    public Admin convertToDomain() {
+        return Admin.builder()
                 .id(id)
                 .firstname(firstname)
                 .lastname(lastname)

@@ -23,7 +23,7 @@ class CustomerServiceTest {
     CustomerService customerService;
 
 
-    @Test
+   /* @Test
     void duplicate_email_is_throws_exception(){
         CustomerCreateParam customer = CustomerCreateParam.builder()
                 .firstname("arash")
@@ -34,7 +34,7 @@ class CustomerServiceTest {
                 .username("mrrostami")
                 .build();
         assertThrows(DuplicatedEmailException.class, () -> customerService.saveOrUpdate(customer));
-    }
+    }*/
 
     /*@Test
     void is_change_password_ok(){

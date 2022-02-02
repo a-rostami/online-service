@@ -16,6 +16,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,9 +29,11 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 public class CustomerController {
     private final CustomerService customerService;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/create")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> save(@Validated @RequestBody CustomerCreateParam param){
+        param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = customerService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0).message("Customer Successfully Created.").data(result).build());
@@ -38,6 +41,7 @@ public class CustomerController {
 
     @PutMapping("/update")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CustomerUpdateParam param){
+        param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = customerService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Customer Successfully Updated.").data(result).build());
