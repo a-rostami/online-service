@@ -21,7 +21,7 @@ public class PermissionService extends BaseService<Permission, Long, PermissionF
         setBaseOutDto(PermissionFindResult.builder().build());
     }
 
-    public Permission findByName(PermissionEnum permissionEnum){
-        return repository.findByName(permissionEnum.getName());
+    public Permission findByPermissionEnum(PermissionEnum permissionEnum){
+        return repository.findByPermissionEnum(permissionEnum);
     }
 }

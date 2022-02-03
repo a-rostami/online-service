@@ -21,7 +21,7 @@ public class RoleService extends BaseService<Role, Long, RoleFindResult> {
         setBaseOutDto(RoleFindResult.builder().build());
     }
 
-    public Role findByName(RoleEnum roleEnum){
-        return repository.findByName(roleEnum.getName());
+    public Role findByRoleEnum(RoleEnum roleEnum){
+        return repository.findByRoleEnum(roleEnum);
     }
 }

@@ -3,6 +3,7 @@ package com.rostami.onlineservice.dto.out.security;
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.model.security.authentication.Permission;
 import com.rostami.onlineservice.model.security.authentication.Role;
+import com.rostami.onlineservice.model.security.enums.RoleEnum;
 import lombok.*;
 
 import java.util.Set;
@@ -14,14 +15,14 @@ import java.util.Set;
 @NoArgsConstructor
 public class RoleFindResult implements BaseOutDto<Role, RoleFindResult> {
     private Long id;
-    private String name;
+    private RoleEnum roleEnum;
     private Set<Permission> permissions;
 
     @Override
     public RoleFindResult convertToDto(Role entity) {
         return RoleFindResult.builder()
                 .id(entity.getId())
-                .name(entity.getName())
+                .roleEnum(entity.getRoleEnum())
                 .permissions(entity.getPermissions())
                 .build();
     }

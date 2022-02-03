@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.model.security.authentication;
 
 import com.rostami.onlineservice.model.base.BaseEntity;
+import com.rostami.onlineservice.model.security.enums.PermissionEnum;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
@@ -16,7 +17,8 @@ import java.util.Set;
 @Entity
 public class Permission extends BaseEntity {
     @Column(nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private PermissionEnum permissionEnum;
 
     @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)

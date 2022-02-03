@@ -54,6 +54,14 @@ public abstract class User extends BaseEntity {
     @NotNull
     private String password;
 
+    @Column(nullable = false)
+    @NotNull
+    private boolean isEnable;
+
+    @Column(nullable = false)
+    @NotNull
+    private boolean isNonLocked;
+
     @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
     @JoinTable(name="role_user",

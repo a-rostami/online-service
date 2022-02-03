@@ -35,8 +35,11 @@ public class AdminCreateParam implements BaseInDto<Admin> {
                 .password(password)
                 .email(email)
                 .roles(SetupAuthorities.SAVED_ROLES.stream()
-                        .filter(role -> role.getName().equals(ADMIN.getName())).collect(Collectors.toSet()))
+                        .filter(role -> role.getRoleEnum().equals(ADMIN)).collect(Collectors.toSet()))
                 .userStatus(UserStatus.NEW)
+                // TODO : Add Email Configuration
+                .isEnable(false)
+                .isNonLocked(true)
                 .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())
                 .build();
     }

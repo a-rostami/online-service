@@ -25,6 +25,9 @@ public class UserSpecification<T> {
             if (notNull(filter.getUserStatus()))
                 predicates.add(cb.equal(root.get("userStatus"), filter.getUserStatus()));
 
+            if (notNull(filter.getIsEnable()))
+                predicates.add(cb.equal(root.get("isEnable"), filter.getIsEnable()));
+
             if (notNull(filter.getFromRecordDate()))
                 predicates.add(cb.greaterThan(root.get("recordDate"), filter.getFromRecordDate()));
 

@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.model.security.authentication;
 
 import com.rostami.onlineservice.model.base.BaseEntity;
+import com.rostami.onlineservice.model.security.enums.RoleEnum;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -19,7 +20,8 @@ import java.util.stream.Collectors;
 public class Role extends BaseEntity {
 
     @Column(nullable = false)
-    private String name;
+    @Enumerated(EnumType.STRING)
+    private RoleEnum roleEnum;
 
     @ToString.Exclude
     @ManyToMany(cascade = {CascadeType.MERGE}, fetch = FetchType.EAGER)
@@ -31,8 +33,8 @@ public class Role extends BaseEntity {
 
     public Set<SimpleGrantedAuthority> getAuthorities(Set<Permission> permissions){
         Set<SimpleGrantedAuthority> authorities = permissions.stream().map(permission ->
-                new SimpleGrantedAuthority(permission.getName())).collect(Collectors.toSet());
-        authorities.add(new SimpleGrantedAuthority(name));
+                new SimpleGrantedAuthority(permission.getPermissionEnum().getName())).collect(Collectors.toSet());
+        authorities.add(new SimpleGrantedAuthority("ROLE_" + roleEnum.name()));
         return authorities;
     }
 

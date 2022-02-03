@@ -10,6 +10,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import static com.rostami.onlineservice.model.security.enums.PermissionEnum.*;
@@ -27,7 +28,11 @@ public class SetupAuthorities implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        if (permissionRepository.count() > 0 && permissionRepository.count() > 0) return;
+        if (permissionRepository.count() > 0 && permissionRepository.count() > 0) {
+            List<Role> all = roleRepository.findAll();
+            SAVED_ROLES.addAll(all);
+            return;
+        }
 
         setupPermissions();
         setupAdminPermissions();
@@ -36,10 +41,10 @@ public class SetupAuthorities implements CommandLineRunner {
     }
 
     private void setupAdminPermissions() {
-        Role admin = Role.builder().name(ADMIN.getName()).build();
+        Role admin = Role.builder().roleEnum(ADMIN).build();
         Set<Permission> adminPermissions = new HashSet<>();
         for (PermissionEnum permissionEnum : allPermissionEnums()) {
-            adminPermissions.add(permissionRepository.findByName(permissionEnum.getName()));
+            adminPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum));
         }
         admin.setPermissions(adminPermissions);
         Role saved = roleRepository.save(admin);
@@ -48,7 +53,7 @@ public class SetupAuthorities implements CommandLineRunner {
 
     private void setupPermissions(){
         for (PermissionEnum permissionEnum : allPermissionEnums()){
-            permissionRepository.save(Permission.builder().name(permissionEnum.getName()).build());
+            permissionRepository.save(Permission.builder().permissionEnum(permissionEnum).build());
         }
     }
 
@@ -59,10 +64,10 @@ public class SetupAuthorities implements CommandLineRunner {
     }
 
     private void setupCustomerPermissions() {
-        Role customer = Role.builder().name(CUSTOMER.getName()).build();
+        Role customer = Role.builder().roleEnum(CUSTOMER).build();
         Set<Permission> customerPermissions = new HashSet<>();
         for (PermissionEnum permissionEnum : allCustomerPermissionEnums()) {
-            customerPermissions.add(permissionRepository.findByName(permissionEnum.getName()));
+            customerPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum));
         }
         customer.setPermissions(customerPermissions);
         Role saved = roleRepository.save(customer);
@@ -75,10 +80,10 @@ public class SetupAuthorities implements CommandLineRunner {
     }
 
     private void setupExpertPermissions() {
-        Role expert = Role.builder().name(EXPERT.getName()).build();
+        Role expert = Role.builder().roleEnum(EXPERT).build();
         Set<Permission> expertPermissions = new HashSet<>();
         for (PermissionEnum permissionEnum : allExpertPermissionEnums()) {
-            expertPermissions.add(permissionRepository.findByName(permissionEnum.getName()));
+            expertPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum));
         }
         expert.setPermissions(expertPermissions);
         Role saved = roleRepository.save(expert);

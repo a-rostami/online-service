@@ -19,8 +19,8 @@ public class UserDetailsImpl implements UserDetails {
     public UserDetailsImpl(User user) {
         this.email = user.getEmail();
         this.password = user.getPassword();
-        this.isEnable = true;
-        this.isNonLocked = true;
+        this.isEnable = user.isEnable();
+        this.isNonLocked = user.isNonLocked();
         Role role = user.getRoles().stream().findFirst().orElseThrow(() -> new EntityLoadException("User Have No Role!"));
         this.authorities = role.getAuthorities(role.getPermissions());
     }

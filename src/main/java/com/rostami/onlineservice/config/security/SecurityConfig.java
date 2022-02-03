@@ -28,7 +28,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http
                 .csrf().disable()
                 .authorizeRequests()
-                .antMatchers("/customers/**").permitAll()
+                .antMatchers("/customers/create").permitAll()
+                .antMatchers("/experts/create").permitAll()
+                .antMatchers("/admins/create").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -51,7 +53,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     public void configure(WebSecurity web) {
-        web.ignoring().antMatchers(HttpMethod.POST,"/customers/**");
+        web.ignoring()
+                .antMatchers(HttpMethod.POST,"/customers/create")
+                .antMatchers(HttpMethod.POST,"/experts/create")
+                .antMatchers(HttpMethod.POST,"/admins/create");
     }
 }
 
