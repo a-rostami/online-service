@@ -10,19 +10,17 @@ import com.rostami.onlineservice.dto.in.update.api.PurchaseParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
-import com.rostami.onlineservice.model.Customer;
 import com.rostami.onlineservice.service.CustomerService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/customers")
@@ -40,6 +38,7 @@ public class CustomerController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CustomerUpdateParam param){
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = customerService.saveOrUpdate(param);
@@ -48,6 +47,7 @@ public class CustomerController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
         customerService.delete(id);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
@@ -56,6 +56,7 @@ public class CustomerController {
     }
 
     @GetMapping("/load/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CustomerFindResult>> read(@Validated @PathVariable Long id){
         CustomerFindResult result = (CustomerFindResult) customerService.get(id);
         return ResponseEntity.ok(ResponseResult.<CustomerFindResult>builder()
@@ -66,6 +67,7 @@ public class CustomerController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<CustomerFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
         List<CustomerFindResult> results = customerService.findAll(pageable)
@@ -78,6 +80,7 @@ public class CustomerController {
     }
 
     @PutMapping("/deposit")
+    @PreAuthorize("hasAnyRole('CUSTOMER')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> depositToCredit(@RequestBody DepositParam param){
         CreateUpdateResult result = customerService.depositToCredit(param.getUserId(), param.getAmount());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
@@ -88,6 +91,7 @@ public class CustomerController {
     }
 
     @PutMapping("/purchase")
+    @PreAuthorize("hasAnyRole('CUSTOMER')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> purchase(@RequestBody PurchaseParam param){
         CreateUpdateResult result = customerService.purchase(param.getCustomerId(), param.getExpertId(), param.getAmount());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
@@ -98,6 +102,7 @@ public class CustomerController {
     }
 
     @GetMapping("/credit/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreditFindResult>> loadCredit(@PathVariable Long id){
         CreditFindResult creditFindResult = customerService.loadCredit(id);
         return ResponseEntity.ok(ResponseResult.<CreditFindResult>builder()
@@ -108,6 +113,7 @@ public class CustomerController {
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<CustomerFindResult>>> getCustomers(@RequestBody CustomerFilter filter, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
         List<CustomerFindResult> results = customerService.findAll(new CustomerSpecification().getUsers(filter), pageable)
@@ -119,9 +125,10 @@ public class CustomerController {
                 .build());
     }
 
-    @GetMapping("/countOfRelatedAds/{customerId}")
+    @GetMapping("/countOfCustomerAds/{customerId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<Long>> countOfAds(@PathVariable Long customerId){
-        long count = customerService.getNumberOfRelatedAds(customerId);
+        long count = customerService.getNumberOfCustomerAds(customerId);
         return ResponseEntity.ok(ResponseResult.<Long>builder()
                 .code(0)
                 .message("Successfully Found Number Of Customer's Ads.")

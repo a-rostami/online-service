@@ -54,6 +54,14 @@
             <artifactId>spring-boot-starter-aop</artifactId>
         </dependency>
 
+        <!-- Location -->
+
+        <dependency>
+            <groupId>io.ipgeolocation</groupId>
+            <artifactId>ipgeolocation</artifactId>
+            <version>1.0.12</version>
+        </dependency>
+
         <!-- Jpa And Database -->
         <dependency>
             <groupId>org.springframework.boot</groupId>

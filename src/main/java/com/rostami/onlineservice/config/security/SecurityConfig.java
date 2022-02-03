@@ -30,7 +30,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/customers/create").permitAll()
                 .antMatchers("/experts/create").permitAll()
-                .antMatchers("/admins/create").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -55,8 +54,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     public void configure(WebSecurity web) {
         web.ignoring()
                 .antMatchers(HttpMethod.POST,"/customers/create")
-                .antMatchers(HttpMethod.POST,"/experts/create")
-                .antMatchers(HttpMethod.POST,"/admins/create");
+                .antMatchers(HttpMethod.POST,"/experts/create");
     }
 }
 

@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class MainServController {
     private final MainServService mainServService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody MainServCreateParam param){
         CreateUpdateResult result = mainServService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
@@ -32,6 +34,7 @@ public class MainServController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody MainServUpdateParam param){
         CreateUpdateResult result = mainServService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
@@ -39,6 +42,7 @@ public class MainServController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
         mainServService.delete(id);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
@@ -47,6 +51,7 @@ public class MainServController {
     }
 
     @GetMapping("/load/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT', 'CUSTOMER')")
     public ResponseEntity<ResponseResult<MainServFindResult>> read(@Validated @PathVariable Long id){
         MainServFindResult result = (MainServFindResult) mainServService.get(id);
         return ResponseEntity.ok(ResponseResult.<MainServFindResult>builder()
@@ -56,6 +61,7 @@ public class MainServController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT', 'CUSTOMER')")
     public ResponseEntity<ResponseResult<List<MainServFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
         List<MainServFindResult> results = mainServService.findAll(pageable)

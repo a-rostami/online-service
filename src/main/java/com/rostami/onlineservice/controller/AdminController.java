@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -25,6 +26,7 @@ public class AdminController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> save(@Validated @RequestBody AdminCreateParam param){
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = adminService.saveOrUpdate(param);
@@ -33,6 +35,7 @@ public class AdminController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody AdminUpdateParam param){
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = adminService.saveOrUpdate(param);
@@ -41,6 +44,7 @@ public class AdminController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
         adminService.delete(id);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
@@ -49,6 +53,7 @@ public class AdminController {
     }
 
     @GetMapping("/load/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<AdminFindResult>> read(@Validated @PathVariable Long id){
         AdminFindResult result = (AdminFindResult) adminService.get(id);
         return ResponseEntity.ok(ResponseResult.<AdminFindResult>builder()
@@ -59,6 +64,7 @@ public class AdminController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<AdminFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
         List<AdminFindResult> results = adminService.findAll(pageable)

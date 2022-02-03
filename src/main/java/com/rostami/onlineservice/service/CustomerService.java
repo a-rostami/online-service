@@ -58,7 +58,7 @@ public class CustomerService extends UserService<Customer, Long, CustomerFindRes
     }
 
     @Transactional
-    public long getNumberOfRelatedAds(Long customerId){
+    public long getNumberOfCustomerAds(Long customerId){
         Customer customer = Customer.builder().id(customerId).build();
         return adService.count((root, query, cb) -> cb.equal(root.get("customer"), customer));
     }

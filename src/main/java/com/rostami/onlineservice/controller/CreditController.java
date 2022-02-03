@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,6 +23,7 @@ public class CreditController {
     private final CreditService creditService;
 
     @PostMapping("/create")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> save(@Validated @RequestBody CreditCreateParam param){
         CreateUpdateResult result = creditService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
@@ -29,6 +31,7 @@ public class CreditController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CreditUpdateParam param){
         CreateUpdateResult result = creditService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
@@ -36,6 +39,7 @@ public class CreditController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
         creditService.delete(id);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
@@ -44,6 +48,7 @@ public class CreditController {
     }
 
     @GetMapping("/load/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreditFindResult>> read(@Validated @PathVariable Long id){
         CreditFindResult result = (CreditFindResult) creditService.get(id);
         return ResponseEntity.ok(ResponseResult.<CreditFindResult>builder()
@@ -54,6 +59,7 @@ public class CreditController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<CreditFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
         List<CreditFindResult> results = creditService.findAll(pageable)

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +39,7 @@ public class ExpertController {
     }
 
     @PutMapping("/update")
+    @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody ExpertUpdateParam param){
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = expertService.saveOrUpdate(param);
@@ -46,6 +48,7 @@ public class ExpertController {
     }
 
     @DeleteMapping("/delete/{id}")
+    @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> delete(@Validated @PathVariable Long id){
         expertService.delete(id);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
@@ -54,6 +57,7 @@ public class ExpertController {
     }
 
     @GetMapping("/load/{id}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<ExpertFindResult>> read(@Validated @PathVariable Long id){
         ExpertFindResult result = (ExpertFindResult) expertService.get(id);
         return ResponseEntity.ok(ResponseResult.<ExpertFindResult>builder()
@@ -63,6 +67,7 @@ public class ExpertController {
     }
 
     @GetMapping("/all")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<ExpertFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
         List<ExpertFindResult> results = expertService.findAll(pageable)
@@ -75,6 +80,7 @@ public class ExpertController {
     }
 
     @GetMapping("/credit/{id}")
+    @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreditFindResult>> loadCredit(@PathVariable Long id){
         CreditFindResult creditFindResult = expertService.loadCredit(id);
         return ResponseEntity.ok(ResponseResult.<CreditFindResult>builder()
@@ -85,6 +91,7 @@ public class ExpertController {
     }
 
     @PutMapping("/deposit")
+    @PreAuthorize("hasAnyRole('EXPERT')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> depositToCredit(@RequestBody DepositParam param){
         CreateUpdateResult result = expertService.depositToCredit(param.getUserId(), param.getAmount());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
@@ -95,6 +102,7 @@ public class ExpertController {
     }
 
     @PostMapping("/addSubServ")
+    @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@RequestParam Long expertId, @RequestParam Long subServId){
         CreateUpdateResult result = expertService.addSubServ(expertId, subServId);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
@@ -105,6 +113,7 @@ public class ExpertController {
     }
 
     @GetMapping("/filter")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<ExpertFindResult>>> getCustomers(@RequestBody ExpertFilter filter){
         List<ExpertFindResult> results = expertService.findAll(new ExpertSpecification().getUsers(filter))
                 .stream().map(expertOutDto -> (ExpertFindResult) expertOutDto).toList();
@@ -116,6 +125,7 @@ public class ExpertController {
     }
 
     @GetMapping("/countOfDoneAds/{expertId}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<Long>> countOfDoneAds(@PathVariable Long expertId){
         long count = expertService.getNumberOfDoneAds(expertId);
         return ResponseEntity.ok(ResponseResult.<Long>builder()

@@ -75,7 +75,7 @@ public class AdController {
     }
 
     @GetMapping("/filter")
-    @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
+    @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<AdFindResult>>> filter(@RequestBody AdFilter filter, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
         Specification<Ad> specification = new AdSpecification().getAds(filter);
