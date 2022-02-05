@@ -18,6 +18,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,4 +63,30 @@ public class AdService extends BaseService<Ad, Long, AdFindResult> {
         ad.setStatus(AdStatus.STARTED);
         return CreateUpdateResult.builder().id(adId).success(true).build();
     }
+
+    @Transactional
+    public CreateUpdateResult setAdToDone(Long adId){
+        Ad ad = repository.findById(adId).orElseThrow(() -> new EntityLoadException("There is no Ad with this id!"));
+        ad.setStatus(AdStatus.DONE);
+
+        Expert chosenExpert = ad.getChosenExpert();
+        LocalTime completionTime = ad.getCompletionTime().toLocalTime();
+        LocalDateTime localDateTime = LocalDateTime.now();
+        int delay =  localDateTime.getHour() - completionTime.getHour();
+        decreaseExpertPoint(chosenExpert, delay);
+
+        Ad saved = repository.save(ad);
+        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    }
+
+    private void decreaseExpertPoint(Expert expert, int delayByHour){
+        if (delayByHour < 1 || expert == null || expert.getId() == null) return;
+
+        Double averagePoint = expertService.getAveragePoint(expert.getId());
+        // 5% for every 1-Hour delay
+        int percentage = 5 * delayByHour / 100;
+        double newAveragePoint = averagePoint - (averagePoint * percentage);
+        expertService.updateAveragePoint(expert.getId(), newAveragePoint);
+    }
+
 }

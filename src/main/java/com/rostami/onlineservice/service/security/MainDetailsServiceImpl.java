@@ -20,20 +20,15 @@ public class MainDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Admin admin = repository.findByEmail(username).orElse(null);
-        if (admin != null)
-            return new UserDetailsImpl(admin);
+        if (admin != null) return new UserDetailsImpl(admin);
 
-        else  {
+        try {
+            return customerDetailsService.loadUserByUsername(username);
+        } catch (UsernameNotFoundException ex) {
             try {
-                return customerDetailsService.loadUserByUsername(username);
-            }
-            catch (UsernameNotFoundException ex){
-                try{
-                    return expertDetailsService.loadUserByUsername(username);
-                }
-                catch (UsernameNotFoundException e){
-                    throw new UsernameNotFoundException("There Is No Admin With This Id;");
-                }
+                return expertDetailsService.loadUserByUsername(username);
+            } catch (UsernameNotFoundException e) {
+                throw new UsernameNotFoundException("There Is No Admin With This Id;");
             }
         }
     }

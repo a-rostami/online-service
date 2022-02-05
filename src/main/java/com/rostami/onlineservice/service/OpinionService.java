@@ -21,11 +21,13 @@ import javax.annotation.PostConstruct;
 public class OpinionService extends BaseService<Opinion, Long, OpinionFindResult> {
     private final OpinionRepository repository;
     private final AdService adService;
+    private final ExpertService expertService;
 
     @Autowired
-    public OpinionService(OpinionRepository repository, @Lazy AdService adService) {
+    public OpinionService(OpinionRepository repository, @Lazy AdService adService, @Lazy ExpertService expertService) {
         this.repository = repository;
         this.adService = adService;
+        this.expertService = expertService;
     }
 
     @PostConstruct
@@ -46,6 +48,9 @@ public class OpinionService extends BaseService<Opinion, Long, OpinionFindResult
         AdFindResult ad = (AdFindResult) adService.get(adId);
         checkPermission(ad);
         Opinion saved = repository.save(opinion);
+
+        Long expertId = opinionCreateParam.getExpertId();
+        expertService.updateAveragePoint(expertId, Double.valueOf(opinionCreateParam.getRate()));
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 

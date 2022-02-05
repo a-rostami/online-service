@@ -17,6 +17,11 @@ import java.util.List;
 @Entity
 public class Expert extends User {
 
+    @Column(precision = 2, scale = 2)
+    @NotNull
+    @Builder.Default
+    private Double averagePoint = 0.0;
+
     @Lob
     @Column( columnDefinition = "BLOB", nullable = false)
     @NotNull

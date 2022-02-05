@@ -20,6 +20,7 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
     private String username;
     @Email
     private String email;
+    private Double averagePoint;
     private List<SubServFindResult> subServFindResults;
 
     @Override
@@ -28,6 +29,7 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
         firstname = entity.getFirstname();
         lastname = entity.getLastname();
         email = entity.getEmail();
+        averagePoint = entity.getAveragePoint();
         subServFindResults = entity.getSubServs().stream().map(subServ ->
                 new SubServFindResult().convertToDto(subServ)).collect(Collectors.toList());
         return this;

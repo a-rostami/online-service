@@ -2,7 +2,6 @@ package com.rostami.onlineservice.service;
 
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
-import com.rostami.onlineservice.dto.out.single.OpinionFindResult;
 import com.rostami.onlineservice.dto.out.single.SubServFindResult;
 import com.rostami.onlineservice.model.*;
 import com.rostami.onlineservice.exception.EntityLoadException;
@@ -54,11 +53,23 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     @Transactional
     public Double getAveragePoint(Long id){
         Expert expert = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no expert with this id"));
-        List<OpinionFindResult> opinions =
-                opinionService.findAll(((root, query, cb) -> cb.equal(root.get("expert"), expert)))
-                        .stream().map(opinionDto -> (OpinionFindResult) opinionDto).toList();
-        return opinions.stream().mapToInt(OpinionFindResult::getRate).average().orElse(0);
+        return expert.getAveragePoint();
     }
+
+    @Transactional
+    public void updateAveragePoint(Long id, double point){
+        Expert expert = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no expert with this id"));
+
+        // plus one for current point we will add
+        long opinionCounts = opinionService.count((root, query, cb) -> cb.equal(root.get("expert"), expert)) + 1;
+
+        double averagePoint = expert.getAveragePoint();
+        double plusOfPreviousAveragePoints = opinionCounts * averagePoint;
+
+        expert.setAveragePoint((plusOfPreviousAveragePoints + point) / opinionCounts);
+        repository.save(expert);
+    }
+
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CreateUpdateResult depositToCredit(Long expertId, BigDecimal amount){

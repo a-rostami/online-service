@@ -122,4 +122,15 @@ public class AdController {
                 .data(result)
                 .build());
     }
+
+    @PutMapping("/setAdToDone/{adId}")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> setAdToDone(@PathVariable Long adId){
+        CreateUpdateResult result = adService.setAdToDone(adId);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("Successfully Updated Ad To Done")
+                .data(result)
+                .build());
+    }
 }
