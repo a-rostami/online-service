@@ -6,7 +6,6 @@ import com.rostami.onlineservice.service.security.MainDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,6 +17,9 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+
+import static org.springframework.http.HttpMethod.GET;
+import static org.springframework.http.HttpMethod.POST;
 
 @Configuration
 @RequiredArgsConstructor
@@ -42,6 +44,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/customers/sign-up").permitAll()
                 .antMatchers("/experts/sign-up").permitAll()
                 .antMatchers("/authentication/authenticate").permitAll()
+                .antMatchers("/registration/confirm").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -72,9 +75,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers(HttpMethod.POST,"/customers/sign-up")
-                .antMatchers(HttpMethod.POST,"/experts/sign-up")
-                .antMatchers(HttpMethod.POST,"/authentication/authenticate");
+                .antMatchers(POST,"/customers/sign-up")
+                .antMatchers(POST,"/experts/sign-up")
+                .antMatchers(GET,"/registration/confirm")
+                .antMatchers(POST,"/authentication/authenticate");
 
     }
 }

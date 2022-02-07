@@ -8,6 +8,8 @@ import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.exception.NotEnoughCreditBalanceException;
 import com.rostami.onlineservice.repository.CustomerRepository;
 import com.rostami.onlineservice.service.base.UserService;
+import com.rostami.onlineservice.service.registration.EmailTokenService;
+import com.rostami.onlineservice.service.registration.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -24,12 +26,22 @@ public class CustomerService extends UserService<Customer, Long, CustomerFindRes
     private final CustomerRepository repository;
     private final ExpertService expertService;
     private final AdService adService;
-
+    private final RegistrationService registrationService;
+    private final EmailTokenService emailTokenService;
 
     @PostConstruct
     public void init(){
         setRepository(repository);
         setBaseOutDto(CustomerFindResult.builder().build());
+        setRegistrationService(registrationService);
+        setEmailTokenService(emailTokenService);
+    }
+
+
+    @Transactional
+    public boolean enableCustomer(String email){
+        int result = repository.enableCustomer(email);
+        return result > 0;
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)

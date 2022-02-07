@@ -15,13 +15,12 @@ import java.time.LocalDateTime;
 @SuperBuilder
 @ToString(callSuper = true)
 @Entity
-public class EmailConfirmationToken extends BaseEntity {
+public class EmailToken extends BaseEntity {
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
     @Column(nullable = false)
     private String token;
-
 
     @Column(nullable = false)
     private LocalDateTime expiresAt;
@@ -29,7 +28,7 @@ public class EmailConfirmationToken extends BaseEntity {
     @Column
     private LocalDateTime confirmedAt;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "user_id")
     private User user;
 }

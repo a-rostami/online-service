@@ -11,7 +11,8 @@ import java.util.Objects;
 @Setter
 @SuperBuilder
 @NoArgsConstructor
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public abstract class BaseEntity {
     @Id
     @Column(name = "id", nullable = false)

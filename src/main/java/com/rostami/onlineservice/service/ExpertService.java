@@ -7,6 +7,8 @@ import com.rostami.onlineservice.model.*;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.UserService;
+import com.rostami.onlineservice.service.registration.EmailTokenService;
+import com.rostami.onlineservice.service.registration.RegistrationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -23,11 +25,21 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     private final OpinionService opinionService;
     private final AdService adService;
     private final SubServService subServService;
+    private final RegistrationService registrationService;
+    private final EmailTokenService emailTokenService;
 
     @PostConstruct
     public void init(){
         setRepository(repository);
         setBaseOutDto(ExpertFindResult.builder().build());
+        setRegistrationService(registrationService);
+        setEmailTokenService(emailTokenService);
+    }
+
+    @Transactional
+    public boolean enableCustomer(String email){
+        int result = repository.enableCustomer(email);
+        return result > 0;
     }
 
     @Transactional

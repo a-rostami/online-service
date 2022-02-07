@@ -154,6 +154,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler(Exception.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(Exception ex) {
+        var apiError = new ApiError(NOT_ACCEPTABLE);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
     // ---------------------- Default Exception Handling -------------------------------------------
 
     @ExceptionHandler(javax.persistence.EntityNotFoundException.class)

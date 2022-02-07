@@ -14,6 +14,7 @@ import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
 import com.rostami.onlineservice.service.CustomerService;
 import com.rostami.onlineservice.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +28,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/customers")
 @RequiredArgsConstructor
+@Slf4j
 public class CustomerController {
     private final CustomerService customerService;
     private final JwtTokenUtil jwtTokenUtil;
@@ -34,10 +36,12 @@ public class CustomerController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> signup(@Validated @RequestBody CustomerCreateParam param) {
+        log.warn("I got the param" + param.getEmail());
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         String token = generateToken(param.getEmail(), param.getPassword());
-
+        log.warn("I generate the token " + token);
         CreateUpdateResult result = customerService.saveOrUpdate(param);
+        log.warn("I saved entity " + result.getSuccess());
 
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)

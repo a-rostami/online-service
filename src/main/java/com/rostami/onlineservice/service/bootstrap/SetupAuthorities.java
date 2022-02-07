@@ -5,6 +5,7 @@ import com.rostami.onlineservice.model.security.authentication.Role;
 import com.rostami.onlineservice.model.security.enums.PermissionEnum;
 import com.rostami.onlineservice.repository.security.PermissionRepository;
 import com.rostami.onlineservice.repository.security.RoleRepository;
+import com.rostami.onlineservice.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
