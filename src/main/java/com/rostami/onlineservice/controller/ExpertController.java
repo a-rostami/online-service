@@ -1,7 +1,9 @@
 package com.rostami.onlineservice.controller;
 import com.rostami.onlineservice.controller.api.filter.ExpertSpecification;
 import com.rostami.onlineservice.dto.api.ResponseResult;
+import com.rostami.onlineservice.dto.api.auth.in.JwtRequestParam;
 import com.rostami.onlineservice.dto.api.filter.ExpertFilter;
+import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
 import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
 import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
 import com.rostami.onlineservice.dto.in.update.api.DepositParam;
@@ -9,6 +11,7 @@ import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
 import com.rostami.onlineservice.service.ExpertService;
+import com.rostami.onlineservice.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,16 +29,28 @@ import java.util.List;
 public class ExpertController {
     private final ExpertService expertService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/create")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @ModelAttribute ExpertCreateParam param){
+    @PostMapping("/sign-up")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> signup(@Validated @RequestBody ExpertCreateParam param) {
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
+        String token = generateToken(param.getEmail(), param.getPassword());
+
         CreateUpdateResult result = expertService.saveOrUpdate(param);
+
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
-                .message("Expert Successfully Created.")
+                .message("Expert Successfully Registered. Token : " + token)
                 .data(result)
                 .build());
+    }
+
+    private String generateToken(String email, String password) {
+        return jwtTokenUtil.generateAccessToken(
+                JwtRequestParam.builder()
+                        .email(email)
+                        .password(password)
+                        .build());
     }
 
     @PutMapping("/update")

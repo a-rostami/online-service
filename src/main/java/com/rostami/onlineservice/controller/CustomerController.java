@@ -9,7 +9,6 @@ import com.rostami.onlineservice.dto.in.update.CustomerUpdateParam;
 import com.rostami.onlineservice.dto.in.update.api.DepositParam;
 import com.rostami.onlineservice.dto.in.update.api.PurchaseParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
-import com.rostami.onlineservice.dto.out.UserCreateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
 import com.rostami.onlineservice.service.CustomerService;
@@ -34,28 +33,25 @@ public class CustomerController {
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<ResponseResult<UserCreateResult>> signup(@Validated @RequestBody CustomerCreateParam param) {
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> signup(@Validated @RequestBody CustomerCreateParam param) {
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
+        String token = generateToken(param.getEmail(), param.getPassword());
 
-        // generating jwt token
-        String token = jwtTokenUtil.generateAccessToken(
-                JwtRequestParam.builder()
-                        .email(param.getEmail())
-                        .password(param.getPassword())
-                        .build());
+        CreateUpdateResult result = customerService.saveOrUpdate(param);
 
-        CreateUpdateResult createUpdateResult = customerService.saveOrUpdate(param);
-        UserCreateResult result = UserCreateResult.builder()
-                .id(createUpdateResult.getId())
-                .success(createUpdateResult.getSuccess())
-                .token(token)
-                .build();
-
-        return ResponseEntity.ok(ResponseResult.<UserCreateResult>builder()
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
-                .message("Customer Successfully Registered.")
+                .message("Customer Successfully Registered. Token : " + token)
                 .data(result)
                 .build());
+    }
+
+    private String generateToken(String email, String password) {
+        return jwtTokenUtil.generateAccessToken(
+                JwtRequestParam.builder()
+                        .email(email)
+                        .password(password)
+                        .build());
     }
 
 

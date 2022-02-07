@@ -1,11 +1,13 @@
 package com.rostami.onlineservice.controller;
 
 import com.rostami.onlineservice.dto.api.ResponseResult;
+import com.rostami.onlineservice.dto.api.auth.in.JwtRequestParam;
 import com.rostami.onlineservice.dto.in.create.AdminCreateParam;
 import com.rostami.onlineservice.dto.in.update.AdminUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdminFindResult;
 import com.rostami.onlineservice.service.AdminService;
+import com.rostami.onlineservice.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -24,14 +26,28 @@ public class AdminController {
 
     private final AdminService adminService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtTokenUtil jwtTokenUtil;
 
-    @PostMapping("/create")
+    @PostMapping("/sign-up")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> save(@Validated @RequestBody AdminCreateParam param){
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> signup(@Validated @RequestBody AdminCreateParam param) {
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
+        String token = generateToken(param.getEmail(), param.getPassword());
+
         CreateUpdateResult result = adminService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
-                .code(0).message("Admin Successfully Created.").data(result).build());
+                .code(0)
+                .message("Admin Successfully Registered. Token : " + token)
+                .data(result)
+                .build());
+    }
+
+    private String generateToken(String email, String password){
+        return jwtTokenUtil.generateAccessToken(
+                JwtRequestParam.builder()
+                        .email(email)
+                        .password(password)
+                        .build());
     }
 
     @PutMapping("/update")
