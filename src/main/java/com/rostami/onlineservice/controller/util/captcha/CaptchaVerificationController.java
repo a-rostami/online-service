@@ -1,5 +1,6 @@
 package com.rostami.onlineservice.controller.util.captcha;
 
+import com.rostami.onlineservice.exception.InvalidCaptchaException;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,13 +13,12 @@ import javax.servlet.http.HttpSession;
 public class CaptchaVerificationController {
 
     @GetMapping(value = "/verifyCaptcha")
-    public ResponseEntity<String> getProfileById(@RequestParam("captchaText") String captchaText, HttpSession session){
+    public ResponseEntity<String> getProfileById(@RequestParam("captchaText") String captchaText, HttpSession session) {
         String captcha = (String) session.getAttribute("CAPTCHA");
         if (StringUtils.isBlank(captcha) || (!StringUtils.isBlank(captcha) && !captcha.equals(captchaText)))
-            return ResponseEntity.ok("Captcha Invalid");
+            throw new InvalidCaptchaException("Captcha Is Invalid");
 
-        else
-            return ResponseEntity.ok("Captcha Valid");
+        return ResponseEntity.ok("Captcha Valid");
     }
 
 }

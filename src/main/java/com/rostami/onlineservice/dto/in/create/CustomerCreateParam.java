@@ -36,7 +36,7 @@ public class CustomerCreateParam implements BaseInDto<Customer> {
                 .roles(SetupAuthorities.SAVED_ROLES.stream()
                         .filter(role -> role.getRoleEnum().equals(CUSTOMER)).collect(Collectors.toSet()))
                 .userStatus(UserStatus.NEW)
-                .isEnable(false)
+                .isEnable(true)
                 .isNonLocked(true)
                 .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())
                 .build();

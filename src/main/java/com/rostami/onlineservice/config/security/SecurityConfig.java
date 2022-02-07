@@ -1,10 +1,13 @@
 package com.rostami.onlineservice.config.security;
 
+import com.rostami.onlineservice.controller.auth.exception.JwtAuthenticationEntryPoint;
+import com.rostami.onlineservice.controller.auth.request.filter.JwtRequestFilter;
 import com.rostami.onlineservice.service.security.MainDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -12,7 +15,9 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @RequiredArgsConstructor
@@ -22,18 +27,26 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final MainDetailsServiceImpl detailsService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final JwtRequestFilter jwtRequestFilter;
+    private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
                 .csrf().disable()
+                .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and()
+                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeRequests()
-                .antMatchers("/customers/create").permitAll()
-                .antMatchers("/experts/create").permitAll()
+                .antMatchers("/customers/sign-up").permitAll()
+                .antMatchers("/experts/sign-up").permitAll()
+                .antMatchers("/authentication/authenticate").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
-                .httpBasic();
+                .exceptionHandling()
+                .authenticationEntryPoint(jwtAuthenticationEntryPoint);
     }
 
     @Bean
@@ -45,6 +58,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
+    @Bean
+    @Override
+    protected AuthenticationManager authenticationManager() throws Exception {
+        return super.authenticationManager();
+    }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) {
         auth.authenticationProvider(daoAuthenticationProvider());
@@ -53,8 +72,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public void configure(WebSecurity web) {
         web.ignoring()
-                .antMatchers(HttpMethod.POST,"/customers/create")
-                .antMatchers(HttpMethod.POST,"/experts/create");
+                .antMatchers(HttpMethod.POST,"/customers/sign-up")
+                .antMatchers(HttpMethod.POST,"/experts/sign-up")
+                .antMatchers(HttpMethod.POST,"/authentication/authenticate");
+
     }
 }
 

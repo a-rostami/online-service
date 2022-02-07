@@ -3,6 +3,8 @@ package com.rostami.onlineservice.controller.api.errors;
 import com.rostami.onlineservice.controller.api.core.ServiceResult;
 import com.rostami.onlineservice.controller.api.errors.api.ApiError;
 import com.rostami.onlineservice.exception.*;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.JwtException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.tomcat.util.http.fileupload.impl.SizeLimitExceededException;
 import org.hibernate.exception.ConstraintViolationException;
@@ -14,6 +16,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.http.converter.HttpMessageNotWritableException;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -38,6 +42,14 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     // transient object to the persist error
 
     // ---------------------- CUSTOM Exception Handling -------------------------------------------
+
+    @ExceptionHandler(InvalidCaptchaException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
+            InvalidCaptchaException ex) {
+        var apiError = new ApiError(NOT_ACCEPTABLE);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
 
     @ExceptionHandler(EntityLoadException.class)
     protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
@@ -93,9 +105,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler(DisabledException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(DisabledException ex) {
+        var apiError = new ApiError(BAD_REQUEST);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(BadCredentialsException ex) {
+        var apiError = new ApiError(BAD_REQUEST);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
     @ExceptionHandler(DuplicatedEmailException.class)
     protected ResponseEntity<ServiceResult<Void>> handleBadRequest(DuplicatedEmailException ex) {
         var apiError = new ApiError(NOT_ACCEPTABLE);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(ExpiredJwtException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(ExpiredJwtException ex) {
+        var apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(ex.getMessage());
         return buildResponseEntity(apiError);
     }
@@ -114,6 +147,13 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return buildResponseEntity(apiError);
     }
 
+    @ExceptionHandler(JwtException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(JwtException ex) {
+        var apiError = new ApiError(NOT_ACCEPTABLE);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
     // ---------------------- Default Exception Handling -------------------------------------------
 
     @ExceptionHandler(javax.persistence.EntityNotFoundException.class)
@@ -122,8 +162,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(DataIntegrityViolationException.class)
-    protected ResponseEntity<ServiceResult<Void>> handleDataIntegrityViolation(DataIntegrityViolationException ex,
-                                                                               WebRequest request) {
+    protected ResponseEntity<ServiceResult<Void>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
         if (ex.getCause() instanceof ConstraintViolationException) {
             return buildResponseEntity(new ApiError(HttpStatus.CONFLICT, "Database error", ex.getCause()));
         }
@@ -131,7 +170,7 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    protected ResponseEntity<ServiceResult<Void>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex, WebRequest request) {
+    protected ResponseEntity<ServiceResult<Void>> handleMethodArgumentTypeMismatch(MethodArgumentTypeMismatchException ex) {
         var apiError = new ApiError(BAD_REQUEST);
         apiError.setMessage(String.format("The parameter '%s' of value '%s' could not be converted to type '%s'", ex.getName(), ex.getValue(), Objects.requireNonNull(ex.getRequiredType()).getSimpleName()));
         apiError.setDebugMessage(ex.getMessage());
