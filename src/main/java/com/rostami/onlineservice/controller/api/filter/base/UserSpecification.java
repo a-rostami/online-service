@@ -20,7 +20,7 @@ public class UserSpecification<T> {
                 predicates.add(cb.equal(root.get("lastname"), filter.getLastname()));
 
             if (notNull(filter.getEmail()))
-                predicates.add(cb.equal(root.get("email"), filter.getEmail()));
+                predicates.add(cb.equal(root.get("registration"), filter.getEmail()));
 
             if (notNull(filter.getUserStatus()))
                 predicates.add(cb.equal(root.get("userStatus"), filter.getUserStatus()));

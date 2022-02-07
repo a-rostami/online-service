@@ -28,8 +28,8 @@ class CustomerServiceTest {
         CustomerCreateParam customer = CustomerCreateParam.builder()
                 .firstname("arash")
                 .lastname("rostami")
-                // this email exists in DB
-                .email("test@Gmail.com")
+                // this registration exists in DB
+                .registration("test@Gmail.com")
                 .password("56556128")
                 .username("mrrostami")
                 .build();

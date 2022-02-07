@@ -1,4 +1,4 @@
-package com.rostami.onlineservice.repository;
+package com.rostami.onlineservice.repository.security;
 
 import com.rostami.onlineservice.model.security.authentication.Permission;
 import com.rostami.onlineservice.model.security.enums.PermissionEnum;

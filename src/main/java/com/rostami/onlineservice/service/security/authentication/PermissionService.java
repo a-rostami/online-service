@@ -3,7 +3,7 @@ package com.rostami.onlineservice.service.security.authentication;
 import com.rostami.onlineservice.dto.out.security.PermissionFindResult;
 import com.rostami.onlineservice.model.security.authentication.Permission;
 import com.rostami.onlineservice.model.security.enums.PermissionEnum;
-import com.rostami.onlineservice.repository.PermissionRepository;
+import com.rostami.onlineservice.repository.security.PermissionRepository;
 import com.rostami.onlineservice.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;

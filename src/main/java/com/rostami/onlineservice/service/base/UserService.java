@@ -40,7 +40,7 @@ public class UserService<T extends User, ID extends Long, E extends BaseOutDto<T
     }
 
     private void checkEmailExist(String email, Long id){
-        List<T> byEmail = getRepository().findAll(((root, cq, cb) -> cb.equal(root.get("email"), email)));
+        List<T> byEmail = getRepository().findAll(((root, cq, cb) -> cb.equal(root.get("registration"), email)));
         if (id == null  && !CollectionUtils.isEmpty(byEmail))
             throw new DuplicatedEmailException("Email Already Exist!");
     }
