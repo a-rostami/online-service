@@ -22,7 +22,6 @@ import org.springframework.util.CollectionUtils;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Objects;
 import java.util.UUID;
 
 @Getter
@@ -37,6 +36,9 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
         T entity = dto.convertToDomain();
         checkEmailExist(entity.getEmail(), entity.getId());
         T saved = getRepository().save(entity);
+        if (saved.getId() == null)
+            throw new EntityLoadException("Cannot Execute Save Sql Statement");
+
         String fulName = "Dear " + saved.getFirstname() + " " + saved.getLastname();
         Role role = saved.getRoles().stream().findFirst()
                 .orElseThrow(() -> new EntityLoadException("User Has No Role"));

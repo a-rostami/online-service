@@ -31,7 +31,7 @@ public class RegistrationService {
     }
 
     public void sendToken(String token, String fulName , String email, Role role){
-        String link = "http://localhost:8080/api/registration/confirm?token=" + token + ",role=" + role.getRoleEnum().name();
+        String link = "http://localhost:8080/api/registration/confirm?token=" + token + "&role=" + role.getRoleEnum().name();
         emailService.send(email, buildEmail(fulName, link));
     }
 

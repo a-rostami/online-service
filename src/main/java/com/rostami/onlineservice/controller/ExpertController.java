@@ -32,7 +32,7 @@ public class ExpertController {
     private final JwtTokenUtil jwtTokenUtil;
 
     @PostMapping("/sign-up")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> signup(@Validated @RequestBody ExpertCreateParam param) {
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> signup(@Validated @ModelAttribute ExpertCreateParam param) {
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         String token = generateToken(param.getEmail(), param.getPassword());
 
