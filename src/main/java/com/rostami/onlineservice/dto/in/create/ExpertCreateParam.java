@@ -40,9 +40,9 @@ public class ExpertCreateParam implements BaseInDto<Expert> {
                 .avatar(avatar.getBytes())
                 .roles(SetupAuthorities.SAVED_ROLES.stream()
                         .filter(role -> role.getRoleEnum().equals(EXPERT)).collect(Collectors.toSet()))
-                .userStatus(UserStatus.NEW)
+                .userStatus(UserStatus.PENDING)
                 .isEnable(false)
-                .isNonLocked(true)
+                .isNonLocked(false)
                 .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())
                 .build();
     }

@@ -53,7 +53,6 @@ public class AdminController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody AdminUpdateParam param){
-        param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = adminService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Admin Successfully Updated.").data(result).build());

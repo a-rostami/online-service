@@ -35,7 +35,7 @@ public class CustomerCreateParam implements BaseInDto<Customer> {
                 .email(email)
                 .roles(SetupAuthorities.SAVED_ROLES.stream()
                         .filter(role -> role.getRoleEnum().equals(CUSTOMER)).collect(Collectors.toSet()))
-                .userStatus(UserStatus.NEW)
+                .userStatus(UserStatus.PENDING)
                 .isEnable(false)
                 .isNonLocked(true)
                 .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())

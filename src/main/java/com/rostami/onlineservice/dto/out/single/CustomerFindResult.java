@@ -2,6 +2,7 @@ package com.rostami.onlineservice.dto.out.single;
 
 import com.rostami.onlineservice.dto.out.BaseOutDto;
 import com.rostami.onlineservice.model.Customer;
+import com.rostami.onlineservice.model.enums.UserStatus;
 import lombok.*;
 
 import javax.validation.constraints.Email;
@@ -17,6 +18,7 @@ public class CustomerFindResult implements BaseOutDto<Customer, CustomerFindResu
     private String lastname;
     @Email
     private String email;
+    private UserStatus userStatus;
 
     @Override
     public CustomerFindResult convertToDto(Customer entity) {
@@ -24,6 +26,7 @@ public class CustomerFindResult implements BaseOutDto<Customer, CustomerFindResu
         firstname = entity.getFirstname();
         lastname = entity.getLastname();
         email = entity.getEmail();
+        userStatus = entity.getUserStatus();
         return this;
     }
 }

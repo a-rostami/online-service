@@ -36,8 +36,7 @@ public class AdminCreateParam implements BaseInDto<Admin> {
                 .email(email)
                 .roles(SetupAuthorities.SAVED_ROLES.stream()
                         .filter(role -> role.getRoleEnum().equals(ADMIN)).collect(Collectors.toSet()))
-                .userStatus(UserStatus.NEW)
-                // TODO : Add Email Configuration
+                .userStatus(UserStatus.PENDING)
                 .isEnable(false)
                 .isNonLocked(true)
                 .credit(Credit.builder().balance(BigDecimal.valueOf(0)).build())

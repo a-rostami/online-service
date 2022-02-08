@@ -2,6 +2,8 @@ package com.rostami.onlineservice.service.registration;
 
 import com.rostami.onlineservice.exception.EmailAlreadyConfirmedException;
 import com.rostami.onlineservice.exception.EmailConfirmationExpiredException;
+import com.rostami.onlineservice.model.base.User;
+import com.rostami.onlineservice.model.enums.UserStatus;
 import com.rostami.onlineservice.model.registration.EmailToken;
 import com.rostami.onlineservice.model.security.authentication.Role;
 import com.rostami.onlineservice.service.CustomerService;
@@ -17,27 +19,28 @@ import static com.rostami.onlineservice.model.security.enums.RoleEnum.CUSTOMER;
 
 @Service
 public class RegistrationService {
-    private final EmailTokenService confirmationTokenService;
+    private final EmailTokenService emailTokenService;
     private final EmailService emailService;
     private final CustomerService customerService;
     private final ExpertService expertService;
 
-    public RegistrationService(EmailTokenService confirmationTokenService, EmailService emailService,
+    public RegistrationService(EmailTokenService emailTokenService, EmailService emailService,
                                @Lazy CustomerService customerService, @Lazy ExpertService expertService) {
-        this.confirmationTokenService = confirmationTokenService;
+        this.emailTokenService = emailTokenService;
         this.emailService = emailService;
         this.customerService = customerService;
         this.expertService = expertService;
     }
 
-    public void sendToken(String token, String fulName , String email, Role role){
+    public void sendToken(String token, String fulName, String email, Role role) {
         String link = "http://localhost:8080/api/registration/confirm?token=" + token + "&role=" + role.getRoleEnum().name();
         emailService.send(email, buildEmail(fulName, link));
     }
 
     @Transactional
     public String confirmToken(String token, String role) {
-        EmailToken confirmationToken = confirmationTokenService.findByToken(token);
+        EmailToken confirmationToken = emailTokenService.findByToken(token);
+        User user = confirmationToken.getUser();
 
         if (confirmationToken.getConfirmedAt() != null)
             throw new EmailAlreadyConfirmedException("email already confirmed");
@@ -47,13 +50,22 @@ public class RegistrationService {
         if (expiredAt.isBefore(LocalDateTime.now()))
             throw new EmailConfirmationExpiredException("token is expired");
 
-        confirmationTokenService.updateConfirmedAt(token);
+        emailTokenService.updateConfirmedAt(token);
 
         boolean result;
-        if (role.equals(CUSTOMER.name()))
-            result = customerService.enableCustomer(confirmationToken.getUser().getEmail());
-        else
+
+        if (role.equals(CUSTOMER.name())) {
+            user.setUserStatus(UserStatus.VERIFIED);
+            result = customerService.enableCustomer(user.getEmail());
+        }
+
+        else {
+            user.setUserStatus(UserStatus.PENDING_ADMIN_TO_VERIFY);
             result = expertService.enableCustomer(confirmationToken.getUser().getEmail());
+        }
+
+        confirmationToken.setUser(user);
+        emailTokenService.save(confirmationToken);
 
         return "Confirmation Was : " + result;
     }

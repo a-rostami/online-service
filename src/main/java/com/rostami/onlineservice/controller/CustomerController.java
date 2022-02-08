@@ -62,7 +62,6 @@ public class CustomerController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CustomerUpdateParam param) {
-        param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = customerService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Customer Successfully Updated.").data(result).build());

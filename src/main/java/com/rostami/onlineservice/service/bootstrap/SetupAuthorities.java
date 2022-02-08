@@ -1,18 +1,24 @@
 package com.rostami.onlineservice.service.bootstrap;
 
+import com.rostami.onlineservice.model.Admin;
+import com.rostami.onlineservice.model.enums.UserStatus;
 import com.rostami.onlineservice.model.security.authentication.Permission;
 import com.rostami.onlineservice.model.security.authentication.Role;
 import com.rostami.onlineservice.model.security.enums.PermissionEnum;
+import com.rostami.onlineservice.model.security.enums.RoleEnum;
+import com.rostami.onlineservice.repository.AdminRepository;
 import com.rostami.onlineservice.repository.security.PermissionRepository;
 import com.rostami.onlineservice.repository.security.RoleRepository;
 import com.rostami.onlineservice.service.email.EmailService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import static com.rostami.onlineservice.model.security.enums.PermissionEnum.*;
 import static com.rostami.onlineservice.model.security.enums.RoleEnum.*;

@@ -23,9 +23,6 @@ public class AdminUpdateParam implements BaseInDto<Admin> {
     @Email
     @NotNull
     private String email;
-    @NotNull
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
-    private String password;
 
     @Override
     public Admin convertToDomain() {
@@ -33,7 +30,6 @@ public class AdminUpdateParam implements BaseInDto<Admin> {
                 .id(id)
                 .firstname(firstname)
                 .lastname(lastname)
-                .password(password)
                 .email(email)
                 .build();
     }

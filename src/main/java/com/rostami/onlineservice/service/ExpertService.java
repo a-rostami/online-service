@@ -95,4 +95,12 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
         Expert expert = Expert.builder().id(expertId).build();
         return adService.count((root, query, cb) -> cb.equal(root.get("chosenExpert"), expert));
     }
+
+    @Transactional
+    public CreateUpdateResult unlockExpert(Long id){
+        int countOfChangedRows = repository.unlockExpert(id);
+        if (countOfChangedRows < 1)
+            throw new EntityLoadException("There Is No Expert With This Id!");
+        return CreateUpdateResult.builder().id(id).success(true).build();
+    }
 }

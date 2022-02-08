@@ -27,8 +27,6 @@ public class ExpertUpdateParam implements BaseInDto<Expert> {
     @NotNull
     private String email;
     @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
-    @NotNull
-    private String password;
 
     @SneakyThrows
     @Override
@@ -37,7 +35,6 @@ public class ExpertUpdateParam implements BaseInDto<Expert> {
                 .id(id)
                 .firstname(firstname)
                 .lastname(lastname)
-                .password(password)
                 .email(email)
                 .avatar(avatar.getBytes())
                 .build();

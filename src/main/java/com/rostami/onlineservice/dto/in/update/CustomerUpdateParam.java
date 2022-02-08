@@ -2,18 +2,23 @@ package com.rostami.onlineservice.dto.in.update;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.model.Customer;
+import com.rostami.onlineservice.model.enums.UserStatus;
+import com.rostami.onlineservice.service.CustomerService;
 import lombok.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Component
 public class CustomerUpdateParam implements BaseInDto<Customer> {
+
     @NotNull
     private Long id;
     @NotNull
@@ -24,8 +29,7 @@ public class CustomerUpdateParam implements BaseInDto<Customer> {
     @NotNull
     private String email;
     @NotNull
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
-    private String password;
+    private UserStatus userStatus;
 
     @Override
     public Customer convertToDomain() {
@@ -33,8 +37,8 @@ public class CustomerUpdateParam implements BaseInDto<Customer> {
                 .id(id)
                 .firstname(firstname)
                 .lastname(lastname)
-                .password(password)
                 .email(email)
+                .userStatus(userStatus)
                 .build();
     }
 }

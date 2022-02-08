@@ -3,7 +3,6 @@ import com.rostami.onlineservice.controller.api.filter.ExpertSpecification;
 import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.api.auth.in.JwtRequestParam;
 import com.rostami.onlineservice.dto.api.filter.ExpertFilter;
-import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
 import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
 import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
 import com.rostami.onlineservice.dto.in.update.api.DepositParam;
@@ -56,7 +55,6 @@ public class ExpertController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody ExpertUpdateParam param){
-        param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         CreateUpdateResult result = expertService.saveOrUpdate(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Expert Successfully Updated.").data(result).build());
@@ -147,6 +145,17 @@ public class ExpertController {
                 .code(0)
                 .message("Successfully Load Number Of Done Ads By Given Expert.")
                 .data(count)
+                .build());
+    }
+
+    @PutMapping("/finalConfirm/{id}")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> finalConfirm(@PathVariable Long id){
+        CreateUpdateResult result = expertService.unlockExpert(id);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
+                .code(0)
+                .message("Successfully Unlocked Expert.")
+                .data(result)
                 .build());
     }
 }
