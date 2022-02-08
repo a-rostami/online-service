@@ -4,6 +4,7 @@ import com.rostami.onlineservice.dto.api.ResponseResult;
 import com.rostami.onlineservice.dto.api.auth.in.JwtRequestParam;
 import com.rostami.onlineservice.dto.in.create.AdminCreateParam;
 import com.rostami.onlineservice.dto.in.update.AdminUpdateParam;
+import com.rostami.onlineservice.dto.in.update.api.PasswordUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdminFindResult;
 import com.rostami.onlineservice.model.Admin;
@@ -18,6 +19,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -92,5 +94,17 @@ public class AdminController {
                 .message("All Admins Loaded Successfully.")
                 .data(results)
                 .build());
+    }
+
+    @PutMapping("/changePassword")
+    @PreAuthorize("hasAnyRole('ADMIN')")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> changePassword(@RequestBody @Valid PasswordUpdateParam param){
+        String newPassword = param.getNewPassword();
+
+        param.setNewPassword(bCryptPasswordEncoder.encode(newPassword));
+
+        CreateUpdateResult result = adminService.changePassword(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("Admin Password Successfully Updated.").data(result).build());
     }
 }

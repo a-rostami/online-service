@@ -7,6 +7,7 @@ import com.rostami.onlineservice.dto.api.filter.CustomerFilter;
 import com.rostami.onlineservice.dto.in.create.CustomerCreateParam;
 import com.rostami.onlineservice.dto.in.update.CustomerUpdateParam;
 import com.rostami.onlineservice.dto.in.update.api.DepositParam;
+import com.rostami.onlineservice.dto.in.update.api.PasswordUpdateParam;
 import com.rostami.onlineservice.dto.in.update.api.PurchaseParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
@@ -24,6 +25,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -155,5 +157,16 @@ public class CustomerController {
                 .message("Successfully Found Number Of Customer's Ads.")
                 .data(count)
                 .build());
+    }
+
+    @PutMapping("/changePassword")
+    @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> changePassword(@RequestBody @Valid PasswordUpdateParam param){
+        String newPassword = param.getNewPassword();
+        param.setNewPassword(bCryptPasswordEncoder.encode(newPassword));
+
+        CreateUpdateResult result = customerService.changePassword(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("Customer Password Successfully Updated.").data(result).build());
     }
 }

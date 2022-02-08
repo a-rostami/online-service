@@ -43,6 +43,30 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     // ---------------------- CUSTOM Exception Handling -------------------------------------------
 
+    @ExceptionHandler(WrongPreviousPasswordException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
+            WrongPreviousPasswordException ex) {
+        var apiError = new ApiError(NOT_ACCEPTABLE);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(EmailAlreadyConfirmedException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
+            EmailAlreadyConfirmedException ex) {
+        var apiError = new ApiError(NOT_ACCEPTABLE);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
+    @ExceptionHandler(EmailConfirmationExpiredException.class)
+    protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
+            EmailConfirmationExpiredException ex) {
+        var apiError = new ApiError(NOT_ACCEPTABLE);
+        apiError.setMessage(ex.getMessage());
+        return buildResponseEntity(apiError);
+    }
+
     @ExceptionHandler(InvalidCaptchaException.class)
     protected ResponseEntity<ServiceResult<Void>> handleBadRequest(
             InvalidCaptchaException ex) {

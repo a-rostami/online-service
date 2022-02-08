@@ -6,6 +6,7 @@ import com.rostami.onlineservice.dto.api.filter.ExpertFilter;
 import com.rostami.onlineservice.dto.in.create.ExpertCreateParam;
 import com.rostami.onlineservice.dto.in.update.ExpertUpdateParam;
 import com.rostami.onlineservice.dto.in.update.api.DepositParam;
+import com.rostami.onlineservice.dto.in.update.api.PasswordUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
@@ -21,6 +22,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -93,6 +95,18 @@ public class ExpertController {
                 .message("Successfully Found All Experts.")
                 .data(results)
                 .build());
+    }
+
+    @PutMapping("/changePassword")
+    @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT')")
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> changePassword(@RequestBody @Valid PasswordUpdateParam param){
+        String newPassword = param.getNewPassword();
+
+        param.setNewPassword(bCryptPasswordEncoder.encode(newPassword));
+
+        CreateUpdateResult result = expertService.changePassword(param);
+        return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
+                builder().code(0).message("Expert Password Successfully Updated.").data(result).build());
     }
 
     @GetMapping("/credit/{id}")

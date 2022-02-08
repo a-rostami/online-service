@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.repository.NoRepositoryBean;
 
 import java.util.List;
+import java.util.Optional;
 
 @NoRepositoryBean
 public interface BaseRepository<T, ID> extends JpaRepository<T, ID>, JpaSpecificationExecutor<T> {
@@ -20,6 +21,8 @@ public interface BaseRepository<T, ID> extends JpaRepository<T, ID>, JpaSpecific
     List<T> findAll(Specification<T> spec, Sort sort);
 
     Page<T> findAll(Pageable pageable);
+
+    Optional<T> findById(ID id);
 
     long count(Specification<T> spec);
 }
