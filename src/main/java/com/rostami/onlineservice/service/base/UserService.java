@@ -32,7 +32,7 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
     private EmailTokenService emailTokenService;
 
     @Override
-    public CreateUpdateResult saveOrUpdate(BaseInDto<T> dto) {
+    public CreateUpdateResult save(BaseInDto<T> dto) {
         T entity = dto.convertToDomain();
         checkEmailExist(entity.getEmail(), entity.getId());
         T saved = getRepository().save(entity);

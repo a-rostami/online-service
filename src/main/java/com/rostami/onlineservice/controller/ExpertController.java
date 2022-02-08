@@ -9,6 +9,7 @@ import com.rostami.onlineservice.dto.in.update.api.DepositParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
+import com.rostami.onlineservice.model.Expert;
 import com.rostami.onlineservice.service.ExpertService;
 import com.rostami.onlineservice.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -35,7 +36,7 @@ public class ExpertController {
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         String token = generateToken(param.getEmail(), param.getPassword());
 
-        CreateUpdateResult result = expertService.saveOrUpdate(param);
+        CreateUpdateResult result = expertService.save(param);
 
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
@@ -55,7 +56,9 @@ public class ExpertController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody ExpertUpdateParam param){
-        CreateUpdateResult result = expertService.saveOrUpdate(param);
+        Expert fetchedEntity = expertService.getForUpdate(param.getId());
+        Expert updatedEntity = param.convertToDomain(fetchedEntity);
+        CreateUpdateResult result = expertService.update(updatedEntity);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Expert Successfully Updated.").data(result).build());
     }

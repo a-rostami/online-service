@@ -72,11 +72,11 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     public void updateAveragePoint(Long id, double point){
         Expert expert = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no expert with this id"));
 
-        // plus one for current point we will add
-        long opinionCounts = opinionService.count((root, query, cb) -> cb.equal(root.get("expert"), expert)) + 1;
+        long opinionCounts = opinionService.count((root, query, cb) -> cb.equal(root.get("expert"), expert));
 
         double averagePoint = expert.getAveragePoint();
-        double plusOfPreviousAveragePoints = opinionCounts * averagePoint;
+        // plus one for current point we will add
+        double plusOfPreviousAveragePoints = (opinionCounts + 1) * averagePoint;
 
         expert.setAveragePoint((plusOfPreviousAveragePoints + point) / opinionCounts);
         repository.save(expert);

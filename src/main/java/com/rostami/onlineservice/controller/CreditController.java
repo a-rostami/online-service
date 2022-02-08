@@ -5,6 +5,7 @@ import com.rostami.onlineservice.dto.in.create.CreditCreateParam;
 import com.rostami.onlineservice.dto.in.update.CreditUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
+import com.rostami.onlineservice.model.Credit;
 import com.rostami.onlineservice.service.CreditService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,7 @@ public class CreditController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> save(@Validated @RequestBody CreditCreateParam param){
-        CreateUpdateResult result = creditService.saveOrUpdate(param);
+        CreateUpdateResult result = creditService.save(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0).message("Credit Successfully Created.").data(result).build());
     }
@@ -33,7 +34,9 @@ public class CreditController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CreditUpdateParam param){
-        CreateUpdateResult result = creditService.saveOrUpdate(param);
+        Credit fetchedEntity = creditService.getForUpdate(param.getId());
+        Credit updatedEntity = param.convertToDomain(fetchedEntity);
+        CreateUpdateResult result = creditService.update(updatedEntity);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Credit Successfully Updated.").data(result).build());
     }

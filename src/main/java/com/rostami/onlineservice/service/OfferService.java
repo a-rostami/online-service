@@ -32,7 +32,7 @@ public class OfferService extends BaseService<Offer, Long, OfferFindResult> {
     }
 
     @Override
-    public CreateUpdateResult saveOrUpdate(BaseInDto<Offer> dto) {
+    public CreateUpdateResult save(BaseInDto<Offer> dto) {
         return submitOffer((OfferCreateParam) dto);
     }
 

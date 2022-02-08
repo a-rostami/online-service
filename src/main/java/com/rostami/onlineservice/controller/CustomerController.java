@@ -11,6 +11,7 @@ import com.rostami.onlineservice.dto.in.update.api.PurchaseParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.CreditFindResult;
 import com.rostami.onlineservice.dto.out.single.CustomerFindResult;
+import com.rostami.onlineservice.model.Customer;
 import com.rostami.onlineservice.service.CustomerService;
 import com.rostami.onlineservice.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -36,12 +37,9 @@ public class CustomerController {
 
     @PostMapping("/sign-up")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> signup(@Validated @RequestBody CustomerCreateParam param) {
-        log.warn("I got the param" + param.getEmail());
         param.setPassword(bCryptPasswordEncoder.encode(param.getPassword()));
         String token = generateToken(param.getEmail(), param.getPassword());
-        log.warn("I generate the token " + token);
-        CreateUpdateResult result = customerService.saveOrUpdate(param);
-        log.warn("I saved entity " + result.getSuccess());
+        CreateUpdateResult result = customerService.save(param);
 
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
@@ -62,7 +60,9 @@ public class CustomerController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CustomerUpdateParam param) {
-        CreateUpdateResult result = customerService.saveOrUpdate(param);
+        Customer fetchedEntity = customerService.getForUpdate(param.getId());
+        Customer updatedEntity = param.convertToDomain(fetchedEntity);
+        CreateUpdateResult result = customerService.update(updatedEntity);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Customer Successfully Updated.").data(result).build());
     }

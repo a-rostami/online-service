@@ -1,6 +1,7 @@
 package com.rostami.onlineservice.dto.in.update;
 
 import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.in.BaseUpdateDto;
 import com.rostami.onlineservice.model.Opinion;
 import lombok.*;
 
@@ -13,7 +14,7 @@ import javax.validation.constraints.NotNull;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class OpinionUpdateParam implements BaseInDto<Opinion> {
+public class OpinionUpdateParam implements BaseUpdateDto<Opinion> {
     @NotNull
     private Long id;
     @Max(value = 5)
@@ -22,10 +23,9 @@ public class OpinionUpdateParam implements BaseInDto<Opinion> {
     private Integer rate;
 
     @Override
-    public Opinion convertToDomain() {
-        return Opinion.builder()
-                .id(id)
-                .rate(rate)
-                .build();
+    public Opinion convertToDomain(Opinion fetchedEntity) {
+        fetchedEntity.setId(id);
+        fetchedEntity.setRate(rate);
+        return fetchedEntity;
     }
 }

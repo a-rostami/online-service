@@ -1,20 +1,19 @@
 package com.rostami.onlineservice.dto.in.update;
 
-import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.in.BaseUpdateDto;
 import com.rostami.onlineservice.model.Expert;
 import lombok.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ExpertUpdateParam implements BaseInDto<Expert> {
+public class ExpertUpdateParam implements BaseUpdateDto<Expert> {
     @NotNull
     private Long id;
     @NotNull
@@ -26,17 +25,15 @@ public class ExpertUpdateParam implements BaseInDto<Expert> {
     @Email
     @NotNull
     private String email;
-    @Pattern(regexp = "^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[@#$%^&+=])(?=\\S+$).{8,}$")
 
     @SneakyThrows
     @Override
-    public Expert convertToDomain() {
-        return Expert.builder()
-                .id(id)
-                .firstname(firstname)
-                .lastname(lastname)
-                .email(email)
-                .avatar(avatar.getBytes())
-                .build();
+    public Expert convertToDomain(Expert fetchedEntity) {
+        fetchedEntity.setId(id);
+        fetchedEntity.setFirstname(firstname);
+        fetchedEntity.setLastname(lastname);
+        fetchedEntity.setEmail(email);
+        fetchedEntity.setAvatar(avatar.getBytes());
+        return fetchedEntity;
     }
 }

@@ -29,7 +29,7 @@ public class AdController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody AdCreateParam param){
-        CreateUpdateResult result = adService.saveOrUpdate(param);
+        CreateUpdateResult result = adService.save(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0).message("Ad Successfully Created.").data(result).build());
     }
@@ -37,7 +37,9 @@ public class AdController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody AdUpdateParam param){
-        CreateUpdateResult result = adService.saveOrUpdate(param);
+        Ad fetchedEntity = adService.getForUpdate(param.getId());
+        Ad updatedEntity = param.convertToDomain(fetchedEntity);
+        CreateUpdateResult result = adService.update(updatedEntity);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Ad Successfully Updated.").data(result).build());
     }

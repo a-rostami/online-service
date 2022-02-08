@@ -8,7 +8,6 @@ import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.base.BaseRepository;
 import lombok.Getter;
 import lombok.Setter;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
@@ -25,8 +24,14 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
     private BaseOutDto<T, E> baseOutDto;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
-    public CreateUpdateResult saveOrUpdate(BaseInDto<T> dto){
+    public CreateUpdateResult save(BaseInDto<T> dto){
         T saved = repository.save(dto.convertToDomain());
+        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    }
+
+    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    public CreateUpdateResult update(T entity){
+        T saved = repository.save(entity);
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
@@ -34,6 +39,11 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
     public BaseOutDto<T, E> get(ID id){
         T entity = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no model with this id"));
         return baseOutDto.convertToDto(entity);
+    }
+
+    @Transactional
+    public T getForUpdate(ID id){
+        return repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no model with this id"));
     }
 
     @Transactional

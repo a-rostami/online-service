@@ -37,7 +37,7 @@ public class OpinionService extends BaseService<Opinion, Long, OpinionFindResult
     }
 
     @Override
-    public CreateUpdateResult saveOrUpdate(BaseInDto<Opinion> dto) {
+    public CreateUpdateResult save(BaseInDto<Opinion> dto) {
         return submitOpinion((OpinionCreateParam) dto);
     }
 

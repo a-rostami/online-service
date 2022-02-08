@@ -5,6 +5,7 @@ import com.rostami.onlineservice.dto.in.create.OfferCreateParam;
 import com.rostami.onlineservice.dto.in.update.OfferUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.OfferFindResult;
+import com.rostami.onlineservice.model.Offer;
 import com.rostami.onlineservice.service.OfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -26,7 +27,7 @@ public class OfferController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('EXPERT')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody OfferCreateParam param){
-        CreateUpdateResult result = offerService.saveOrUpdate(param);
+        CreateUpdateResult result = offerService.save(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
                 .message("Offer Successfully Created.")
@@ -37,7 +38,9 @@ public class OfferController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody OfferUpdateParam param){
-        CreateUpdateResult result = offerService.saveOrUpdate(param);
+        Offer fetchedEntity = offerService.getForUpdate(param.getId());
+        Offer updatedEntity = param.convertToDomain(fetchedEntity);
+        CreateUpdateResult result = offerService.update(updatedEntity);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Offer Successfully Updated.").data(result).build());
     }

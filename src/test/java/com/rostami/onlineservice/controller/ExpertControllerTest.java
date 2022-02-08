@@ -31,7 +31,7 @@ public class ExpertControllerTest extends AbstractRestControllerTest {
     @MockBean
     private ExpertService expertService;
 
-        @SneakyThrows
+        /*@SneakyThrows
         @Test
         public void test_add_subServ_isOk() {
             //mock Service
@@ -53,5 +53,5 @@ public class ExpertControllerTest extends AbstractRestControllerTest {
                         .content(toJson(subServParam))
                         .accept(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
-    }
+    }*/
 }

@@ -1,7 +1,7 @@
 package com.rostami.onlineservice.dto.in.update;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.in.BaseUpdateDto;
 import com.rostami.onlineservice.model.MainServ;
 import com.rostami.onlineservice.model.SubServ;
 import lombok.*;
@@ -14,7 +14,7 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SubServUpdateParam implements BaseInDto<SubServ> {
+public class SubServUpdateParam implements BaseUpdateDto<SubServ> {
     @NotNull
     private Long id;
     @NotNull
@@ -23,17 +23,14 @@ public class SubServUpdateParam implements BaseInDto<SubServ> {
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal basePrice;
     @NotNull
-    private MainServUpdateParam mainServUpdateParam;
+    private Long mainServId;
 
     @Override
-    public SubServ convertToDomain() {
-        return SubServ.builder()
-                .id(id)
-                .name(name)
-                .basePrice(basePrice)
-                .mainServ(MainServ.builder().id(mainServUpdateParam.getId())
-                        .name(mainServUpdateParam.getName())
-                        .build())
-                .build();
+    public SubServ convertToDomain(SubServ fetchedEntity) {
+        fetchedEntity.setId(id);
+        fetchedEntity.setName(name);
+        fetchedEntity.setBasePrice(basePrice);
+        fetchedEntity.setMainServ(MainServ.builder().id(mainServId).build());
+        return fetchedEntity;
     }
 }

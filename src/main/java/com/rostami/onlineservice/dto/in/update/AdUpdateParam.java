@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.update;
 
-import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.in.BaseUpdateDto;
 import com.rostami.onlineservice.model.Ad;
 import lombok.*;
 
@@ -14,7 +14,7 @@ import java.sql.Time;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdUpdateParam implements BaseInDto<Ad> {
+public class AdUpdateParam implements BaseUpdateDto<Ad> {
     @NotNull
     private Long id;
     @NotNull
@@ -29,14 +29,12 @@ public class AdUpdateParam implements BaseInDto<Ad> {
     private String address;
 
     @Override
-    public Ad convertToDomain() {
-        return Ad.builder()
-                .id(id)
-                .completionDate(completionDate)
-                .completionTime(completionTime)
-                .price(price)
-                .workDescription(workDescription)
-                .address(address)
-                .build();
+    public Ad convertToDomain(Ad fetchedEntity) {
+        fetchedEntity.setId(id);
+        fetchedEntity.setCompletionDate(completionDate);
+        fetchedEntity.setPrice(price);
+        fetchedEntity.setWorkDescription(workDescription);
+        fetchedEntity.setAddress(address);
+        return fetchedEntity;
     }
 }

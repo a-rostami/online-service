@@ -1,19 +1,18 @@
 package com.rostami.onlineservice.dto.in.update;
 
-import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.in.BaseUpdateDto;
 import com.rostami.onlineservice.model.Admin;
 import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AdminUpdateParam implements BaseInDto<Admin> {
+public class AdminUpdateParam implements BaseUpdateDto<Admin> {
     @NotNull
     private Long id;
     @NotNull
@@ -25,12 +24,11 @@ public class AdminUpdateParam implements BaseInDto<Admin> {
     private String email;
 
     @Override
-    public Admin convertToDomain() {
-        return Admin.builder()
-                .id(id)
-                .firstname(firstname)
-                .lastname(lastname)
-                .email(email)
-                .build();
+    public Admin convertToDomain(Admin fetchedEntity) {
+        fetchedEntity.setId(id);
+        fetchedEntity.setFirstname(firstname);
+        fetchedEntity.setLastname(lastname);
+        fetchedEntity.setEmail(email);
+        return fetchedEntity;
     }
 }

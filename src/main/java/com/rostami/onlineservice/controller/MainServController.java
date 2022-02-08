@@ -5,6 +5,7 @@ import com.rostami.onlineservice.dto.in.create.MainServCreateParam;
 import com.rostami.onlineservice.dto.in.update.MainServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.MainServFindResult;
+import com.rostami.onlineservice.model.MainServ;
 import com.rostami.onlineservice.service.MainServService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,7 @@ public class MainServController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody MainServCreateParam param){
-        CreateUpdateResult result = mainServService.saveOrUpdate(param);
+        CreateUpdateResult result = mainServService.save(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
                 .message("MainServ Successfully Created.")
@@ -36,7 +37,9 @@ public class MainServController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody MainServUpdateParam param){
-        CreateUpdateResult result = mainServService.saveOrUpdate(param);
+        MainServ fetchedEntity = mainServService.getForUpdate(param.getId());
+        MainServ updatedEntity = param.convertToDomain(fetchedEntity);
+        CreateUpdateResult result = mainServService.update(updatedEntity);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("MainServ Successfully Updated.").data(result).build());
     }

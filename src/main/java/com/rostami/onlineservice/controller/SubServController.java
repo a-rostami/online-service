@@ -5,6 +5,7 @@ import com.rostami.onlineservice.dto.in.create.SubServCreateParam;
 import com.rostami.onlineservice.dto.in.update.SubServUpdateParam;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.SubServFindResult;
+import com.rostami.onlineservice.model.SubServ;
 import com.rostami.onlineservice.service.SubServService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -25,7 +26,7 @@ public class SubServController {
     @PostMapping("/create")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody SubServCreateParam param){
-        CreateUpdateResult result = subServService.saveOrUpdate(param);
+        CreateUpdateResult result = subServService.save(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
                 .message("SubServ Successfully Created.")
@@ -36,7 +37,9 @@ public class SubServController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody SubServUpdateParam param){
-        CreateUpdateResult result = subServService.saveOrUpdate(param);
+        SubServ fetchedEntity = subServService.getForUpdate(param.getId());
+        SubServ updatedEntity = param.convertToDomain(fetchedEntity);
+        CreateUpdateResult result = subServService.update(updatedEntity);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("SubServ Successfully Updated.").data(result).build());
     }

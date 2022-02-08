@@ -1,6 +1,6 @@
 package com.rostami.onlineservice.dto.in.update;
 
-import com.rostami.onlineservice.dto.in.BaseInDto;
+import com.rostami.onlineservice.dto.in.BaseUpdateDto;
 import com.rostami.onlineservice.model.Credit;
 import lombok.*;
 
@@ -12,17 +12,16 @@ import java.math.BigDecimal;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreditUpdateParam implements BaseInDto<Credit> {
+public class CreditUpdateParam implements BaseUpdateDto<Credit> {
     @NotNull
     private Long id;
     @NotNull
     private BigDecimal balance;
 
     @Override
-    public Credit convertToDomain() {
-        return Credit.builder()
-                .id(id)
-                .balance(balance)
-                .build();
+    public Credit convertToDomain(Credit fetchedEntity) {
+        fetchedEntity.setId(id);
+        fetchedEntity.setBalance(balance);
+        return fetchedEntity;
     }
 }
