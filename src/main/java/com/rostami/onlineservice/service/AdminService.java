@@ -39,7 +39,6 @@ public class AdminService extends UserService<Admin, Long, AdminFindResult> {
                 .orElseThrow(() -> new EntityLoadException("There Is No Admin With This Email"));
 
         String adminPassword = admin.getPassword();
-
         if (!bCryptPasswordEncoder.matches(param.getPreviousPassword(), adminPassword))
             throw new WrongPreviousPasswordException("Previous Password Is Wrong !");
 
