@@ -17,11 +17,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
-import java.util.List;
 import java.util.UUID;
 
 @Getter
@@ -34,7 +32,7 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
     @Override
     public CreateUpdateResult save(BaseInDto<T> dto) {
         T entity = dto.convertToDomain();
-        checkEmailExist(entity.getEmail(), entity.getId());
+        checkEmailExist(entity.getEmail());
         T saved = getRepository().save(entity);
         if (saved.getId() == null)
             throw new EntityLoadException("Cannot Execute Save Sql Statement");
@@ -44,6 +42,12 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
                 .orElseThrow(() -> new EntityLoadException("User Has No Role"));
         registrationService.sendToken(generateToken(saved), fulName, saved.getEmail(), role);
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    }
+
+    private void checkEmailExist(String email){
+        long count = getRepository().count(((root, cq, cb) -> cb.equal(root.get("email"), email)));
+        if (count > 0)
+            throw new DuplicatedEmailException("Email Already Exist!");
     }
 
     private String generateToken(User user){
@@ -58,12 +62,6 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
         return token;
     }
 
-    private void checkEmailExist(String email, Long id){
-        List<T> byEmail = getRepository().findAll(((root, cq, cb) -> cb.equal(root.get("email"), email)));
-        if (id == null  && !CollectionUtils.isEmpty(byEmail))
-            throw new DuplicatedEmailException("Email Already Exist!");
-    }
-
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     protected CreateUpdateResult depositToCredit(T user, BigDecimal amount){
         Credit credit = user.getCredit();
@@ -72,6 +70,19 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
         user.setCredit(credit);
         T saved = getRepository().save(user);
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    }
+
+    @Override
+    public CreateUpdateResult update(T entity) {
+        checkEmailExistForUpdate(entity.getEmail());
+        return super.update(entity);
+    }
+
+    private void checkEmailExistForUpdate(String email){
+        long count = getRepository().count(((root, cq, cb) -> cb.equal(root.get("email"), email)));
+        // one exist is for auto update when we try to set new value to fetched entity in convertToDomain Method
+        if (count > 1)
+            throw new DuplicatedEmailException("Email Already Exist!");
     }
 
     public CreditFindResult loadCredit(ID id){

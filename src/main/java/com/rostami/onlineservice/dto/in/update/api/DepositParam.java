@@ -12,6 +12,6 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class DepositParam {
     private Long userId;
-    @JsonFormat
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal amount;
 }

@@ -1,5 +1,6 @@
 package com.rostami.onlineservice.dto.in.create;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.model.Ad;
 import com.rostami.onlineservice.model.Expert;
@@ -21,6 +22,7 @@ public class OfferCreateParam implements BaseInDto<Offer> {
     private Time startTime;
     private Date completionDate;
     private Time completionTime;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
     private Long expertId;
     private Long adId;

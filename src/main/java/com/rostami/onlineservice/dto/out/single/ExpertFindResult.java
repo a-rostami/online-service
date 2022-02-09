@@ -17,7 +17,6 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
     private Long id;
     private String firstname;
     private String lastname;
-    private String username;
     @Email
     private String email;
     private Double averagePoint;
@@ -31,7 +30,7 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
         email = entity.getEmail();
         averagePoint = entity.getAveragePoint();
         subServFindResults = entity.getSubServs().stream().map(subServ ->
-                new SubServFindResult().convertToDto(subServ)).collect(Collectors.toList());
+                SubServFindResult.builder().build().convertToDto(subServ)).collect(Collectors.toList());
         return this;
     }
 }

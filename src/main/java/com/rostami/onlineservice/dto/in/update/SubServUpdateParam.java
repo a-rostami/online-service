@@ -2,7 +2,6 @@ package com.rostami.onlineservice.dto.in.update;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rostami.onlineservice.dto.in.BaseUpdateDto;
-import com.rostami.onlineservice.model.MainServ;
 import com.rostami.onlineservice.model.SubServ;
 import lombok.*;
 
@@ -22,15 +21,12 @@ public class SubServUpdateParam implements BaseUpdateDto<SubServ> {
     @NotNull
     @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal basePrice;
-    @NotNull
-    private Long mainServId;
 
     @Override
     public SubServ convertToDomain(SubServ fetchedEntity) {
         fetchedEntity.setId(id);
         fetchedEntity.setName(name);
         fetchedEntity.setBasePrice(basePrice);
-        fetchedEntity.setMainServ(MainServ.builder().id(mainServId).build());
         return fetchedEntity;
     }
 }

@@ -1,6 +1,5 @@
 package com.rostami.onlineservice.dto.in.update;
 
-import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.dto.in.BaseUpdateDto;
 import com.rostami.onlineservice.model.MainServ;
 import lombok.*;

@@ -113,7 +113,7 @@ public class AdController {
                 .build());
     }
 
-    @GetMapping("/findRelatedAds/{id}")
+    @GetMapping("/findRelatedAdsToExpertSubServ/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<List<AdFindResult>>> findRelatedAds(@PathVariable Long id, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);

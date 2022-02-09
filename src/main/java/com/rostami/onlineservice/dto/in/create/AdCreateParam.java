@@ -1,5 +1,6 @@
 package com.rostami.onlineservice.dto.in.create;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.model.Ad;
 import com.rostami.onlineservice.model.Customer;
@@ -8,6 +9,7 @@ import com.rostami.onlineservice.model.enums.AdStatus;
 import com.rostami.onlineservice.exception.EntityRelationException;
 import lombok.*;
 
+import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
@@ -18,11 +20,18 @@ import java.sql.Time;
 @AllArgsConstructor
 @NoArgsConstructor
 public class AdCreateParam implements BaseInDto<Ad> {
+    @NotNull
     private Date completionDate;
+    @NotNull
     private Time completionTime;
+    @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
+    @NotNull
     private String workDescription;
+    @NotNull
     private String address;
+
     private Long customerId;
     private Long subServId;
 

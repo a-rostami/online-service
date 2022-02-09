@@ -25,7 +25,7 @@ public class OpinionController {
     private final OpinionService opinionService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody OpinionCreateParam param){
         CreateUpdateResult result = opinionService.submitOpinion(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()

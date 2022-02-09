@@ -57,7 +57,7 @@ public class ExpertController {
 
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody ExpertUpdateParam param){
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @ModelAttribute ExpertUpdateParam param){
         Expert fetchedEntity = expertService.getForUpdate(param.getId());
         Expert updatedEntity = param.convertToDomain(fetchedEntity);
         CreateUpdateResult result = expertService.update(updatedEntity);
@@ -121,7 +121,7 @@ public class ExpertController {
     }
 
     @PutMapping("/deposit")
-    @PreAuthorize("hasAnyRole('EXPERT')")
+    @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> depositToCredit(@RequestBody DepositParam param){
         CreateUpdateResult result = expertService.depositToCredit(param.getUserId(), param.getAmount());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()

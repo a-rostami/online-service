@@ -25,7 +25,7 @@ public class OfferController {
     private final OfferService offerService;
 
     @PostMapping("/create")
-    @PreAuthorize("hasAnyRole('EXPERT')")
+    @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> create(@Validated @RequestBody OfferCreateParam param){
         CreateUpdateResult result = offerService.save(param);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()

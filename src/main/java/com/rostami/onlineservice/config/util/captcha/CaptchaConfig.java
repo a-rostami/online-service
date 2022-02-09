@@ -10,6 +10,6 @@ public class CaptchaConfig {
 
     @Bean
     public ServletRegistrationBean<CaptchaServlet> customServletBean() {
-        return new ServletRegistrationBean<>(new CaptchaServlet(), "/secure/captcha/captcha.jpg");
+        return new ServletRegistrationBean<>(new CaptchaServlet(), "/captchaValidation/captcha.jpg");
     }
 }

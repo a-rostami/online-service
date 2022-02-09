@@ -1,5 +1,6 @@
 package com.rostami.onlineservice.dto.in.update;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rostami.onlineservice.dto.in.BaseUpdateDto;
 import com.rostami.onlineservice.model.Offer;
 import lombok.*;
@@ -26,6 +27,7 @@ public class OfferUpdateParam implements BaseUpdateDto<Offer> {
     @NotNull
     private Time completionTime;
     @NotNull
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal price;
 
     @Override

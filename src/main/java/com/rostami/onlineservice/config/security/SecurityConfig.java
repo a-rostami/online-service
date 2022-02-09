@@ -45,6 +45,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/experts/sign-up").permitAll()
                 .antMatchers("/authentication/authenticate").permitAll()
                 .antMatchers("/registration/confirm").permitAll()
+                .antMatchers("/captchaValidation/**").permitAll()
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -78,7 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(POST,"/customers/sign-up")
                 .antMatchers(POST,"/experts/sign-up")
                 .antMatchers(GET,"/registration/confirm")
-                .antMatchers(POST,"/authentication/authenticate");
+                .antMatchers(POST,"/authentication/authenticate")
+                .antMatchers(GET, "/captchaValidation/**");
 
     }
 }

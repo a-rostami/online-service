@@ -103,7 +103,7 @@ public class CustomerController {
     }
 
     @PutMapping("/deposit")
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> depositToCredit(@RequestBody DepositParam param) {
         CreateUpdateResult result = customerService.depositToCredit(param.getUserId(), param.getAmount());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
@@ -114,7 +114,7 @@ public class CustomerController {
     }
 
     @PutMapping("/purchase")
-    @PreAuthorize("hasAnyRole('CUSTOMER')")
+    @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> purchase(@RequestBody PurchaseParam param) {
         CreateUpdateResult result = customerService.purchase(param.getCustomerId(), param.getExpertId(), param.getAmount());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()

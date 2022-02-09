@@ -1,5 +1,6 @@
 package com.rostami.onlineservice.dto.in.create;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.rostami.onlineservice.dto.in.BaseInDto;
 import com.rostami.onlineservice.model.MainServ;
 import com.rostami.onlineservice.model.SubServ;
@@ -15,6 +16,7 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class SubServCreateParam implements BaseInDto<SubServ> {
     private String name;
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private BigDecimal basePrice;
     private Long mainServId;
 

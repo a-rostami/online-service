@@ -7,6 +7,7 @@ import com.rostami.onlineservice.dto.out.single.SubServFindResult;
 import com.rostami.onlineservice.model.Ad;
 import com.rostami.onlineservice.model.Customer;
 import com.rostami.onlineservice.model.Expert;
+import com.rostami.onlineservice.model.SubServ;
 import com.rostami.onlineservice.model.enums.AdStatus;
 import com.rostami.onlineservice.exception.EntityLoadException;
 import com.rostami.onlineservice.repository.AdRepository;
@@ -50,9 +51,12 @@ public class AdService extends BaseService<Ad, Long, AdFindResult> {
     @Transactional
     public List<AdFindResult> findAdsRelatedToExpertSubServ(Long expertId, Pageable pageable){
         ExpertFindResult expert = (ExpertFindResult) expertService.get(expertId);
-        List<SubServFindResult> subServFindResults = expert.getSubServFindResults();
+        List<SubServ> subServs = expert.getSubServFindResults()
+                .stream().map(subServFindResult -> SubServ.builder()
+                        .id(subServFindResult.getId())
+                        .build()).collect(Collectors.toList());
 
-        return repository.findAll((root, query, cb) -> root.get("subServ").in(subServFindResults), pageable)
+        return repository.findAll((root, query, cb) -> root.get("subServ").in(subServs), pageable)
                 .stream().map(ad -> new AdFindResult().convertToDto(ad)).collect(Collectors.toList());
     }
 
