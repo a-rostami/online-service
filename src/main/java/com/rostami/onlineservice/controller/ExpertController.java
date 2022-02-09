@@ -165,10 +165,10 @@ public class ExpertController {
                 .build());
     }
 
-    @PutMapping("/finalConfirm/{id}")
+    @PutMapping("/finalConfirm")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<CreateUpdateResult>> finalConfirm(@PathVariable Long id){
-        CreateUpdateResult result = expertService.unlockExpert(id);
+    public ResponseEntity<ResponseResult<CreateUpdateResult>> finalConfirm(@RequestParam String email){
+        CreateUpdateResult result = expertService.unlockExpert(email);
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>builder()
                 .code(0)
                 .message("Successfully Unlocked Expert.")

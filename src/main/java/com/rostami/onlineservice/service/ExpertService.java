@@ -42,7 +42,7 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
 
     @Transactional
     public boolean enableCustomer(String email){
-        int result = repository.enableCustomer(email);
+        int result = repository.enableExpert(email);
         return result > 0;
     }
 
@@ -101,11 +101,11 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     }
 
     @Transactional
-    public CreateUpdateResult unlockExpert(Long id){
-        int countOfChangedRows = repository.unlockExpert(id);
+    public CreateUpdateResult unlockExpert(String email){
+        int countOfChangedRows = repository.unlockExpert(email);
         if (countOfChangedRows < 1)
             throw new EntityLoadException("There Is No Expert With This Id!");
-        return CreateUpdateResult.builder().id(id).success(true).build();
+        return CreateUpdateResult.builder().success(true).build();
     }
 
     @Transactional

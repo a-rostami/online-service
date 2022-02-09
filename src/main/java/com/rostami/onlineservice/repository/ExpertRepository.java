@@ -12,10 +12,10 @@ public interface ExpertRepository extends BaseRepository<Expert, Long> {
 
      @Query("UPDATE Expert e SET e.isEnable = true WHERE e.email = ?1")
      @Modifying(clearAutomatically = true, flushAutomatically = true)
-     int enableCustomer(String email);
+     int enableExpert(String email);
 
      @Modifying(flushAutomatically = true, clearAutomatically = true)
-     @Query("UPDATE Expert e SET e.isNonLocked = true WHERE e.id = ?1")
-     int unlockExpert(Long id);
+     @Query("UPDATE Expert e SET e.isNonLocked = true WHERE e.email = ?1")
+     int unlockExpert(String email);
 
 }
