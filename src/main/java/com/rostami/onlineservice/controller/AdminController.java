@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/admins")
@@ -85,11 +87,11 @@ public class AdminController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<List<AdminFindResult>>> readAll(@RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<AdminFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<AdminFindResult> results = adminService.findAll(pageable)
-                .stream().map(customerOutDto -> (AdminFindResult) customerOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<AdminFindResult>>builder()
+        Set<AdminFindResult> results = adminService.findAll(pageable)
+                .stream().map(customerOutDto -> (AdminFindResult) customerOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<AdminFindResult>>builder()
                 .code(0)
                 .message("All Admins Loaded Successfully.")
                 .data(results)

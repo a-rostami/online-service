@@ -24,5 +24,7 @@ public interface BaseRepository<T, ID> extends JpaRepository<T, ID>, JpaSpecific
 
     Optional<T> findById(ID id);
 
+    Optional<T> findOne(Specification<T> spec);
+
     long count(Specification<T> spec);
 }

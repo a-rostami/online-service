@@ -12,6 +12,7 @@ import com.rostami.onlineservice.service.base.UserService;
 import com.rostami.onlineservice.service.registration.EmailTokenService;
 import com.rostami.onlineservice.service.registration.RegistrationService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
@@ -19,10 +20,11 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     private final ExpertRepository repository;
     private final OpinionService opinionService;
@@ -58,7 +60,7 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
         Expert expert = repository.findById(expertId).orElseThrow(
                 () -> new EntityLoadException("There is no expert with this id"));
 
-        List<SubServ> subServs = expert.getSubServs();
+        Set<SubServ> subServs = expert.getSubServs();
         subServs.add(subServ);
         expert.setSubServs(subServs);
 
@@ -67,23 +69,35 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     }
 
     @Transactional
-    public Double getAveragePoint(Long id){
-        Expert expert = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no expert with this id"));
-        return expert.getAveragePoint();
+    public void updateAveragePoint(double newAveragePoint, Long expertId){
+        repository.updateAveragePoint(newAveragePoint, expertId);
     }
 
+
     @Transactional
-    public void updateAveragePoint(Long id, double point){
+    /* Formula :
+      ( Count Of numbers * Average ) + New Point / ( Count Of Numbers + 1 )
+    */
+    public void addNewPointToExpertAveragePoint(Long id, double point){
         Expert expert = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no expert with this id"));
+        Double expertAveragePoint = expert.getAveragePoint();
 
-        long opinionCounts = opinionService.count((root, query, cb) -> cb.equal(root.get("expert"), expert));
+        long numberOfAllExpertOpinions = opinionService.count((root, query, cb) -> cb.equal(root.get("expert"), expert));
+        // mines one because just saved opinion will be count in specification query
+        double sumOfExpertPoints = (numberOfAllExpertOpinions - 1) * expertAveragePoint;
 
-        double averagePoint = expert.getAveragePoint();
-        // plus one for current point we will add
-        double plusOfPreviousAveragePoints = (opinionCounts + 1) * averagePoint;
+        log.warn("expert average point : " + expertAveragePoint);
+        log.warn("number of opinions : " + numberOfAllExpertOpinions);
+        log.warn("sum of expert points : " + sumOfExpertPoints);
 
-        expert.setAveragePoint((plusOfPreviousAveragePoints + point) / opinionCounts);
-        repository.save(expert);
+        // plus sum of points with given new point
+        sumOfExpertPoints += point;
+
+        log.warn("number of opinions : " + numberOfAllExpertOpinions);
+        log.warn("sum of expert points : " + sumOfExpertPoints);
+
+        log.warn("new average point : " + sumOfExpertPoints / numberOfAllExpertOpinions);
+        expert.setAveragePoint(sumOfExpertPoints / numberOfAllExpertOpinions);
     }
 
 

@@ -26,7 +26,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/customers")
@@ -91,11 +92,11 @@ public class CustomerController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> readAll(@RequestParam Integer page) {
+    public ResponseEntity<ResponseResult<Set<CustomerFindResult>>> readAll(@RequestParam Integer page) {
         Pageable pageable = PageRequest.of(page, 5);
-        List<CustomerFindResult> results = customerService.findAll(pageable)
-                .stream().map(customerOutDto -> (CustomerFindResult) customerOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<CustomerFindResult>>builder()
+        Set<CustomerFindResult> results = customerService.findAll(pageable)
+                .stream().map(customerOutDto -> (CustomerFindResult) customerOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<CustomerFindResult>>builder()
                 .code(0)
                 .message("All Customers Loaded Successfully.")
                 .data(results)
@@ -137,11 +138,11 @@ public class CustomerController {
 
     @GetMapping("/filter")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<List<CustomerFindResult>>> getCustomers(@RequestBody CustomerFilter filter, @RequestParam Integer page) {
+    public ResponseEntity<ResponseResult<Set<CustomerFindResult>>> getCustomers(@RequestBody CustomerFilter filter, @RequestParam Integer page) {
         Pageable pageable = PageRequest.of(page, 5);
-        List<CustomerFindResult> results = customerService.findAll(new CustomerSpecification().getUsers(filter), pageable)
-                .stream().map(customerOutDto -> (CustomerFindResult) customerOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<CustomerFindResult>>builder()
+        Set<CustomerFindResult> results = customerService.findAll(new CustomerSpecification().getUsers(filter), pageable)
+                .stream().map(customerOutDto -> (CustomerFindResult) customerOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<CustomerFindResult>>builder()
                 .code(0)
                 .message("Successfully Load Customers Based Filters.")
                 .data(results)

@@ -6,7 +6,7 @@ import lombok.experimental.SuperBuilder;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -34,5 +34,5 @@ public class Expert extends User {
             joinColumns=@JoinColumn(name="expert_id"),
             inverseJoinColumns=@JoinColumn(name="subServ_id")
     )
-    private List<SubServ> subServs;
+    private Set<SubServ> subServs;
 }

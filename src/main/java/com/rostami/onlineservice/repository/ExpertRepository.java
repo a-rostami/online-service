@@ -18,4 +18,8 @@ public interface ExpertRepository extends BaseRepository<Expert, Long> {
      @Query("UPDATE Expert e SET e.isNonLocked = true WHERE e.email = ?1")
      int unlockExpert(String email);
 
+     @Modifying(flushAutomatically = true, clearAutomatically = true)
+     @Query("UPDATE Expert e SET e.averagePoint = ?1 WHERE e.id = ?2")
+     int updateAveragePoint(Double averagePoint, Long id);
+
 }

@@ -31,6 +31,7 @@ public class CustomerUpdateParam implements BaseUpdateDto<Customer> {
         fetchedEntity.setId(id);
         fetchedEntity.setFirstname(firstname);
         fetchedEntity.setLastname(lastname);
+        fetchedEntity.setEmail(email);
         return fetchedEntity;
     }
 }

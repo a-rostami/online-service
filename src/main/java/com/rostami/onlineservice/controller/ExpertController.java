@@ -23,7 +23,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/experts")
@@ -86,11 +87,11 @@ public class ExpertController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<List<ExpertFindResult>>> readAll(@RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<ExpertFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<ExpertFindResult> results = expertService.findAll(pageable)
-                .stream().map(expertOutDto -> (ExpertFindResult) expertOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<ExpertFindResult>>builder()
+        Set<ExpertFindResult> results = expertService.findAll(pageable)
+                .stream().map(expertOutDto -> (ExpertFindResult) expertOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<ExpertFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All Experts.")
                 .data(results)
@@ -144,10 +145,10 @@ public class ExpertController {
 
     @GetMapping("/filter")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<List<ExpertFindResult>>> getCustomers(@RequestBody ExpertFilter filter){
-        List<ExpertFindResult> results = expertService.findAll(new ExpertSpecification().getUsers(filter))
-                .stream().map(expertOutDto -> (ExpertFindResult) expertOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<ExpertFindResult>>builder()
+    public ResponseEntity<ResponseResult<Set<ExpertFindResult>>> getCustomers(@RequestBody ExpertFilter filter){
+        Set<ExpertFindResult> results = expertService.findAll(new ExpertSpecification().getUsers(filter))
+                .stream().map(expertOutDto -> (ExpertFindResult) expertOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<ExpertFindResult>>builder()
                 .code(0)
                 .message("Successfully Load Experts Based Filters.")
                 .data(results)

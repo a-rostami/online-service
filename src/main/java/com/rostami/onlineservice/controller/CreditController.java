@@ -15,7 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequestMapping("/credits")
 @RequiredArgsConstructor
@@ -63,11 +64,11 @@ public class CreditController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<List<CreditFindResult>>> readAll(@RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<CreditFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<CreditFindResult> results = creditService.findAll(pageable)
-                .stream().map(creditOutDto -> (CreditFindResult) creditOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<CreditFindResult>>builder()
+        Set<CreditFindResult> results = creditService.findAll(pageable)
+                .stream().map(creditOutDto -> (CreditFindResult) creditOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<CreditFindResult>>builder()
                 .code(0)
                 .message("All Credits Loaded Successfully.")
                 .data(results)

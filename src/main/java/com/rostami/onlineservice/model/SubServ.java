@@ -7,7 +7,7 @@ import lombok.experimental.SuperBuilder;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.math.BigDecimal;
-import java.util.List;
+import java.util.Set;
 
 @Setter
 @Getter
@@ -35,5 +35,5 @@ public class SubServ extends BaseEntity {
             joinColumns=@JoinColumn(name="subServ_id"),
             inverseJoinColumns=@JoinColumn(name="expert_id")
     )
-    private List<Expert> experts;
+    private Set<Expert> experts;
 }

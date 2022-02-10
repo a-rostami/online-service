@@ -16,6 +16,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("/mainServs")
@@ -65,11 +67,11 @@ public class MainServController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT', 'CUSTOMER')")
-    public ResponseEntity<ResponseResult<List<MainServFindResult>>> readAll(@RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<MainServFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<MainServFindResult> results = mainServService.findAll(pageable)
-                .stream().map(mainServOutDto -> (MainServFindResult) mainServOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<MainServFindResult>>builder()
+        Set<MainServFindResult> results = mainServService.findAll(pageable)
+                .stream().map(mainServOutDto -> (MainServFindResult) mainServOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<MainServFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All Main Services.")
                 .data(results)

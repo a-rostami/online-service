@@ -19,6 +19,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/ads")
@@ -66,10 +68,10 @@ public class AdController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
-    public ResponseEntity<ResponseResult<List<AdFindResult>>> readAll(@RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<AdFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<AdFindResult> results = adService.findAll(pageable).stream().map(adOutDto -> (AdFindResult) adOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
+        Set<AdFindResult> results = adService.findAll(pageable).stream().map(adOutDto -> (AdFindResult) adOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<AdFindResult>>builder()
                 .code(0)
                 .message("All Ads Loaded Successfully.")
                 .data(results)
@@ -78,12 +80,12 @@ public class AdController {
 
     @GetMapping("/filter")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<List<AdFindResult>>> filter(@RequestBody AdFilter filter, @RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<AdFindResult>>> filter(@RequestBody AdFilter filter, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
         Specification<Ad> specification = new AdSpecification().getAds(filter);
-        List<AdFindResult> result = adService.findAll(specification, pageable)
-                .stream().map(ad -> (AdFindResult) ad).toList();
-        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
+        Set<AdFindResult> result = adService.findAll(specification, pageable)
+                .stream().map(ad -> (AdFindResult) ad).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<AdFindResult>>builder()
                 .code(0)
                 .message("Successfully Load All Ads Based On Filter.")
                 .data(result)
@@ -103,10 +105,10 @@ public class AdController {
 
     @GetMapping("/loadAllAdsOfCustomer/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
-    public ResponseEntity<ResponseResult<List<AdFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id, @RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<AdFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<AdFindResult> allAdsOfCustomer = adService.findAllAdsOfCustomer(id, pageable);
-        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
+        Set<AdFindResult> allAdsOfCustomer = adService.findAllAdsOfCustomer(id, pageable);
+        return ResponseEntity.ok(ResponseResult.<Set<AdFindResult>>builder()
                 .code(0)
                 .message("Successfully Load All Related Ads.")
                 .data(allAdsOfCustomer)
@@ -115,10 +117,10 @@ public class AdController {
 
     @GetMapping("/findRelatedAdsToExpertSubServ/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
-    public ResponseEntity<ResponseResult<List<AdFindResult>>> findRelatedAds(@PathVariable Long id, @RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<AdFindResult>>> findRelatedAds(@PathVariable Long id, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<AdFindResult> result = adService.findAdsRelatedToExpertSubServ(id, pageable);
-        return ResponseEntity.ok(ResponseResult.<List<AdFindResult>>builder()
+        Set<AdFindResult> result = adService.findAdsRelatedToExpertSubServ(id, pageable);
+        return ResponseEntity.ok(ResponseResult.<Set<AdFindResult>>builder()
                 .code(0)
                 .message("Successfully Load All Related Ads.")
                 .data(result)

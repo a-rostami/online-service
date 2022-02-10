@@ -16,7 +16,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequestMapping("/opinions")
 @RequiredArgsConstructor
@@ -66,13 +67,13 @@ public class OpinionController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT', 'CUSTOMER')")
-    public ResponseEntity<ResponseResult<List<OpinionFindResult>>> readAll(@RequestParam Integer page, @RequestParam Long expertId){
+    public ResponseEntity<ResponseResult<Set<OpinionFindResult>>> readAll(@RequestParam Integer page, @RequestParam Long expertId){
         Expert expert = Expert.builder().id(expertId).build();
         Pageable pageable = PageRequest.of(page, 5);
-        List<OpinionFindResult> results = opinionService.findAll((root, query, cb) ->
+        Set<OpinionFindResult> results = opinionService.findAll((root, query, cb) ->
                         cb.equal(root.get("expert"), expert), pageable)
-                .stream().map(opinionOutDto -> (OpinionFindResult) opinionOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<OpinionFindResult>>builder()
+                .stream().map(opinionOutDto -> (OpinionFindResult) opinionOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<OpinionFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All Opinions.")
                 .data(results)

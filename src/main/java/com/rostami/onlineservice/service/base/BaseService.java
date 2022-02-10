@@ -14,7 +14,10 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Setter
@@ -22,6 +25,9 @@ import java.util.stream.Collectors;
 public abstract class BaseService<T extends BaseEntity, ID extends Long, E extends BaseOutDto<T, E>> {
     private BaseRepository<T, ID> repository;
     private BaseOutDto<T, E> baseOutDto;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CreateUpdateResult save(BaseInDto<T> dto){
@@ -43,13 +49,20 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
 
     @Transactional
     public T getForUpdate(ID id){
-        return repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no model with this id"));
+        T fetchedEntity = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no model with this id"));
+        detach(fetchedEntity);
+        return fetchedEntity;
     }
 
     @Transactional
-    public List<BaseOutDto<T, E>> list(){
+    public Set<BaseOutDto<T, E>> list(){
         List<T> all = repository.findAll();
-        return all.stream().map((entity) -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
+        return all.stream().map((entity) -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
+    }
+
+    @Transactional
+    public void detach(T entity){
+        entityManager.detach(entity);
     }
 
     @Transactional
@@ -58,33 +71,40 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
     }
 
     @Transactional(readOnly = true)
-    public List<BaseOutDto<T, E>> findAll(Specification<T> specification){
+    public Set<BaseOutDto<T, E>> findAll(Specification<T> specification){
         List<T> entities = repository.findAll(specification);
-        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
-    public List<BaseOutDto<T, E>> findAll(Specification<T> specification, Sort sort){
+    public Set<BaseOutDto<T, E>> findAll(Specification<T> specification, Sort sort){
         List<T> entities = repository.findAll(specification, sort);
-        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
-    public List<BaseOutDto<T, E>> findAll(Specification<T> specification, Pageable pageable){
+    public Set<BaseOutDto<T, E>> findAll(Specification<T> specification, Pageable pageable){
         List<T> entities = repository.findAll(specification, pageable).getContent();
-        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
-    public List<BaseOutDto<T, E>> findAll(Sort sort){
+    public Set<BaseOutDto<T, E>> findAll(Sort sort){
         List<T> entities = repository.findAll(sort);
-        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
     }
 
     @Transactional(readOnly = true)
-    public List<BaseOutDto<T, E>> findAll(Pageable pageable){
+    public Set<BaseOutDto<T, E>> findAll(Pageable pageable){
         List<T> entities = repository.findAll(pageable).getContent();
-        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toList());
+        return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
+    }
+
+    @Transactional(readOnly = true)
+    public BaseOutDto<T, E> findOne(Specification<T> specification){
+        T entity = repository.findOne(specification)
+                .orElseThrow(() -> new EntityLoadException("There is no model with this id"));
+        return baseOutDto.convertToDto(entity);
     }
 
     @Transactional

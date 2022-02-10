@@ -3,7 +3,6 @@ package com.rostami.onlineservice.service;
 import com.rostami.onlineservice.dto.out.CreateUpdateResult;
 import com.rostami.onlineservice.dto.out.single.AdFindResult;
 import com.rostami.onlineservice.dto.out.single.ExpertFindResult;
-import com.rostami.onlineservice.dto.out.single.SubServFindResult;
 import com.rostami.onlineservice.model.Ad;
 import com.rostami.onlineservice.model.Customer;
 import com.rostami.onlineservice.model.Expert;
@@ -22,6 +21,7 @@ import javax.annotation.PostConstruct;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -42,14 +42,14 @@ public class AdService extends BaseService<Ad, Long, AdFindResult> {
     }
 
     @Transactional
-    public List<AdFindResult> findAllAdsOfCustomer(Long customerId, Pageable pageable){
+    public Set<AdFindResult> findAllAdsOfCustomer(Long customerId, Pageable pageable){
         Customer customer = Customer.builder().id(customerId).build();
         return findAll((root, query, cb) -> cb.equal(root.get("customer"), customer), pageable)
-                .stream().map(ad -> (AdFindResult) ad).collect(Collectors.toList());
+                .stream().map(ad -> (AdFindResult) ad).collect(Collectors.toSet());
     }
 
     @Transactional
-    public List<AdFindResult> findAdsRelatedToExpertSubServ(Long expertId, Pageable pageable){
+    public Set<AdFindResult> findAdsRelatedToExpertSubServ(Long expertId, Pageable pageable){
         ExpertFindResult expert = (ExpertFindResult) expertService.get(expertId);
         List<SubServ> subServs = expert.getSubServFindResults()
                 .stream().map(subServFindResult -> SubServ.builder()
@@ -57,7 +57,7 @@ public class AdService extends BaseService<Ad, Long, AdFindResult> {
                         .build()).collect(Collectors.toList());
 
         return repository.findAll((root, query, cb) -> root.get("subServ").in(subServs), pageable)
-                .stream().map(ad -> new AdFindResult().convertToDto(ad)).collect(Collectors.toList());
+                .stream().map(ad -> new AdFindResult().convertToDto(ad)).collect(Collectors.toSet());
     }
 
     @Transactional
@@ -75,22 +75,25 @@ public class AdService extends BaseService<Ad, Long, AdFindResult> {
 
         Expert chosenExpert = ad.getChosenExpert();
         LocalTime completionTime = ad.getCompletionTime().toLocalTime();
-        LocalDateTime localDateTime = LocalDateTime.now();
-        int delay =  localDateTime.getHour() - completionTime.getHour();
-        decreaseExpertPoint(chosenExpert, delay);
+        LocalDateTime now = LocalDateTime.now();
+        int delay =  now.getHour() - completionTime.getHour();
 
         Ad saved = repository.save(ad);
+        decreaseExpertPoint(chosenExpert, delay);
+
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
     private void decreaseExpertPoint(Expert expert, int delayByHour){
         if (delayByHour < 1 || expert == null || expert.getId() == null) return;
 
-        Double averagePoint = expertService.getAveragePoint(expert.getId());
+        Double expertAveragePoint = expert.getAveragePoint();
+
         // 5% for every 1-Hour delay
         int percentage = 5 * delayByHour / 100;
-        double newAveragePoint = averagePoint - (averagePoint * percentage);
-        expertService.updateAveragePoint(expert.getId(), newAveragePoint);
+        double newAveragePoint = expertAveragePoint - (expertAveragePoint * percentage);
+
+        expertService.updateAveragePoint(newAveragePoint, expert.getId());
     }
 
 }

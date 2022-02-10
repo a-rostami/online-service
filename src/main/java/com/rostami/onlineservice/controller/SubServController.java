@@ -15,7 +15,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequestMapping("/subServs")
 @RequiredArgsConstructor
@@ -65,11 +66,11 @@ public class SubServController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT', 'CUSTOMER')")
-    public ResponseEntity<ResponseResult<List<SubServFindResult>>> readAll(@RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<SubServFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<SubServFindResult> results = subServService.findAll(pageable)
-                .stream().map(subServOutDto -> (SubServFindResult) subServOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<SubServFindResult>>builder()
+        Set<SubServFindResult> results = subServService.findAll(pageable)
+                .stream().map(subServOutDto -> (SubServFindResult) subServOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<SubServFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All SubServs.")
                 .data(results)
@@ -77,9 +78,9 @@ public class SubServController {
     }
 
     @GetMapping("/subServsOfMainServ/{mainServId}")
-    public ResponseEntity<ResponseResult<List<SubServFindResult>>> findSubServsOfMainServ(@PathVariable Long mainServId){
-        List<SubServFindResult> results = subServService.findSubServsOfMainServ(mainServId);
-        return ResponseEntity.ok(ResponseResult.<List<SubServFindResult>>builder()
+    public ResponseEntity<ResponseResult<Set<SubServFindResult>>> findSubServsOfMainServ(@PathVariable Long mainServId){
+        Set<SubServFindResult> results = subServService.findSubServsOfMainServ(mainServId);
+        return ResponseEntity.ok(ResponseResult.<Set<SubServFindResult>>builder()
                 .code(0)
                 .message("Successfully Load All SubServices Of Given MainService")
                 .data(results)

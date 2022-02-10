@@ -17,6 +17,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @RequestMapping("/offers")
@@ -66,11 +68,11 @@ public class OfferController {
 
     @GetMapping("/all")
     @PreAuthorize("hasAnyRole('ADMIN')")
-    public ResponseEntity<ResponseResult<List<OfferFindResult>>> readAll(@RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<OfferFindResult>>> readAll(@RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<OfferFindResult> results = offerService.findAll(pageable)
-                .stream().map(offerOutDto -> (OfferFindResult) offerOutDto).toList();
-        return ResponseEntity.ok(ResponseResult.<List<OfferFindResult>>builder()
+        Set<OfferFindResult> results = offerService.findAll(pageable)
+                .stream().map(offerOutDto -> (OfferFindResult) offerOutDto).collect(Collectors.toSet());
+        return ResponseEntity.ok(ResponseResult.<Set<OfferFindResult>>builder()
                 .code(0)
                 .message("Successfully Found All Offers.")
                 .data(results)
@@ -79,17 +81,17 @@ public class OfferController {
 
     @GetMapping("/loadAllOffersOfExpert/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT')")
-    public ResponseEntity<ResponseResult<List<OfferFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id, @RequestParam Integer page){
+    public ResponseEntity<ResponseResult<Set<OfferFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
-        List<OfferFindResult> allOffersOfExpert = offerService.loadAllOffersOfExpert(id, pageable);
-        return ResponseEntity.ok(ResponseResult.<List<OfferFindResult>>builder()
+        Set<OfferFindResult> allOffersOfExpert = offerService.loadAllOffersOfExpert(id, pageable);
+        return ResponseEntity.ok(ResponseResult.<Set<OfferFindResult>>builder()
                 .code(0)
                 .message("Successfully Load All Related Offers.")
                 .data(allOffersOfExpert)
                 .build());
     }
 
-    @GetMapping("/orderOffersByPrice/{adId}")
+    @GetMapping("/orderOffersOfAdByPrice/{adId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<OfferFindResult>>> orderOffersByPrice(@PathVariable Long adId, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5, Sort.by("price"));

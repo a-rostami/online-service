@@ -5,8 +5,10 @@ import com.rostami.onlineservice.model.Expert;
 import lombok.*;
 
 import javax.validation.constraints.Email;
-import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
+
+import static java.lang.Math.round;
 
 @Getter
 @Setter
@@ -20,7 +22,7 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
     @Email
     private String email;
     private Double averagePoint;
-    private List<SubServFindResult> subServFindResults;
+    private Set<SubServFindResult> subServFindResults;
 
     @Override
     public ExpertFindResult convertToDto(Expert entity) {
@@ -28,9 +30,15 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
         firstname = entity.getFirstname();
         lastname = entity.getLastname();
         email = entity.getEmail();
-        averagePoint = entity.getAveragePoint();
+        averagePoint = getRoundTwoDecimal(entity.getAveragePoint());
         subServFindResults = entity.getSubServs().stream().map(subServ ->
-                SubServFindResult.builder().build().convertToDto(subServ)).collect(Collectors.toList());
+                SubServFindResult.builder().build().convertToDto(subServ)).collect(Collectors.toSet());
         return this;
+    }
+
+    private double getRoundTwoDecimal(double number){
+        number *= 100;
+        number = round(number);
+        return number / 100;
     }
 }

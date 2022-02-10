@@ -23,6 +23,7 @@ public class AdFindResult implements BaseOutDto<Ad, AdFindResult> {
     private String address;
     private AdStatus adStatus;
     private ExpertFindResult chosenExpert;
+    private SubServFindResult subServFindResult;
 
     @Override
     public AdFindResult convertToDto(Ad entity) {
@@ -36,6 +37,7 @@ public class AdFindResult implements BaseOutDto<Ad, AdFindResult> {
         workDescription = entity.getWorkDescription();
         address = entity.getAddress();
         adStatus = entity.getStatus();
+        subServFindResult = SubServFindResult.builder().build().convertToDto(entity.getSubServ());
         return this;
     }
 }
