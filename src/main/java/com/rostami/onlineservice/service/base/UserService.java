@@ -22,6 +22,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
+import static com.rostami.onlineservice.util.ExceptionMessages.*;
+
 @Getter
 @Slf4j
 public abstract class UserService<T extends User, ID extends Long, E extends BaseOutDto<T, E> > extends BaseService<T, ID, E> {
@@ -34,20 +36,21 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
         T entity = dto.convertToDomain();
         checkEmailExist(entity.getEmail());
         T saved = getRepository().save(entity);
-        if (saved.getId() == null)
-            throw new EntityLoadException("Cannot Execute Save Sql Statement");
+        sendEmailVerificationToken(saved);
+        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    }
 
+    private void sendEmailVerificationToken(T saved) {
         String fulName = "Dear " + saved.getFirstname() + " " + saved.getLastname();
         Role role = saved.getRoles().stream().findFirst()
-                .orElseThrow(() -> new EntityLoadException("User Has No Role"));
+                .orElseThrow(() -> new EntityLoadException(NO_ROLE_MESSAGE));
         registrationService.sendToken(generateToken(saved), fulName, saved.getEmail(), role);
-        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
     private void checkEmailExist(String email){
         long count = getRepository().count(((root, cq, cb) -> cb.equal(root.get("email"), email)));
         if (count > 0)
-            throw new DuplicatedEmailException("Email Already Exist!");
+            throw new DuplicatedEmailException(EMAIL_EXIST_MESSAGE);
     }
 
     private String generateToken(User user){
@@ -82,11 +85,11 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
         long count = getRepository().count(((root, cq, cb) -> cb.equal(root.get("email"), email)));
         // one exist is for auto update when we try to set new value to fetched entity in convertToDomain Method
         if (count > 1)
-            throw new DuplicatedEmailException("Email Already Exist!");
+            throw new DuplicatedEmailException(EMAIL_EXIST_MESSAGE);
     }
 
     public CreditFindResult loadCredit(ID id){
-        T user = getRepository().findById(id).orElseThrow(() -> new EntityLoadException("There Is No User With This ID."));
+        T user = getRepository().findById(id).orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         Credit credit = user.getCredit();
         return CreditFindResult.builder().build().convertToDto(credit);
     }

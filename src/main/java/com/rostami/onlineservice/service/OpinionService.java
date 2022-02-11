@@ -19,6 +19,7 @@ import javax.annotation.PostConstruct;
 
 import static com.rostami.onlineservice.model.enums.AdStatus.DONE;
 import static com.rostami.onlineservice.model.enums.AdStatus.PAID;
+import static com.rostami.onlineservice.util.ExceptionMessages.NOT_ALLOWED_SUBMIT_OPINION_MESSAGE;
 
 @Service
 @Slf4j
@@ -64,6 +65,6 @@ public class OpinionService extends BaseService<Opinion, Long, OpinionFindResult
 
     private void checkPermission(AdFindResult ad){
         if (!ad.getAdStatus().equals(DONE) && !ad.getAdStatus().equals(PAID))
-            throw new NotAllowedToSubmitOpinionException("You Can't submit opinion until Ad Becomes done");
+            throw new NotAllowedToSubmitOpinionException(NOT_ALLOWED_SUBMIT_OPINION_MESSAGE);
     }
 }

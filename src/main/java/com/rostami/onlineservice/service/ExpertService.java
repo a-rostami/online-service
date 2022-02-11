@@ -11,6 +11,7 @@ import com.rostami.onlineservice.repository.ExpertRepository;
 import com.rostami.onlineservice.service.base.UserService;
 import com.rostami.onlineservice.service.registration.EmailTokenService;
 import com.rostami.onlineservice.service.registration.RegistrationService;
+import com.rostami.onlineservice.util.ExceptionMessages;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -21,6 +22,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.util.Set;
+
+import static com.rostami.onlineservice.util.ExceptionMessages.*;
 
 @Service
 @RequiredArgsConstructor
@@ -58,7 +61,7 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
                 .build();
 
         Expert expert = repository.findById(expertId).orElseThrow(
-                () -> new EntityLoadException("There is no expert with this id"));
+                () -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
 
         Set<SubServ> subServs = expert.getSubServs();
         subServs.add(subServ);
@@ -79,24 +82,16 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
       ( Count Of numbers * Average ) + New Point / ( Count Of Numbers + 1 )
     */
     public void addNewPointToExpertAveragePoint(Long id, double point){
-        Expert expert = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no expert with this id"));
+        Expert expert = repository.findById(id)
+                .orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         Double expertAveragePoint = expert.getAveragePoint();
 
         long numberOfAllExpertOpinions = opinionService.count((root, query, cb) -> cb.equal(root.get("expert"), expert));
         // mines one because just saved opinion will be count in specification query
         double sumOfExpertPoints = (numberOfAllExpertOpinions - 1) * expertAveragePoint;
 
-        log.warn("expert average point : " + expertAveragePoint);
-        log.warn("number of opinions : " + numberOfAllExpertOpinions);
-        log.warn("sum of expert points : " + sumOfExpertPoints);
-
         // plus sum of points with given new point
         sumOfExpertPoints += point;
-
-        log.warn("number of opinions : " + numberOfAllExpertOpinions);
-        log.warn("sum of expert points : " + sumOfExpertPoints);
-
-        log.warn("new average point : " + sumOfExpertPoints / numberOfAllExpertOpinions);
         expert.setAveragePoint(sumOfExpertPoints / numberOfAllExpertOpinions);
     }
 
@@ -104,7 +99,7 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CreateUpdateResult depositToCredit(Long expertId, BigDecimal amount){
         Expert expert = repository.findById(expertId).orElseThrow(() ->
-                new EntityLoadException("There Is No Expert With This ID!"));
+                new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         return super.depositToCredit(expert, amount);
     }
 
@@ -118,19 +113,19 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
     public CreateUpdateResult unlockExpert(String email){
         int countOfChangedRows = repository.unlockExpert(email);
         if (countOfChangedRows < 1)
-            throw new EntityLoadException("There Is No Expert With This Id!");
+            throw new EntityLoadException(ENTITY_ID_LOAD_MESSAGE);
         return CreateUpdateResult.builder().success(true).build();
     }
 
     @Transactional
     public CreateUpdateResult changePassword(PasswordUpdateParam param){
         Expert expert = repository.findByEmail(param.getEmail())
-                .orElseThrow(() -> new EntityLoadException("There Is No Expert With This Email"));
+                .orElseThrow(() -> new EntityLoadException(ENTITY_EMAIL_LOAD_MESSAGE));
 
         String expertPassword = expert.getPassword();
 
         if (!bCryptPasswordEncoder.matches(param.getPreviousPassword(), expertPassword))
-            throw new WrongPreviousPasswordException("Previous Password Is Wrong !");
+            throw new WrongPreviousPasswordException(WRONG_PREVIOUS_PASSWORD_MESSAGE);
 
         expert.setPassword(param.getNewPassword());
         Expert saved = repository.save(expert);

@@ -3,19 +3,23 @@ package com.rostami.onlineservice.service.registration;
 import com.rostami.onlineservice.exception.EmailAlreadyConfirmedException;
 import com.rostami.onlineservice.exception.EmailConfirmationExpiredException;
 import com.rostami.onlineservice.model.base.User;
-import com.rostami.onlineservice.model.enums.UserStatus;
 import com.rostami.onlineservice.model.registration.EmailToken;
 import com.rostami.onlineservice.model.security.authentication.Role;
 import com.rostami.onlineservice.service.CustomerService;
 import com.rostami.onlineservice.service.ExpertService;
 import com.rostami.onlineservice.service.email.EmailService;
+import com.rostami.onlineservice.util.ExceptionMessages;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 
+import static com.rostami.onlineservice.model.enums.UserStatus.PENDING_ADMIN_TO_VERIFY;
+import static com.rostami.onlineservice.model.enums.UserStatus.VERIFIED;
 import static com.rostami.onlineservice.model.security.enums.RoleEnum.CUSTOMER;
+import static com.rostami.onlineservice.util.ExceptionMessages.EMAIL_ALREADY_CONFIRMED_MESSAGE;
+import static com.rostami.onlineservice.util.ExceptionMessages.EXPIRED_TOKEN_MESSAGE;
 
 @Service
 public class RegistrationService {
@@ -43,31 +47,35 @@ public class RegistrationService {
         User user = confirmationToken.getUser();
 
         if (confirmationToken.getConfirmedAt() != null)
-            throw new EmailAlreadyConfirmedException("email already confirmed");
+            throw new EmailAlreadyConfirmedException(EMAIL_ALREADY_CONFIRMED_MESSAGE);
 
         LocalDateTime expiredAt = confirmationToken.getExpiresAt();
 
         if (expiredAt.isBefore(LocalDateTime.now()))
-            throw new EmailConfirmationExpiredException("token is expired");
+            throw new EmailConfirmationExpiredException(EXPIRED_TOKEN_MESSAGE);
 
         emailTokenService.updateConfirmedAt(token);
-
-        boolean result;
-
-        if (role.equals(CUSTOMER.name())) {
-            user.setUserStatus(UserStatus.VERIFIED);
-            result = customerService.enableCustomer(user.getEmail());
-        }
-
-        else {
-            user.setUserStatus(UserStatus.PENDING_ADMIN_TO_VERIFY);
-            result = expertService.enableCustomer(confirmationToken.getUser().getEmail());
-        }
+        boolean result = updateUserStatus(role, confirmationToken, user);
 
         confirmationToken.setUser(user);
         emailTokenService.save(confirmationToken);
 
         return "Confirmation Was : " + result;
+    }
+
+    private boolean updateUserStatus(String role, EmailToken confirmationToken, User user) {
+        boolean result;
+
+        if (role.equals(CUSTOMER.name())) {
+            user.setUserStatus(VERIFIED);
+            result = customerService.enableCustomer(user.getEmail());
+        }
+
+        else {
+            user.setUserStatus(PENDING_ADMIN_TO_VERIFY);
+            result = expertService.enableCustomer(confirmationToken.getUser().getEmail());
+        }
+        return result;
     }
 
     private String buildEmail(String name, String link) {

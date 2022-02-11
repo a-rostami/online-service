@@ -22,6 +22,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.rostami.onlineservice.util.ExceptionMessages.OFFER_LOW_BASE_PRICE_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -57,7 +59,7 @@ public class OfferService extends BaseService<Offer, Long, OfferFindResult> {
     private void checkBasePrice(Offer offer){
         AdFindResult ad = (AdFindResult) adService.get(offer.getAd().getId());
         if (offer.getPrice().compareTo(ad.getSubServFindResult().getBasePrice()) > 0)
-            throw new BelowBasePriceException("OfferPrice Is Below SubService Base price.");
+            throw new BelowBasePriceException(OFFER_LOW_BASE_PRICE_MESSAGE);
     }
 
     @Transactional

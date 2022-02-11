@@ -24,6 +24,8 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.rostami.onlineservice.util.ExceptionMessages.ENTITY_ID_LOAD_MESSAGE;
+
 @Service
 public class AdService extends BaseService<Ad, Long, AdFindResult> {
     private final AdRepository repository;
@@ -62,7 +64,7 @@ public class AdService extends BaseService<Ad, Long, AdFindResult> {
 
     @Transactional
     public CreateUpdateResult chooseExpert(Long adId, Long expertId){
-        Ad ad = repository.findById(adId).orElseThrow(() -> new EntityLoadException("There is no Ad with this id!"));
+        Ad ad = repository.findById(adId).orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         ad.setChosenExpert(Expert.builder().id(expertId).build());
         ad.setStatus(AdStatus.STARTED);
         return CreateUpdateResult.builder().id(adId).success(true).build();
@@ -70,7 +72,7 @@ public class AdService extends BaseService<Ad, Long, AdFindResult> {
 
     @Transactional
     public CreateUpdateResult setAdToDone(Long adId){
-        Ad ad = repository.findById(adId).orElseThrow(() -> new EntityLoadException("There is no Ad with this id!"));
+        Ad ad = repository.findById(adId).orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         ad.setStatus(AdStatus.DONE);
 
         Expert chosenExpert = ad.getChosenExpert();

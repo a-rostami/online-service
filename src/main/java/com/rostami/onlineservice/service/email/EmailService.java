@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 import javax.mail.MessagingException;
 import javax.mail.internet.MimeMessage;
 
+import static com.rostami.onlineservice.util.ExceptionMessages.FAILED_TO_SEND_EMAIL_MESSAGE;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -27,8 +29,8 @@ public class EmailService {
             helper.setFrom("arashrostami518@mail.com");
             mailSender.send(mimeMessage);
         } catch (MessagingException e) {
-            log.error("failed to send email", e);
-            throw new IllegalStateException("failed to send email");
+            log.error(FAILED_TO_SEND_EMAIL_MESSAGE, e);
+            throw new IllegalStateException(FAILED_TO_SEND_EMAIL_MESSAGE);
         }
     }
 }

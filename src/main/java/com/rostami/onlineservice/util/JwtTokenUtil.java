@@ -56,26 +56,6 @@ public class JwtTokenUtil implements Serializable {
         return claims.getSubject().split(",")[0];
     }
 
-    public String getPassword(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(generalKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getSubject().split(",")[1];
-    }
-
-    public Date getExpirationDate(String token) {
-        Claims claims = Jwts.parserBuilder()
-                .setSigningKey(generalKey())
-                .build()
-                .parseClaimsJws(token)
-                .getBody();
-
-        return claims.getExpiration();
-    }
-
     public boolean validate(String token) {
         try {
             Jwts.parserBuilder()

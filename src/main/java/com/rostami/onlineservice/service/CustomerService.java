@@ -23,6 +23,8 @@ import javax.annotation.PostConstruct;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 
+import static com.rostami.onlineservice.util.ExceptionMessages.*;
+
 @Service
 @RequiredArgsConstructor
 @Slf4j
@@ -53,26 +55,31 @@ public class CustomerService extends UserService<Customer, Long, CustomerFindRes
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CreateUpdateResult depositToCredit(Long customerId, BigDecimal amount){
         Customer customer = repository.findById(customerId).orElseThrow(() ->
-                new EntityLoadException("There Is No Customer With This ID!"));
+                new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         return super.depositToCredit(customer, amount);
     }
 
     @Transactional(propagation = Propagation.REQUIRES_NEW)
     public CreateUpdateResult purchase(Long customerId, Long expertId, BigDecimal amount){
         Customer customer = repository.findById(customerId).orElseThrow(() ->
-                new EntityLoadException("There Is No Customer With This Id!"));
+                new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         Credit credit = customer.getCredit();
         BigDecimal balance = credit.getBalance();
 
         if (balance.compareTo(amount) <= 0)
-            throw new NotEnoughCreditBalanceException("Not Enough Balance Please Charge Your Account!");
+            throw new NotEnoughCreditBalanceException(NOT_ENOUGH_BALANCE_MESSAGE);
+
         credit.setBalance(balance.subtract(amount));
         customer.setCredit(credit);
 
-        BigDecimal percentage = amount.multiply(BigDecimal.valueOf(70)).divide(ONE_HUNDRED, 2, RoundingMode.UP);
-        expertService.depositToCredit(expertId, percentage);
+        depositToExpertAndAdmin(expertId, amount);
         Customer saved = repository.save(customer);
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    }
+
+    private void depositToExpertAndAdmin(Long expertId, BigDecimal amount) {
+        BigDecimal percentage = amount.multiply(BigDecimal.valueOf(70)).divide(ONE_HUNDRED, 2, RoundingMode.UP);
+        expertService.depositToCredit(expertId, percentage);
     }
 
     @Transactional
@@ -84,12 +91,12 @@ public class CustomerService extends UserService<Customer, Long, CustomerFindRes
     @Transactional
     public CreateUpdateResult changePassword(PasswordUpdateParam param){
         Customer customer = repository.findByEmail(param.getEmail())
-                .orElseThrow(() -> new EntityLoadException("There Is No Customer With This Email"));
+                .orElseThrow(() -> new EntityLoadException(ENTITY_EMAIL_LOAD_MESSAGE));
 
         String customerPassword = customer.getPassword();
 
         if (!bCryptPasswordEncoder.matches(param.getPreviousPassword(), customerPassword))
-            throw new WrongPreviousPasswordException("Previous Password Is Wrong !");
+            throw new WrongPreviousPasswordException(WRONG_PREVIOUS_PASSWORD_MESSAGE);
 
         customer.setPassword(param.getNewPassword());
         Customer saved = repository.save(customer);

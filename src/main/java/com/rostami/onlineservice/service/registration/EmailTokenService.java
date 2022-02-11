@@ -9,6 +9,8 @@ import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
+import static com.rostami.onlineservice.util.ExceptionMessages.ENTITY_TOKEN_LOAD_MESSAGE;
+
 @Service
 @AllArgsConstructor
 public class EmailTokenService {
@@ -24,7 +26,7 @@ public class EmailTokenService {
 
     public EmailToken findByToken(String token){
         return repository.findByToken(token)
-                .orElseThrow(() -> new EntityLoadException("There Is No Email Confirmation Token With THis ID"));
+                .orElseThrow(() -> new EntityLoadException(ENTITY_TOKEN_LOAD_MESSAGE));
     }
 
     public void updateConfirmedAt(String token){

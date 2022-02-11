@@ -11,7 +11,6 @@ import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
-import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.EntityManager;
@@ -19,6 +18,8 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
+
+import static com.rostami.onlineservice.util.ExceptionMessages.ENTITY_ID_LOAD_MESSAGE;
 
 @Setter
 @Getter
@@ -29,13 +30,13 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public CreateUpdateResult save(BaseInDto<T> dto){
         T saved = repository.save(dto.convertToDomain());
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     public CreateUpdateResult update(T entity){
         T saved = repository.save(entity);
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
@@ -43,13 +44,13 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
 
     @Transactional
     public BaseOutDto<T, E> get(ID id){
-        T entity = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no model with this id"));
+        T entity = repository.findById(id).orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         return baseOutDto.convertToDto(entity);
     }
 
     @Transactional
     public T getForUpdate(ID id){
-        T fetchedEntity = repository.findById(id).orElseThrow(() -> new EntityLoadException("There is no model with this id"));
+        T fetchedEntity = repository.findById(id).orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         detach(fetchedEntity);
         return fetchedEntity;
     }
@@ -100,12 +101,13 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
         return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
     }
 
+    /* We Can Use This Later
     @Transactional(readOnly = true)
     public BaseOutDto<T, E> findOne(Specification<T> specification){
         T entity = repository.findOne(specification)
-                .orElseThrow(() -> new EntityLoadException("There is no model with this id"));
+                .orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         return baseOutDto.convertToDto(entity);
-    }
+    }*/
 
     @Transactional
     public long count(Specification<T> specification){

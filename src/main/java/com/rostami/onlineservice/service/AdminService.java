@@ -17,6 +17,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.PostConstruct;
 
+import static com.rostami.onlineservice.util.ExceptionMessages.ENTITY_ID_LOAD_MESSAGE;
+import static com.rostami.onlineservice.util.ExceptionMessages.WRONG_PREVIOUS_PASSWORD_MESSAGE;
+
 @Service
 @RequiredArgsConstructor
 public class AdminService extends UserService<Admin, Long, AdminFindResult> {
@@ -36,11 +39,11 @@ public class AdminService extends UserService<Admin, Long, AdminFindResult> {
     @Transactional
     public CreateUpdateResult changePassword(PasswordUpdateParam param){
         Admin admin = repository.findByEmail(param.getEmail())
-                .orElseThrow(() -> new EntityLoadException("There Is No Admin With This Email"));
+                .orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
 
         String adminPassword = admin.getPassword();
         if (!bCryptPasswordEncoder.matches(param.getPreviousPassword(), adminPassword))
-            throw new WrongPreviousPasswordException("Previous Password Is Wrong !");
+            throw new WrongPreviousPasswordException(WRONG_PREVIOUS_PASSWORD_MESSAGE);
 
         admin.setPassword(param.getNewPassword());
         Admin saved = repository.save(admin);
