@@ -17,7 +17,8 @@ import java.time.LocalDateTime;
 @Entity
 public class EmailToken extends BaseEntity {
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt;
+    @Builder.Default
+    private LocalDateTime createdAt = LocalDateTime.now();
 
     @Column(nullable = false)
     private String token;

@@ -12,6 +12,8 @@ public interface EmailTokenRepository extends BaseRepository<EmailToken, Long> {
     Optional<EmailToken> findByToken(String token);
 
     @Modifying(clearAutomatically = true, flushAutomatically = true)
-    @Query("UPDATE EmailToken ec SET ec.confirmedAt = ?1 WHERE ec.token = ?2")
+    @Query("UPDATE EmailToken ec " +
+            "SET ec.confirmedAt = ?1 " +
+            "WHERE ec.token = ?2")
     void updateConfirmedAt(LocalDateTime confirmedAt, String token);
 }
