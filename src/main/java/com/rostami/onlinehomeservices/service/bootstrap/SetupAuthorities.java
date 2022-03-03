@@ -1,5 +1,6 @@
 package com.rostami.onlinehomeservices.service.bootstrap;
 
+import com.rostami.onlinehomeservices.exception.EntityLoadException;
 import com.rostami.onlinehomeservices.model.security.auth.Permission;
 import com.rostami.onlinehomeservices.model.security.auth.Role;
 import com.rostami.onlinehomeservices.model.security.enums.PermissionEnum;
@@ -13,6 +14,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static com.rostami.onlinehomeservices.exception.messages.ExceptionMessages.ENTITY_ID_LOAD_MESSAGE;
 import static com.rostami.onlinehomeservices.model.security.enums.PermissionEnum.*;
 import static com.rostami.onlinehomeservices.model.security.enums.RoleEnum.*;
 
@@ -44,7 +46,8 @@ public class SetupAuthorities implements CommandLineRunner {
         Role admin = Role.builder().roleEnum(ADMIN).build();
         Set<Permission> adminPermissions = new HashSet<>();
         for (PermissionEnum permissionEnum : allPermissionEnums()) {
-            adminPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum));
+            adminPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum)
+                    .orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE)));
         }
         admin.setPermissions(adminPermissions);
         Role saved = roleRepository.save(admin);
@@ -67,7 +70,8 @@ public class SetupAuthorities implements CommandLineRunner {
         Role customer = Role.builder().roleEnum(CUSTOMER).build();
         Set<Permission> customerPermissions = new HashSet<>();
         for (PermissionEnum permissionEnum : allCustomerPermissionEnums()) {
-            customerPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum));
+            customerPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum)
+                    .orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE)));
         }
         customer.setPermissions(customerPermissions);
         Role saved = roleRepository.save(customer);
@@ -83,7 +87,8 @@ public class SetupAuthorities implements CommandLineRunner {
         Role expert = Role.builder().roleEnum(EXPERT).build();
         Set<Permission> expertPermissions = new HashSet<>();
         for (PermissionEnum permissionEnum : allExpertPermissionEnums()) {
-            expertPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum));
+            expertPermissions.add(permissionRepository.findByPermissionEnum(permissionEnum)
+                    .orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE)));
         }
         expert.setPermissions(expertPermissions);
         Role saved = roleRepository.save(expert);

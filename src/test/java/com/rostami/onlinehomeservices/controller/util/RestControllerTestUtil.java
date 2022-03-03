@@ -1,4 +1,4 @@
-package com.rostami.onlinehomeservices.controller;
+package com.rostami.onlinehomeservices.controller.util;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
