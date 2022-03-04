@@ -1,7 +1,7 @@
 package com.rostami.onlinehomeservices.config.security;
 
 import com.rostami.onlinehomeservices.controller.auth.exception.JwtAuthenticationEntryPoint;
-import com.rostami.onlinehomeservices.controller.auth.request.filter.JwtRequestFilter;
+import com.rostami.onlinehomeservices.config.filterchain.JwtRequestFilter;
 import com.rostami.onlinehomeservices.service.security.MainDetailsServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;

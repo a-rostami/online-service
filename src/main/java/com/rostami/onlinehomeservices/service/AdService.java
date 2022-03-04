@@ -10,6 +10,7 @@ import com.rostami.onlinehomeservices.model.SubServ;
 import com.rostami.onlinehomeservices.model.enums.AdStatus;
 import com.rostami.onlinehomeservices.exception.EntityLoadException;
 import com.rostami.onlinehomeservices.repository.AdRepository;
+import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import com.rostami.onlinehomeservices.service.base.BaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -30,16 +31,19 @@ import static com.rostami.onlinehomeservices.exception.messages.ExceptionMessage
 public class AdService extends BaseService<Ad, Long, AdFindResult> {
     private final AdRepository repository;
     private final ExpertService expertService;
+    private final UpdateRepositoryImpl<Ad, Long> updateRepository;
 
     @Autowired
-    public AdService(AdRepository repository, @Lazy ExpertService expertService) {
+    public AdService(AdRepository repository, @Lazy ExpertService expertService, UpdateRepositoryImpl<Ad, Long> updateRepository) {
         this.repository = repository;
+        this.updateRepository = updateRepository;
         this.expertService = expertService;
     }
 
     @PostConstruct
     public void init() {
         setRepository(repository);
+        setUpdateRepositoryImpl(updateRepository);
         setBaseOutDto(AdFindResult.builder().build());
     }
 

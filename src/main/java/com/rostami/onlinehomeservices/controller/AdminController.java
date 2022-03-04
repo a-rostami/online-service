@@ -7,7 +7,6 @@ import com.rostami.onlinehomeservices.dto.in.update.AdminUpdateParam;
 import com.rostami.onlinehomeservices.dto.in.update.api.PasswordUpdateParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.AdminFindResult;
-import com.rostami.onlinehomeservices.model.Admin;
 import com.rostami.onlinehomeservices.service.AdminService;
 import com.rostami.onlinehomeservices.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -57,9 +56,7 @@ public class AdminController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody AdminUpdateParam param){
-        Admin fetchedEntity = adminService.getForUpdate(param.getId());
-        Admin updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = adminService.update(updatedEntity);
+        CreateUpdateResult result = adminService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Admin Successfully Updated.").data(result).build());
     }

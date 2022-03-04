@@ -38,9 +38,7 @@ public class AdController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody AdUpdateParam param){
-        Ad fetchedEntity = adService.getForUpdate(param.getId());
-        Ad updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = adService.update(updatedEntity);
+        CreateUpdateResult result = adService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Ad Successfully Updated.").data(result).build());
     }

@@ -2,14 +2,17 @@ package com.rostami.onlinehomeservices.service;
 
 import com.rostami.onlinehomeservices.dto.in.BaseInDto;
 import com.rostami.onlinehomeservices.dto.in.create.OfferCreateParam;
+import com.rostami.onlinehomeservices.dto.in.update.OfferUpdateParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.AdFindResult;
 import com.rostami.onlinehomeservices.dto.out.single.OfferFindResult;
+import com.rostami.onlinehomeservices.exception.EntityLoadException;
 import com.rostami.onlinehomeservices.model.Ad;
 import com.rostami.onlinehomeservices.model.Expert;
 import com.rostami.onlinehomeservices.model.Offer;
 import com.rostami.onlinehomeservices.exception.BelowBasePriceException;
 import com.rostami.onlinehomeservices.repository.OfferRepository;
+import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import com.rostami.onlinehomeservices.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +25,7 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import static com.rostami.onlinehomeservices.exception.messages.ExceptionMessages.ENTITY_ID_LOAD_MESSAGE;
 import static com.rostami.onlinehomeservices.exception.messages.ExceptionMessages.OFFER_LOW_BASE_PRICE_MESSAGE;
 
 @Service
@@ -30,10 +34,12 @@ import static com.rostami.onlinehomeservices.exception.messages.ExceptionMessage
 public class OfferService extends BaseService<Offer, Long, OfferFindResult> {
     private final OfferRepository repository;
     private final AdService adService;
+    private final UpdateRepositoryImpl<Offer, Long> updateRepository;
 
     @PostConstruct
     public void init(){
         setRepository(repository);
+        setUpdateRepositoryImpl(updateRepository);
         setBaseOutDto(OfferFindResult.builder().build());
     }
 
@@ -42,10 +48,11 @@ public class OfferService extends BaseService<Offer, Long, OfferFindResult> {
         return submitOffer((OfferCreateParam) dto);
     }
 
-    @Override
-    public CreateUpdateResult update(Offer offer) {
+
+    public CreateUpdateResult update(OfferUpdateParam param, Long id) {
+        Offer offer = repository.findById(id).orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         checkBasePrice(offer);
-        return super.update(offer);
+        return super.update(param, id);
     }
 
     @Transactional

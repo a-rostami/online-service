@@ -9,6 +9,7 @@ import com.rostami.onlinehomeservices.model.Customer;
 import com.rostami.onlinehomeservices.exception.EntityLoadException;
 import com.rostami.onlinehomeservices.exception.NotEnoughCreditBalanceException;
 import com.rostami.onlinehomeservices.repository.CustomerRepository;
+import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import com.rostami.onlinehomeservices.service.base.UserService;
 import com.rostami.onlinehomeservices.service.registration.EmailTokenService;
 import com.rostami.onlinehomeservices.service.registration.RegistrationService;
@@ -36,10 +37,12 @@ public class CustomerService extends UserService<Customer, Long, CustomerFindRes
     private final RegistrationService registrationService;
     private final EmailTokenService emailTokenService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UpdateRepositoryImpl<Customer, Long> updateRepository;
 
     @PostConstruct
     public void init(){
         setRepository(repository);
+        setUpdateRepositoryImpl(updateRepository);
         setBaseOutDto(CustomerFindResult.builder().build());
         setRegistrationService(registrationService);
         setEmailTokenService(emailTokenService);

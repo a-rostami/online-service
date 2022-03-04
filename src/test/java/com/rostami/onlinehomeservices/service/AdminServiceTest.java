@@ -8,6 +8,7 @@ import com.rostami.onlinehomeservices.model.Admin;
 import com.rostami.onlinehomeservices.model.Credit;
 import com.rostami.onlinehomeservices.model.enums.UserStatus;
 import com.rostami.onlinehomeservices.repository.AdminRepository;
+import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import com.rostami.onlinehomeservices.service.registration.EmailTokenService;
 import com.rostami.onlinehomeservices.service.registration.RegistrationService;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +34,7 @@ class AdminServiceTest {
     @Mock private AdminRepository adminRepository;
     @Mock private RegistrationService registrationService;
     @Mock private EmailTokenService emailTokenService;
+    @Mock private UpdateRepositoryImpl<Admin, Long> updateRepository;
 
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     private AdminService adminService;
@@ -40,7 +42,7 @@ class AdminServiceTest {
     @BeforeEach
     void setup(){
         bCryptPasswordEncoder = new PasswordEncoder().bCryptPasswordEncoder();
-        adminService = new AdminService(adminRepository, registrationService, emailTokenService, bCryptPasswordEncoder);
+        adminService = new AdminService(adminRepository, registrationService, emailTokenService, bCryptPasswordEncoder, updateRepository);
     }
 
     @Test

@@ -6,7 +6,6 @@ import com.rostami.onlinehomeservices.dto.in.update.OpinionUpdateParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.OpinionFindResult;
 import com.rostami.onlinehomeservices.model.Expert;
-import com.rostami.onlinehomeservices.model.Opinion;
 import com.rostami.onlinehomeservices.service.OpinionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -39,9 +38,7 @@ public class OpinionController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody OpinionUpdateParam param){
-        Opinion fetchedEntity = opinionService.getForUpdate(param.getId());
-        Opinion updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = opinionService.update(updatedEntity);
+        CreateUpdateResult result = opinionService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Opinion Successfully Updated.").data(result).build());
     }

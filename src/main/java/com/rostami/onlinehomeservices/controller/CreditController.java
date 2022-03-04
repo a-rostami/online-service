@@ -5,7 +5,6 @@ import com.rostami.onlinehomeservices.dto.in.create.CreditCreateParam;
 import com.rostami.onlinehomeservices.dto.in.update.CreditUpdateParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.CreditFindResult;
-import com.rostami.onlinehomeservices.model.Credit;
 import com.rostami.onlinehomeservices.service.CreditService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -35,9 +34,7 @@ public class CreditController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CreditUpdateParam param){
-        Credit fetchedEntity = creditService.getForUpdate(param.getId());
-        Credit updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = creditService.update(updatedEntity);
+        CreateUpdateResult result = creditService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Credit Successfully Updated.").data(result).build());
     }

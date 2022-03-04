@@ -7,6 +7,7 @@ import com.rostami.onlinehomeservices.exception.EntityLoadException;
 import com.rostami.onlinehomeservices.exception.WrongPreviousPasswordException;
 import com.rostami.onlinehomeservices.model.Admin;
 import com.rostami.onlinehomeservices.repository.AdminRepository;
+import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import com.rostami.onlinehomeservices.service.base.UserService;
 import com.rostami.onlinehomeservices.service.registration.EmailTokenService;
 import com.rostami.onlinehomeservices.service.registration.RegistrationService;
@@ -27,11 +28,13 @@ public class AdminService extends UserService<Admin, Long, AdminFindResult> {
     private final RegistrationService registrationService;
     private final EmailTokenService emailTokenService;
     private final BCryptPasswordEncoder bCryptPasswordEncoder;
+    private final UpdateRepositoryImpl<Admin, Long> updateRepository;
 
     @PostConstruct
     public void init(){
         setRepository(repository);
         setBaseOutDto(AdminFindResult.builder().build());
+        setUpdateRepositoryImpl(updateRepository);
         setRegistrationService(registrationService);
         setEmailTokenService(emailTokenService);
     }

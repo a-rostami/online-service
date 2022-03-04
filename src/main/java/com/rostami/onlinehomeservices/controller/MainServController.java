@@ -5,7 +5,6 @@ import com.rostami.onlinehomeservices.dto.in.create.MainServCreateParam;
 import com.rostami.onlinehomeservices.dto.in.update.MainServUpdateParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.MainServFindResult;
-import com.rostami.onlinehomeservices.model.MainServ;
 import com.rostami.onlinehomeservices.service.MainServService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -38,9 +37,7 @@ public class MainServController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody MainServUpdateParam param){
-        MainServ fetchedEntity = mainServService.getForUpdate(param.getId());
-        MainServ updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = mainServService.update(updatedEntity);
+        CreateUpdateResult result = mainServService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("MainServ Successfully Updated.").data(result).build());
     }

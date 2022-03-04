@@ -1,6 +1,7 @@
 package com.rostami.onlinehomeservices.service.base;
 
 import com.rostami.onlinehomeservices.dto.in.BaseInDto;
+import com.rostami.onlinehomeservices.dto.in.BaseUpdateDto;
 import com.rostami.onlinehomeservices.dto.out.BaseOutDto;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.CreditFindResult;
@@ -75,10 +76,9 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
         return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
     }
 
-    @Override
-    public CreateUpdateResult update(T entity) {
-        checkEmailExistForUpdate(entity.getEmail());
-        return super.update(entity);
+    public CreateUpdateResult update(BaseUpdateDto<T> updateDto, ID id, String email) {
+        checkEmailExistForUpdate(email);
+        return super.update(updateDto, id);
     }
 
     private void checkEmailExistForUpdate(String email){

@@ -8,6 +8,7 @@ import com.rostami.onlinehomeservices.dto.out.single.OpinionFindResult;
 import com.rostami.onlinehomeservices.model.Opinion;
 import com.rostami.onlinehomeservices.exception.NotAllowedToSubmitOpinionException;
 import com.rostami.onlinehomeservices.repository.OpinionRepository;
+import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import com.rostami.onlinehomeservices.service.base.BaseService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,17 +28,23 @@ public class OpinionService extends BaseService<Opinion, Long, OpinionFindResult
     private final OpinionRepository repository;
     private final AdService adService;
     private final ExpertService expertService;
+    private final UpdateRepositoryImpl<Opinion, Long> updateRepository;
 
     @Autowired
-    public OpinionService(OpinionRepository repository, @Lazy AdService adService, @Lazy ExpertService expertService) {
+    public OpinionService(OpinionRepository repository,
+                          @Lazy AdService adService,
+                          @Lazy ExpertService expertService,
+                          UpdateRepositoryImpl<Opinion, Long> updateRepository) {
         this.repository = repository;
         this.adService = adService;
         this.expertService = expertService;
+        this.updateRepository = updateRepository;
     }
 
     @PostConstruct
     public void init(){
         setRepository(repository);
+        setUpdateRepositoryImpl(updateRepository);
         setBaseOutDto(OpinionFindResult.builder().build());
     }
 

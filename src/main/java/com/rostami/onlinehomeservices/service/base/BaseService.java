@@ -1,20 +1,21 @@
 package com.rostami.onlinehomeservices.service.base;
 
 import com.rostami.onlinehomeservices.dto.in.BaseInDto;
+import com.rostami.onlinehomeservices.dto.in.BaseUpdateDto;
 import com.rostami.onlinehomeservices.dto.out.BaseOutDto;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.model.base.BaseEntity;
 import com.rostami.onlinehomeservices.exception.EntityLoadException;
 import com.rostami.onlinehomeservices.repository.base.BaseRepository;
+import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -26,9 +27,7 @@ import static com.rostami.onlinehomeservices.exception.messages.ExceptionMessage
 public abstract class BaseService<T extends BaseEntity, ID extends Long, E extends BaseOutDto<T, E>> {
     private BaseRepository<T, ID> repository;
     private BaseOutDto<T, E> baseOutDto;
-
-    @PersistenceContext
-    private EntityManager entityManager;
+    private UpdateRepositoryImpl<T, ID> updateRepositoryImpl;
 
     @Transactional
     public CreateUpdateResult save(BaseInDto<T> dto){
@@ -37,9 +36,8 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
     }
 
     @Transactional
-    public CreateUpdateResult update(T entity){
-        T saved = repository.save(entity);
-        return CreateUpdateResult.builder().id(saved.getId()).success(true).build();
+    public CreateUpdateResult update(BaseUpdateDto<T> updateDto, ID id){
+        return updateRepositoryImpl.update(updateDto, id);
     }
 
     @Transactional
@@ -49,21 +47,9 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
     }
 
     @Transactional
-    public T getForUpdate(ID id){
-        T fetchedEntity = repository.findById(id).orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
-        detach(fetchedEntity);
-        return fetchedEntity;
-    }
-
-    @Transactional
     public Set<BaseOutDto<T, E>> list(){
         List<T> all = repository.findAll();
         return all.stream().map((entity) -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
-    }
-
-    @Transactional
-    public void detach(T entity){
-        entityManager.detach(entity);
     }
 
     @Transactional
@@ -100,14 +86,6 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
         List<T> entities = repository.findAll(pageable).getContent();
         return entities.stream().map(entity -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
     }
-
-    /* We Can Use This Later
-    @Transactional(readOnly = true)
-    public BaseOutDto<T, E> findOne(Specification<T> specification){
-        T entity = repository.findOne(specification)
-                .orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
-        return baseOutDto.convertToDto(entity);
-    }*/
 
     @Transactional
     public long count(Specification<T> specification){

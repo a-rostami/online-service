@@ -4,6 +4,7 @@ import com.rostami.onlinehomeservices.dto.out.single.SubServFindResult;
 import com.rostami.onlinehomeservices.model.MainServ;
 import com.rostami.onlinehomeservices.model.SubServ;
 import com.rostami.onlinehomeservices.repository.SubServRepository;
+import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import com.rostami.onlinehomeservices.service.base.BaseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -18,10 +19,13 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class SubServService extends BaseService<SubServ, Long, SubServFindResult> {
     private final SubServRepository repository;
+    private final UpdateRepositoryImpl<SubServ, Long> updateRepository;
+
 
     @PostConstruct
     public void init(){
         setRepository(repository);
+        setUpdateRepositoryImpl(updateRepository);
         setBaseOutDto(SubServFindResult.builder().build());
     }
 

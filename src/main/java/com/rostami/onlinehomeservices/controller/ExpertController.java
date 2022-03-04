@@ -10,7 +10,6 @@ import com.rostami.onlinehomeservices.dto.in.update.api.PasswordUpdateParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.CreditFindResult;
 import com.rostami.onlinehomeservices.dto.out.single.ExpertFindResult;
-import com.rostami.onlinehomeservices.model.Expert;
 import com.rostami.onlinehomeservices.service.ExpertService;
 import com.rostami.onlinehomeservices.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -59,9 +58,7 @@ public class ExpertController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @ModelAttribute ExpertUpdateParam param){
-        Expert fetchedEntity = expertService.getForUpdate(param.getId());
-        Expert updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = expertService.update(updatedEntity);
+        CreateUpdateResult result = expertService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Expert Successfully Updated.").data(result).build());
     }

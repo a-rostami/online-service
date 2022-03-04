@@ -5,7 +5,6 @@ import com.rostami.onlinehomeservices.dto.in.create.OfferCreateParam;
 import com.rostami.onlinehomeservices.dto.in.update.OfferUpdateParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.OfferFindResult;
-import com.rostami.onlinehomeservices.model.Offer;
 import com.rostami.onlinehomeservices.service.OfferService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -40,9 +39,7 @@ public class OfferController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody OfferUpdateParam param){
-        Offer fetchedEntity = offerService.getForUpdate(param.getId());
-        Offer updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = offerService.update(updatedEntity);
+        CreateUpdateResult result = offerService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Offer Successfully Updated.").data(result).build());
     }

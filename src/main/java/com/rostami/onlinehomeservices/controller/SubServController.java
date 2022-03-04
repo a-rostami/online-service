@@ -5,7 +5,6 @@ import com.rostami.onlinehomeservices.dto.in.create.SubServCreateParam;
 import com.rostami.onlinehomeservices.dto.in.update.SubServUpdateParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.SubServFindResult;
-import com.rostami.onlinehomeservices.model.SubServ;
 import com.rostami.onlinehomeservices.service.SubServService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -38,9 +37,7 @@ public class SubServController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody SubServUpdateParam param){
-        SubServ fetchedEntity = subServService.getForUpdate(param.getId());
-        SubServ updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = subServService.update(updatedEntity);
+        CreateUpdateResult result = subServService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("SubServ Successfully Updated.").data(result).build());
     }

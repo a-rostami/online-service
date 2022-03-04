@@ -12,7 +12,6 @@ import com.rostami.onlinehomeservices.dto.in.update.api.PurchaseParam;
 import com.rostami.onlinehomeservices.dto.out.CreateUpdateResult;
 import com.rostami.onlinehomeservices.dto.out.single.CreditFindResult;
 import com.rostami.onlinehomeservices.dto.out.single.CustomerFindResult;
-import com.rostami.onlinehomeservices.model.Customer;
 import com.rostami.onlinehomeservices.service.CustomerService;
 import com.rostami.onlinehomeservices.util.JwtTokenUtil;
 import lombok.RequiredArgsConstructor;
@@ -63,9 +62,7 @@ public class CustomerController {
     @PutMapping("/update")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> update(@Validated @RequestBody CustomerUpdateParam param) {
-        Customer fetchedEntity = customerService.getForUpdate(param.getId());
-        Customer updatedEntity = param.convertToDomain(fetchedEntity);
-        CreateUpdateResult result = customerService.update(updatedEntity);
+        CreateUpdateResult result = customerService.update(param, param.getId());
         return ResponseEntity.ok(ResponseResult.<CreateUpdateResult>
                 builder().code(0).message("Customer Successfully Updated.").data(result).build());
     }
