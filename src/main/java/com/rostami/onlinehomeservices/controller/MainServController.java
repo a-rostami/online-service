@@ -54,7 +54,7 @@ public class MainServController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT', 'CUSTOMER')")
     public ResponseEntity<ResponseResult<MainServFindResult>> read(@Validated @PathVariable Long id){
-        MainServFindResult result = (MainServFindResult) mainServService.get(id);
+        MainServFindResult result = (MainServFindResult) mainServService.findById(id);
         return ResponseEntity.ok(ResponseResult.<MainServFindResult>builder()
                 .code(0)
                 .message("Successfully Found MainServ.")

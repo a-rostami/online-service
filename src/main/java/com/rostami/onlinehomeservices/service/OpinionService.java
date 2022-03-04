@@ -57,7 +57,7 @@ public class OpinionService extends BaseService<Opinion, Long, OpinionFindResult
     public CreateUpdateResult submitOpinion(OpinionCreateParam opinionCreateParam){
         Opinion opinion = opinionCreateParam.convertToDomain();
         Long adId = opinion.getAd().getId();
-        AdFindResult ad = (AdFindResult) adService.get(adId);
+        AdFindResult ad = (AdFindResult) adService.findById(adId);
 
         // check Ad Is Done or not
         checkPermission(ad);

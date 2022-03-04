@@ -55,7 +55,7 @@ public class ExpertService extends UserService<Expert, Long, ExpertFindResult> {
 
     @Transactional
     public CreateUpdateResult addSubServ(Long expertId, Long subServId){
-        SubServFindResult subServFindResult = (SubServFindResult) subServService.get(subServId);
+        SubServFindResult subServFindResult = (SubServFindResult) subServService.findById(subServId);
         SubServ subServ = SubServ.builder()
                 .id(subServId)
                 .basePrice(subServFindResult.getBasePrice())

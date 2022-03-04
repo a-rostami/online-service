@@ -51,7 +51,7 @@ public class CreditController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreditFindResult>> read(@Validated @PathVariable Long id){
-        CreditFindResult result = (CreditFindResult) creditService.get(id);
+        CreditFindResult result = (CreditFindResult) creditService.findById(id);
         return ResponseEntity.ok(ResponseResult.<CreditFindResult>builder()
                 .code(0)
                 .message("Credit Successfully Loaded.")

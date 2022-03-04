@@ -5,6 +5,7 @@ import com.rostami.onlinehomeservices.model.Expert;
 import lombok.*;
 
 import javax.validation.constraints.Email;
+import java.util.Objects;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -40,5 +41,18 @@ public class ExpertFindResult implements BaseOutDto<Expert, ExpertFindResult> {
         number *= 100;
         number = round(number);
         return number / 100;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ExpertFindResult that = (ExpertFindResult) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

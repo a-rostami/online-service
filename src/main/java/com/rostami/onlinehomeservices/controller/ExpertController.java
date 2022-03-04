@@ -75,7 +75,7 @@ public class ExpertController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<ExpertFindResult>> read(@Validated @PathVariable Long id){
-        ExpertFindResult result = (ExpertFindResult) expertService.get(id);
+        ExpertFindResult result = (ExpertFindResult) expertService.findById(id);
         return ResponseEntity.ok(ResponseResult.<ExpertFindResult>builder()
                 .code(0)
                 .message("Successfully Found Expert.")

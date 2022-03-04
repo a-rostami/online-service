@@ -6,6 +6,7 @@ import com.rostami.onlinehomeservices.model.enums.UserStatus;
 import lombok.*;
 
 import javax.validation.constraints.Email;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -28,5 +29,18 @@ public class CustomerFindResult implements BaseOutDto<Customer, CustomerFindResu
         email = entity.getEmail();
         userStatus = entity.getUserStatus();
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        CustomerFindResult that = (CustomerFindResult) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

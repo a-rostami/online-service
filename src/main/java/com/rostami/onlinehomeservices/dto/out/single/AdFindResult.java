@@ -8,6 +8,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.sql.Date;
 import java.sql.Time;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -39,5 +40,18 @@ public class AdFindResult implements BaseOutDto<Ad, AdFindResult> {
         adStatus = entity.getStatus();
         subServFindResult = SubServFindResult.builder().build().convertToDto(entity.getSubServ());
         return this;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        AdFindResult that = (AdFindResult) o;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

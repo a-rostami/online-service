@@ -56,7 +56,7 @@ public class OfferController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT', 'CUSTOMER')")
     public ResponseEntity<ResponseResult<OfferFindResult>> read(@Validated @PathVariable Long id){
-        OfferFindResult result = (OfferFindResult) offerService.get(id);
+        OfferFindResult result = (OfferFindResult) offerService.findById(id);
         return ResponseEntity.ok(ResponseResult.<OfferFindResult>builder()
                 .code(0)
                 .message("Successfully Found Offer.")

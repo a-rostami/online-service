@@ -64,7 +64,7 @@ public class OfferService extends BaseService<Offer, Long, OfferFindResult> {
     }
 
     private void checkBasePrice(Offer offer){
-        AdFindResult ad = (AdFindResult) adService.get(offer.getAd().getId());
+        AdFindResult ad = (AdFindResult) adService.findById(offer.getAd().getId());
         if (offer.getPrice().compareTo(ad.getSubServFindResult().getBasePrice()) > 0)
             throw new BelowBasePriceException(OFFER_LOW_BASE_PRICE_MESSAGE);
     }

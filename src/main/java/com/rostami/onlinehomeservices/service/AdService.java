@@ -56,7 +56,7 @@ public class AdService extends BaseService<Ad, Long, AdFindResult> {
 
     @Transactional
     public Set<AdFindResult> findAdsRelatedToExpertSubServ(Long expertId, Pageable pageable){
-        ExpertFindResult expert = (ExpertFindResult) expertService.get(expertId);
+        ExpertFindResult expert = (ExpertFindResult) expertService.findById(expertId);
         List<SubServ> subServs = expert.getSubServFindResults()
                 .stream().map(subServFindResult -> SubServ.builder()
                         .id(subServFindResult.getId())

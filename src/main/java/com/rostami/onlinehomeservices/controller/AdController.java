@@ -55,7 +55,7 @@ public class AdController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<AdFindResult>> read(@Validated @PathVariable Long id){
-        AdFindResult result = (AdFindResult) adService.get(id);
+        AdFindResult result = (AdFindResult) adService.findById(id);
         return ResponseEntity.ok(ResponseResult.<AdFindResult>builder()
                 .code(0)
                 .message("Ad Successfully Loaded.")

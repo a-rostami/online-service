@@ -55,7 +55,7 @@ public class OpinionController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<OpinionFindResult>> read(@Validated @PathVariable Long id){
-        OpinionFindResult result = (OpinionFindResult) opinionService.get(id);
+        OpinionFindResult result = (OpinionFindResult) opinionService.findById(id);
         return ResponseEntity.ok(ResponseResult.<OpinionFindResult>builder()
                 .code(0)
                 .message("Successfully Found Opinion.")

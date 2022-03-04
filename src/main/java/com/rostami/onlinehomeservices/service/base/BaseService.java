@@ -9,7 +9,6 @@ import com.rostami.onlinehomeservices.exception.EntityLoadException;
 import com.rostami.onlinehomeservices.repository.base.BaseRepository;
 import com.rostami.onlinehomeservices.repository.impl.UpdateRepositoryImpl;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -24,7 +23,7 @@ import static com.rostami.onlinehomeservices.exception.messages.ExceptionMessage
 
 @Setter
 @Getter
-public abstract class BaseService<T extends BaseEntity, ID extends Long, E extends BaseOutDto<T, E>> {
+public class BaseService<T extends BaseEntity, ID extends Long, E extends BaseOutDto<T, E>> {
     private BaseRepository<T, ID> repository;
     private BaseOutDto<T, E> baseOutDto;
     private UpdateRepositoryImpl<T, ID> updateRepositoryImpl;
@@ -41,13 +40,13 @@ public abstract class BaseService<T extends BaseEntity, ID extends Long, E exten
     }
 
     @Transactional
-    public BaseOutDto<T, E> get(ID id){
+    public BaseOutDto<T, E> findById(ID id){
         T entity = repository.findById(id).orElseThrow(() -> new EntityLoadException(ENTITY_ID_LOAD_MESSAGE));
         return baseOutDto.convertToDto(entity);
     }
 
     @Transactional
-    public Set<BaseOutDto<T, E>> list(){
+    public Set<BaseOutDto<T, E>> findAll(){
         List<T> all = repository.findAll();
         return all.stream().map((entity) -> baseOutDto.convertToDto(entity)).collect(Collectors.toSet());
     }

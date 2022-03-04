@@ -73,7 +73,7 @@ public class AdminController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<AdminFindResult>> read(@Validated @PathVariable Long id){
-        AdminFindResult result = (AdminFindResult) adminService.get(id);
+        AdminFindResult result = (AdminFindResult) adminService.findById(id);
         return ResponseEntity.ok(ResponseResult.<AdminFindResult>builder()
                 .code(0)
                 .message("Admin Successfully Loaded.")

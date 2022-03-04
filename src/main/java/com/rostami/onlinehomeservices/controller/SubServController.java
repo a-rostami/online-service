@@ -54,7 +54,7 @@ public class SubServController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT', 'CUSTOMER')")
     public ResponseEntity<ResponseResult<SubServFindResult>> read(@Validated @PathVariable Long id){
-        SubServFindResult result = (SubServFindResult) subServService.get(id);
+        SubServFindResult result = (SubServFindResult) subServService.findById(id);
         return ResponseEntity.ok(ResponseResult.<SubServFindResult>builder()
                 .code(0)
                 .message("Successfully Found SubServ.")

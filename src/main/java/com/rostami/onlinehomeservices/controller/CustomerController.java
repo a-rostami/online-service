@@ -79,7 +79,7 @@ public class CustomerController {
     @GetMapping("/load/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CustomerFindResult>> read(@Validated @PathVariable Long id) {
-        CustomerFindResult result = (CustomerFindResult) customerService.get(id);
+        CustomerFindResult result = (CustomerFindResult) customerService.findById(id);
         return ResponseEntity.ok(ResponseResult.<CustomerFindResult>builder()
                 .code(0)
                 .message("Customer Successfully Loaded.")
