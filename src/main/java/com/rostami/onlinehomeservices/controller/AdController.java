@@ -89,7 +89,7 @@ public class AdController {
                 .build());
     }
 
-    @PutMapping("/chooseExpert")
+    @PutMapping("/choose-expert")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@RequestParam Long adId, @RequestParam Long expertId){
         CreateUpdateResult res = adService.chooseExpert(adId, expertId);
@@ -100,7 +100,7 @@ public class AdController {
                 .build());
     }
 
-    @GetMapping("/loadAllAdsOfCustomer/{id}")
+    @GetMapping("/load-all-ads-of-customer/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<Set<AdFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
@@ -112,7 +112,7 @@ public class AdController {
                 .build());
     }
 
-    @GetMapping("/findRelatedAdsToExpertSubServ/{id}")
+    @GetMapping("/find-related-ads-to-expert-subServ/{id}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<Set<AdFindResult>>> findRelatedAds(@PathVariable Long id, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
@@ -124,7 +124,7 @@ public class AdController {
                 .build());
     }
 
-    @PutMapping("/setAdToDone/{adId}")
+    @PutMapping("/set-ad-to-done/{adId}")
     @PreAuthorize("hasAnyRole('CUSTOMER', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> setAdToDone(@PathVariable Long adId){
         CreateUpdateResult result = adService.setAdToDone(adId);

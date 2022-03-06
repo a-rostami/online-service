@@ -146,7 +146,7 @@ public class CustomerController {
                 .build());
     }
 
-    @GetMapping("/countOfCustomerAds/{customerId}")
+    @GetMapping("/count-of-customer-ads/{customerId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<Long>> countOfAds(@PathVariable Long customerId) {
         long count = customerService.getNumberOfCustomerAds(customerId);
@@ -157,7 +157,7 @@ public class CustomerController {
                 .build());
     }
 
-    @PutMapping("/changePassword")
+    @PutMapping("/change-password")
     @PreAuthorize("hasAnyRole('ADMIN', 'CUSTOMER')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> changePassword(@RequestBody @Valid PasswordUpdateParam param){
         String newPassword = param.getNewPassword();

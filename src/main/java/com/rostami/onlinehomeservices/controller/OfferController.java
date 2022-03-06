@@ -76,7 +76,7 @@ public class OfferController {
                 .build());
     }
 
-    @GetMapping("/loadAllOffersOfExpert/{id}")
+    @GetMapping("/load-all-offers-of-expert/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT')")
     public ResponseEntity<ResponseResult<Set<OfferFindResult>>> loadAllAdsOfCustomer(@PathVariable Long id, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5);
@@ -88,7 +88,7 @@ public class OfferController {
                 .build());
     }
 
-    @GetMapping("/orderOffersOfAdByPrice/{adId}")
+    @GetMapping("/load-offers-of-ad-order-by-price/{adId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<List<OfferFindResult>>> orderOffersByPrice(@PathVariable Long adId, @RequestParam Integer page){
         Pageable pageable = PageRequest.of(page, 5, Sort.by("price"));

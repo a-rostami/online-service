@@ -74,7 +74,7 @@ public class SubServController {
                 .build());
     }
 
-    @GetMapping("/subServsOfMainServ/{mainServId}")
+    @GetMapping("/sub-services-of-main-service/{mainServId}")
     public ResponseEntity<ResponseResult<Set<SubServFindResult>>> findSubServsOfMainServ(@PathVariable Long mainServId){
         Set<SubServFindResult> results = subServService.findSubServsOfMainServ(mainServId);
         return ResponseEntity.ok(ResponseResult.<Set<SubServFindResult>>builder()

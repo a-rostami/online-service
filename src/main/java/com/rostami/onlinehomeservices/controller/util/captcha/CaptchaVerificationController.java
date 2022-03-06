@@ -11,10 +11,10 @@ import org.springframework.web.bind.annotation.RestController;
 import javax.servlet.http.HttpSession;
 
 @RestController
-@RequestMapping("/captchaValidation")
+@RequestMapping("/captcha-validation")
 public class CaptchaVerificationController {
 
-    @GetMapping(value = "/verifyCaptcha")
+    @GetMapping(value = "/verify-captcha")
     public ResponseEntity<String> getProfileById(@RequestParam("captchaText") String captchaText, HttpSession session) {
         String captcha = (String) session.getAttribute("CAPTCHA");
         if (StringUtils.isBlank(captcha) || (!StringUtils.isBlank(captcha) && !captcha.equals(captchaText)))

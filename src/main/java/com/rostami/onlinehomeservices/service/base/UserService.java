@@ -27,7 +27,7 @@ import static com.rostami.onlinehomeservices.exception.messages.ExceptionMessage
 
 @Getter
 @Slf4j
-public abstract class UserService<T extends User, ID extends Long, E extends BaseOutDto<T, E> > extends BaseService<T, ID, E> {
+public class UserService<T extends User, ID extends Long, E extends BaseOutDto<T, E> > extends BaseService<T, ID, E> {
 
     private RegistrationService registrationService;
     private EmailTokenService emailTokenService;
@@ -66,7 +66,7 @@ public abstract class UserService<T extends User, ID extends Long, E extends Bas
         return token;
     }
 
-    @Transactional(propagation = Propagation.REQUIRES_NEW)
+    @Transactional
     protected CreateUpdateResult depositToCredit(T user, BigDecimal amount){
         Credit credit = user.getCredit();
         BigDecimal balance = credit.getBalance();

@@ -94,7 +94,7 @@ public class AdminController {
                 .build());
     }
 
-    @PutMapping("/changePassword")
+    @PutMapping("/change-password")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> changePassword(@RequestBody @Valid PasswordUpdateParam param){
         String newPassword = param.getNewPassword();

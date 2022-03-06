@@ -95,7 +95,7 @@ public class ExpertController {
                 .build());
     }
 
-    @PutMapping("/changePassword")
+    @PutMapping("/change-password")
     @PreAuthorize("hasAnyRole('ADMIN', 'EXPERT')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> changePassword(@RequestBody @Valid PasswordUpdateParam param){
         String newPassword = param.getNewPassword();
@@ -129,7 +129,7 @@ public class ExpertController {
                 .build());
     }
 
-    @PostMapping("/addSubServ")
+    @PostMapping("/add-sub-serv")
     @PreAuthorize("hasAnyRole('EXPERT', 'ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> chooseExpert(@RequestParam Long expertId, @RequestParam Long subServId){
         CreateUpdateResult result = expertService.addSubServ(expertId, subServId);
@@ -152,7 +152,7 @@ public class ExpertController {
                 .build());
     }
 
-    @GetMapping("/countOfDoneAds/{expertId}")
+    @GetMapping("/count-of-done-ads/{expertId}")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<Long>> countOfDoneAds(@PathVariable Long expertId){
         long count = expertService.getNumberOfDoneAds(expertId);
@@ -163,7 +163,7 @@ public class ExpertController {
                 .build());
     }
 
-    @PutMapping("/finalConfirm")
+    @PutMapping("/final-confirm")
     @PreAuthorize("hasAnyRole('ADMIN')")
     public ResponseEntity<ResponseResult<CreateUpdateResult>> finalConfirm(@RequestParam String email){
         CreateUpdateResult result = expertService.unlockExpert(email);
